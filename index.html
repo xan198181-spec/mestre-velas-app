@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mestre das Velas</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mestre das Velas">
+<meta name="description" content="Aprenda padrões de candlestick com quizzes, simulador e biblioteca completa.">
+
+<!-- Icons -->
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --bull: #00c896;
+    --bear: #ff4560;
+    --neutral: #f5a623;
+    --text: #e8eaf0;
+    --text2: #7a8ba8;
+    --accent: #3b82f6;
+    --gold: #fbbf24;
+    --font: 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; }
+
+  /* NAV */
+  nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; }
+  nav::-webkit-scrollbar { display: none; }
+  nav button { flex: none; padding: 14px 18px; background: none; border: none; color: var(--text2); font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: .5px; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .2s; }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* PAGES */
+  .page { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  /* HOME */
+  .home-hero { text-align: center; padding: 40px 20px 30px; }
+  .home-hero h1 { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--bull), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .home-hero p { color: var(--text2); margin-top: 8px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat-card .val { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+  .stat-card .lbl { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .mode-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 16px; cursor: pointer; transition: all .2s; }
+  .mode-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .mode-card .icon { font-size: 2rem; margin-bottom: 8px; }
+  .mode-card h3 { font-size: .95rem; font-weight: 700; }
+  .mode-card p { font-size: .78rem; color: var(--text2); margin-top: 4px; }
+  .streak-banner { background: linear-gradient(135deg, #1a2a1a, #1a2235); border: 1px solid var(--bull); border-radius: 14px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin: 16px 0; }
+  .streak-banner .fire { font-size: 2rem; }
+  .streak-banner .info h3 { color: var(--bull); font-size: 1.1rem; }
+  .streak-banner .info p { color: var(--text2); font-size: .8rem; }
+
+  /* QUIZ */
+  .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .lives { display: flex; gap: 6px; }
+  .heart { font-size: 1.3rem; transition: all .3s; }
+  .heart.lost { filter: grayscale(1); opacity: .3; }
+  .score-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: .85rem; font-weight: 700; color: var(--accent); }
+  canvas#quizCanvas { width: 100%; border-radius: 12px; background: #0d1520; display: block; border: 1px solid var(--border); }
+  .quiz-question { text-align: center; margin: 14px 0 10px; font-size: 1rem; font-weight: 600; color: var(--text2); line-height: 1.5; }
+  .quiz-question span { color: var(--accent); font-size: .88rem; font-weight: 700; background: rgba(59,130,246,.1); padding: 2px 10px; border-radius: 20px; display: inline-block; margin-top: 4px; }
+  .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .opt-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px 12px;
+    cursor: pointer;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--text);
+    transition: all .2s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-height: 68px;
+    justify-content: center;
+    position: relative;
+    letter-spacing: .1px;
+  }
+  .opt-btn:hover:not(.disabled) { border-color: var(--accent); background: var(--surface2); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,.13); }
+  .opt-btn .opt-signal-badge {
+    font-size: .68rem;
+    font-weight: 800;
+    padding: 2px 9px;
+    border-radius: 20px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+  .opt-btn .opt-signal-badge.alta { background: rgba(0,200,150,.15); color: var(--bull); }
+  .opt-btn .opt-signal-badge.baixa { background: rgba(255,69,96,.15); color: var(--bear); }
+  .opt-btn .opt-signal-badge.neutro { background: rgba(245,166,35,.15); color: var(--neutral); }
+  .opt-btn .opt-label { line-height: 1.3; }
+  .opt-btn.correct { background: #0a2218; border-color: var(--bull); color: var(--bull); box-shadow: 0 0 0 2px rgba(0,200,150,.18); }
+  .opt-btn.wrong { background: #2a0d0d; border-color: var(--bear); color: var(--bear); box-shadow: 0 0 0 2px rgba(255,69,96,.18); }
+  .opt-btn.disabled { pointer-events: none; opacity: .45; }
+  .feedback-box { border-radius: 12px; padding: 14px 16px; margin: 12px 0; display: none; }
+  .feedback-box.show { display: block; }
+  .feedback-box.correct { background: #0d2a1a; border: 1px solid var(--bull); }
+  .feedback-box.wrong { background: #2a0d0d; border: 1px solid var(--bear); }
+  .feedback-box h4 { font-size: 1rem; margin-bottom: 6px; }
+  .feedback-box p { font-size: .82rem; color: var(--text2); line-height: 1.5; }
+  .feedback-box .trade-info { margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .trade-info .ti { background: rgba(255,255,255,.05); border-radius: 8px; padding: 8px; text-align: center; }
+  .trade-info .ti .label { font-size: 10px; color: var(--text2); }
+  .trade-info .ti .value { font-size: .9rem; font-weight: 700; margin-top: 2px; }
+  .next-btn { width: 100%; padding: 14px; background: var(--accent); border: none; border-radius: 10px; color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 10px; transition: all .2s; }
+  .next-btn:hover { background: #2563eb; }
+  .mode-selector { display: flex; gap: 8px; margin-bottom: 14px; }
+  .mode-selector button { flex: 1; padding: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text2); font-size: .8rem; cursor: pointer; font-weight: 600; transition: all .2s; }
+  .mode-selector button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .combo-badge { position: fixed; top: 80px; right: 20px; background: var(--gold); color: #000; font-weight: 900; font-size: 1.2rem; border-radius: 50%; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0); transition: all .3s; z-index: 200; pointer-events: none; }
+  .combo-badge.show { opacity: 1; transform: scale(1); }
+
+  /* SIMULATOR */
+  #simCanvas { width: 100%; border-radius: 12px; background: #090e18; display: block; cursor: crosshair; touch-action: none; border: 1px solid var(--border); }
+  .sim-controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .sim-controls button { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: .8rem; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .sim-controls button:hover { border-color: var(--accent); }
+  .sim-controls button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .trade-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .trade-btns button { padding: 14px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all .2s; }
+  .btn-buy { background: var(--bull); color: #000; }
+  .btn-sell { background: var(--bear); color: #fff; }
+  .btn-wait { background: var(--surface2); color: var(--text); border: 1px solid var(--border) !important; }
+  .btn-buy:hover { background: #00a87a; }
+  .btn-sell:hover { background: #e03050; }
+  .sim-result-display { border-radius: 16px; padding: 22px 16px; margin: 12px 0; text-align: center; transition: all .3s; }
+  .sim-result-display.acerto { background: #0a2218; border: 2px solid var(--bull); }
+  .sim-result-display.erro { background: #2a0d0d; border: 2px solid var(--bear); }
+  .sim-result-display.aguardou { background: var(--surface2); border: 2px solid var(--border); }
+  .sim-result-icon { font-size: 2.4rem; line-height: 1; margin-bottom: 6px; }
+  .sim-result-text { font-size: 1.3rem; font-weight: 900; letter-spacing: .5px; }
+  .sim-result-display.acerto .sim-result-text { color: var(--bull); }
+  .sim-result-display.erro .sim-result-text { color: var(--bear); }
+  .sim-result-display.aguardou .sim-result-text { color: var(--text2); }
+  .sim-result-sub { font-size: .82rem; color: var(--text2); margin-top: 5px; font-weight: 600; }
+  .pattern-alert { background: var(--surface2); border-left: 3px solid var(--neutral); border-radius: 8px; padding: 10px 14px; margin: 10px 0; font-size: .85rem; display: none; }
+  .pattern-alert.show { display: block; }
+  .crosshair-info { font-size: .78rem; color: var(--text2); margin: 4px 0 8px; font-family: monospace; min-height: 18px; }
+  .sim-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+  .sim-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; text-align: center; }
+  .sim-stat .v { font-size: 1.1rem; font-weight: 800; }
+  .sim-stat .l { font-size: 10px; color: var(--text2); margin-top: 2px; }
+
+  /* LIBRARY */
+  .lib-search { width: 100%; padding: 12px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: .9rem; margin-bottom: 12px; }
+  .lib-search:focus { outline: none; border-color: var(--accent); }
+  .filter-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .filter-btn { padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: .78rem; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .pattern-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .pattern-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; transition: all .2s; }
+  .pattern-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .pattern-card .pc-signal { font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-bottom: 6px; }
+  .signal-alta { background: rgba(0,200,150,.15); color: var(--bull); }
+  .signal-baixa { background: rgba(255,69,96,.15); color: var(--bear); }
+  .signal-neutro { background: rgba(245,166,35,.15); color: var(--neutral); }
+  .pattern-card canvas { display: block; width: 100%; height: 60px; margin: 8px 0; }
+  .pattern-card h4 { font-size: .82rem; font-weight: 700; }
+  .pattern-card p { font-size: .72rem; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+
+  /* DETAIL MODAL */
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .modal.hidden { display: none; }
+  .modal-content { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 24px; }
+  .modal-content h2 { font-size: 1.3rem; font-weight: 800; margin-bottom: 4px; }
+  .modal-content canvas { width: 100%; height: 120px; display: block; background: #0d1520; border-radius: 10px; margin: 14px 0; }
+  .modal-detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .modal-detail-item { background: var(--surface2); border-radius: 8px; padding: 10px 12px; }
+  .modal-detail-item .lbl { font-size: .72rem; color: var(--text2); }
+  .modal-detail-item .val { font-size: .9rem; font-weight: 700; margin-top: 3px; }
+  .modal-desc { font-size: .85rem; color: var(--text2); line-height: 1.6; }
+  .close-btn { width: 100%; padding: 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: .9rem; font-weight: 600; cursor: pointer; margin-top: 16px; }
+
+  /* ACHIEVEMENTS */
+  .ach-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ach-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; align-items: center; gap: 12px; }
+  .ach-card.earned { border-color: var(--gold); background: rgba(251,191,36,.05); }
+  .ach-card .ach-icon { font-size: 1.8rem; min-width: 40px; text-align: center; }
+  .ach-card h4 { font-size: .82rem; font-weight: 700; }
+  .ach-card p { font-size: .72rem; color: var(--text2); margin-top: 2px; }
+
+  /* CONFETTI */
+  .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 500; overflow: hidden; }
+  .confetti-piece { position: absolute; width: 8px; height: 8px; border-radius: 2px; animation: confettiFall 2s ease-in forwards; }
+  @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+
+  /* GAMEOVER */
+  .gameover-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 900; display: flex; align-items: center; justify-content: center; }
+  .gameover-overlay.hidden { display: none; }
+  .gameover-box { background: var(--surface); border: 1px solid var(--bear); border-radius: 20px; padding: 32px 24px; text-align: center; max-width: 360px; width: 100%; }
+  .gameover-box h2 { font-size: 2rem; font-weight: 900; color: var(--bear); }
+  .gameover-box p { color: var(--text2); margin: 8px 0 20px; }
+  .go-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .go-stat { background: var(--surface2); border-radius: 10px; padding: 14px; }
+  .go-stat .v { font-size: 1.5rem; font-weight: 900; color: var(--accent); }
+  .go-stat .l { font-size: .75rem; color: var(--text2); }
+  .go-btn { padding: 14px 32px; border-radius: 10px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; }
+  .go-btn-primary { background: var(--accent); color: #fff; }
+  .go-btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); margin-left: 10px; }
+
+  /* MISC */
+  .section-title { font-size: .75rem; font-weight: 700; letter-spacing: 1px; color: var(--text2); text-transform: uppercase; margin: 20px 0 10px; }
+  .tip-box { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 8px; padding: 10px 14px; font-size: .82rem; color: var(--text2); line-height: 1.5; margin: 10px 0; }
+  .difficulty-badge { font-size: .7rem; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+  .diff-1 { background: rgba(0,200,150,.1); color: var(--bull); }
+  .diff-2 { background: rgba(59,130,246,.1); color: var(--accent); }
+  .diff-3 { background: rgba(255,165,0,.1); color: var(--neutral); }
+  .diff-4 { background: rgba(255,69,96,.1); color: var(--bear); }
+
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: repeat(3,1fr); }
+    .pattern-grid { grid-template-columns: repeat(2,1fr); }
+    .home-hero h1 { font-size: 1.5rem; }
+    .modal-content { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="active" onclick="showPage('home')">🏠 Início</button>
+  <button onclick="showPage('quiz')">🎯 Quiz</button>
+  <button onclick="showPage('simulator')">📊 Simulador</button>
+  <button onclick="showPage('library')">📖 Biblioteca</button>
+  <button onclick="showPage('achievements')">🏆 Conquistas</button>
+</nav>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+  <div class="home-hero">
+    <h1>📈 Mestre das Velas</h1>
+    <p>Domine os padrões de candlestick</p>
+  </div>
+
+  <div id="streakBanner" class="streak-banner">
+    <div class="fire">🔥</div>
+    <div class="info">
+      <h3 id="streakText">0 dias seguidos</h3>
+      <p id="streakSub">Faça seu primeiro quiz hoje!</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="val" id="homeTotal">0</div><div class="lbl">Total de Questões</div></div>
+    <div class="stat-card"><div class="val" id="homeAcc">0%</div><div class="lbl">Precisão</div></div>
+    <div class="stat-card"><div class="val" id="homePats">0</div><div class="lbl">Padrões Estudados</div></div>
+  </div>
+
+  <div class="section-title">Modos de Jogo</div>
+  <div class="mode-grid">
+    <div class="mode-card" onclick="startMode('normal')">
+      <div class="icon">🔍</div>
+      <h3>Identificar Padrão</h3>
+      <p>Questões ilimitadas, sem pressão</p>
+    </div>
+    <div class="mode-card" onclick="startMode('survival')">
+      <div class="icon">💀</div>
+      <h3>Sobrevivência</h3>
+      <p>3 vidas — perde tudo se errar 3×</p>
+    </div>
+  
+    <div class="mode-card" onclick="startMode('signal')">
+      <div class="icon">🎲</div>
+      <h3>Adivinhe o Sinal</h3>
+      <p>Alta, Baixa ou Indecisão?</p>
+    </div>
+  </div>
+
+  <div class="tip-box">💡 <strong>Dica do dia:</strong> O Martelo tem pavio inferior longo (≥2× corpo) e sugere reversão de baixa para alta. Procure sempre confirmar com a vela seguinte!</div>
+</div>
+
+<!-- QUIZ PAGE -->
+<div id="page-quiz" class="page">
+  <div class="quiz-header">
+    <div class="lives" id="livesDisplay" style="visibility:hidden">
+      <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+    </div>
+    <div class="score-badge">✅ <span id="quizScore">0</span> | ❌ <span id="quizErrors">0</span> | 🔥 <span id="quizStreak">0</span></div>
+  </div>
+
+  <canvas id="quizCanvas" height="200"></canvas>
+  <div class="quiz-question">Qual é este padrão? <br><span id="quizSubQ"></span></div>
+
+  <div class="options-grid" id="optionsGrid"></div>
+  <div class="feedback-box" id="feedbackBox">
+    <h4 id="feedbackTitle"></h4>
+    <p id="feedbackText"></p>
+    <div class="trade-info" id="tradeInfo"></div>
+  </div>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none">Próxima →</button>
+</div>
+
+<div class="combo-badge" id="comboBadge"></div>
+
+<!-- SIMULATOR PAGE -->
+<div id="page-simulator" class="page">
+  <canvas id="simCanvas" height="340"></canvas>
+  <div class="crosshair-info" id="crosshairInfo">Analise o gráfico e tome sua decisão</div>
+
+  <div class="sim-controls">
+    <button onclick="simTF('1m')" id="tf-1m" class="active">1m</button>
+    <button onclick="simTF('5m')" id="tf-5m">5m</button>
+    <button onclick="genNewSimData()" style="margin-left:auto">🔄 Novo Cenário</button>
+  </div>
+
+  <div class="pattern-alert" id="patternAlert">⚠️ Padrão detectado: <strong id="patternAlertName"></strong></div>
+
+  <div class="section-title">Operação</div>
+  <div class="trade-btns">
+    <button class="btn-buy" onclick="placeTrade('buy')">▲ COMPRAR</button>
+    <button class="btn-wait" onclick="placeTrade('wait')">⏸ AGUARDAR</button>
+    <button class="btn-sell" onclick="placeTrade('sell')">▼ VENDER</button>
+  </div>
+
+  <div class="sim-result-display" id="simResultDisplay" style="display:none">
+    <div class="sim-result-icon" id="simResultIcon"></div>
+    <div class="sim-result-text" id="simResultText"></div>
+    <div class="sim-result-sub" id="simResultSub"></div>
+  </div>
+
+  <div class="sim-stats">
+    <div class="sim-stat"><div class="v" id="simWins">0</div><div class="l">Acertos</div></div>
+    <div class="sim-stat"><div class="v" id="simLosses">0</div><div class="l">Erros</div></div>
+    <div class="sim-stat"><div class="v" id="simWR">-</div><div class="l">Aproveitamento</div></div>
+    <div class="sim-stat"><div class="v" id="simStreak">0</div><div class="l">Sequência</div></div>
+  </div>
+</div>
+
+<!-- LIBRARY PAGE -->
+<div id="page-library" class="page">
+  <input class="lib-search" id="libSearch" placeholder="🔍 Buscar padrão..." oninput="renderLibrary()">
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="libFilter('all',this)">Todos</button>
+    <button class="filter-btn" onclick="libFilter('alta',this)">📈 Alta</button>
+    <button class="filter-btn" onclick="libFilter('baixa',this)">📉 Baixa</button>
+    <button class="filter-btn" onclick="libFilter('neutro',this)">➡️ Neutro</button>
+    <button class="filter-btn" onclick="libFilter('d1',this)">★ Fácil</button>
+    <button class="filter-btn" onclick="libFilter('d2',this)">★★ Médio</button>
+    <button class="filter-btn" onclick="libFilter('d3',this)">★★★ Difícil</button>
+    <button class="filter-btn" onclick="libFilter('d4',this)">★★★★ Expert</button>
+  </div>
+  <div class="pattern-grid" id="patternGrid"></div>
+</div>
+
+<!-- ACHIEVEMENTS PAGE -->
+<div id="page-achievements" class="page">
+  <div class="section-title">Suas Conquistas</div>
+  <div class="ach-grid" id="achGrid"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal hidden" id="patternModal">
+  <div class="modal-content">
+    <span id="modalSignalBadge" class="pc-signal"></span>
+    <h2 id="modalTitle"></h2>
+    <canvas id="modalCanvas" height="120"></canvas>
+    <div class="modal-detail-row">
+      <div class="modal-detail-item"><div class="lbl">Sinal</div><div class="val" id="modalSignal"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Dificuldade</div><div class="val" id="modalDiff"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Alvo</div><div class="val" id="modalTarget"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Stop</div><div class="val" id="modalStop"></div></div>
+    </div>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="tip-box" id="modalTip"></div>
+    <button class="close-btn" onclick="closeModal()">Fechar</button>
+  </div>
+</div>
+
+<!-- GAMEOVER -->
+<div class="gameover-overlay hidden" id="gameOverOverlay">
+  <div class="gameover-box">
+    <h2>💀 Game Over</h2>
+    <p>Suas 3 vidas se esgotaram!</p>
+    <div class="go-stats">
+      <div class="go-stat"><div class="v" id="goAcertos">0</div><div class="l">Acertos</div></div>
+      <div class="go-stat"><div class="v" id="goErros">0</div><div class="l">Erros</div></div>
+      <div class="go-stat"><div class="v" id="goAcc">0%</div><div class="l">Precisão</div></div>
+      <div class="go-stat"><div class="v" id="goStreak">0</div><div class="l">Melhor Streak</div></div>
+    </div>
+    <button class="go-btn go-btn-primary" onclick="restartSurvival()">🔄 Tentar Novamente</button>
+    <button class="go-btn go-btn-secondary" onclick="closeGameOver()">Fechar</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+// ==================== AUDIO ====================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new AudioCtx();
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'correct') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } else if (type === 'wrong') {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.setValueAtTime(150, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(100, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } else if (type === 'combo') {
+      osc.type = 'sine';
+      [523,659,784,1047].forEach((f,i) => osc.frequency.setValueAtTime(f, ctx.currentTime + i*0.08));
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } else if (type === 'gameover') {
+      osc.type = 'square';
+      [300,250,200,150].forEach((f,i) => osc.frequency.setValueAtTime(f, ctx.currentTime + i*0.15));
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.8);
+    }
+  } catch(e) { /* silently fail */ }
+}
+
+// ==================== DATA ====================
+const PATTERNS = [
+  // SINGLE CANDLE - BULLISH
+  {id:'hammer',name:'Martelo',signal:'alta',diff:1,desc:'Corpo pequeno no topo, pavio inferior longo (≥2× corpo), pouco ou nenhum pavio superior. Sinaliza reversão de baixa.',tip:'Confirme com vela bullish na sequência.',target:'+2R',stop:'Mínima da vela',candles:[{o:55,h:58,l:20,c:57}]},
+  {id:'inv_hammer',name:'Martelo Invertido',signal:'alta',diff:2,desc:'Corpo no baixo, pavio superior longo. Em fundo de baixa, sugere reversão para alta.',tip:'Menos confiável que o Martelo, confirme.',target:'+1.5R',stop:'Mínima',candles:[{o:30,h:70,l:28,c:32}]},
+  {id:'bull_marubozu',name:'Marubozu de Alta',signal:'alta',diff:1,desc:'Vela bullish sem pavios. Abertura é a mínima, fechamento é a máxima. Força compradora total.',tip:'Em breakout, é muito confiável.',target:'+2R',stop:'Abertura',candles:[{o:20,h:80,l:20,c:80}]},
+  {id:'dragonfly',name:'Dragonfly Doji',signal:'alta',diff:2,desc:'Doji com pavio inferior longo e quase sem pavio superior. Reversão em fundo.',tip:'Sinal forte em fundo de suporte.',target:'+2R',stop:'Mínima',candles:[{o:60,h:62,l:20,c:60}]},
+  {id:'spin_bull',name:'Peão de Alta',signal:'alta',diff:3,desc:'Corpo muito pequeno, pavios longos dos dois lados. Indecisão mas em contexto bullish.',tip:'Contexto é fundamental.',target:'+1R',stop:'Mínima',candles:[{o:45,h:80,l:20,c:55}]},
+  {id:'long_bull',name:'Vela Longa de Alta',signal:'alta',diff:1,desc:'Vela bullish com corpo grande. Mostra domínio comprador no período.',tip:'Volume confirma a força.',target:'+2R',stop:'Meio do corpo',candles:[{o:20,h:85,l:18,c:82}]},
+  {id:'belt_hold_bull',name:'Belt Hold de Alta',signal:'alta',diff:3,desc:'Abre na mínima (sem pavio inferior), fecha perto da máxima. Forte virada.',tip:'Raro mas confiável.',target:'+2R',stop:'Abertura',candles:[{o:20,h:78,l:20,c:76}]},
+  {id:'closing_marubozu_bull',name:'Marubozu de Fechamento Alta',signal:'alta',diff:2,desc:'Sem pavio superior, tem pavio inferior. Compra dominou até o fechamento.',tip:'Bom em suportes.',target:'+2R',stop:'Mínima',candles:[{o:30,h:80,l:20,c:80}]},
+
+  // SINGLE CANDLE - BEARISH
+  {id:'shooting_star',name:'Estrela Cadente',signal:'baixa',diff:2,desc:'Corpo pequeno embaixo, pavio superior longo (≥2× corpo). Em topo de alta, sinaliza reversão.',tip:'Pavio superior longo = rejeição de preço alto.',target:'-2R',stop:'Máxima',candles:[{o:65,h:90,l:60,c:68}]},
+  {id:'hang_man',name:'Enforcado',signal:'baixa',diff:2,desc:'Igual ao martelo mas em topo de alta. Sinal de exaustão compradora.',tip:'Mais confiável com pavio inferior longo.',target:'-2R',stop:'Máxima',candles:[{o:55,h:58,l:20,c:57}]},
+  {id:'bear_marubozu',name:'Marubozu de Baixa',signal:'baixa',diff:1,desc:'Vela bearish sem pavios. Abertura é a máxima, fechamento é a mínima. Pressão vendedora total.',tip:'Muito confiável em resistências.',target:'-2R',stop:'Abertura',candles:[{o:80,h:80,l:20,c:20}]},
+  {id:'gravestone',name:'Gravestone Doji',signal:'baixa',diff:2,desc:'Doji com pavio superior longo e quase sem pavio inferior. Rejeição forte em topo.',tip:'Em topo com volume alto = reversão.',target:'-2R',stop:'Máxima',candles:[{o:40,h:80,l:38,c:40}]},
+  {id:'spin_bear',name:'Peão de Baixa',signal:'baixa',diff:3,desc:'Corpo pequeno bearish, pavios dos dois lados. Indecisão em contexto bearish.',tip:'Contexto e posição são chave.',target:'-1R',stop:'Máxima',candles:[{o:55,h:80,l:20,c:45}]},
+  {id:'long_bear',name:'Vela Longa de Baixa',signal:'baixa',diff:1,desc:'Vela bearish com corpo grande. Domínio vendedor claro.',tip:'Em resistência com volume confirma.',target:'-2R',stop:'Meio do corpo',candles:[{o:82,h:85,l:18,c:22}]},
+  {id:'belt_hold_bear',name:'Belt Hold de Baixa',signal:'baixa',diff:3,desc:'Abre na máxima (sem pavio superior), fecha perto da mínima. Forte virada vendedora.',tip:'Aguarde confirmação.',target:'-2R',stop:'Abertura',candles:[{o:80,h:80,l:22,c:24}]},
+  {id:'closing_marubozu_bear',name:'Marubozu de Fechamento Baixa',signal:'baixa',diff:2,desc:'Sem pavio inferior, tem pavio superior. Venda dominou até o fechamento.',tip:'Em resistências é sinal forte.',target:'-2R',stop:'Máxima',candles:[{o:70,h:80,l:20,c:20}]},
+
+  // SINGLE CANDLE - NEUTRAL
+  {id:'doji',name:'Doji',signal:'neutro',diff:1,desc:'Abertura ≈ fechamento. Indica equilíbrio e indecisão entre compradores e vendedores.',tip:'O contexto determina o viés.',target:'Aguarde',stop:'N/A',candles:[{o:50,h:80,l:20,c:50}]},
+  {id:'long_legged_doji',name:'Doji de Pernas Longas',signal:'neutro',diff:2,desc:'Doji com pavios superiores e inferiores muito longos. Indecisão extrema.',tip:'Pode preceder grandes movimentos.',target:'Aguarde',stop:'N/A',candles:[{o:50,h:90,l:10,c:50}]},
+  {id:'four_price_doji',name:'Doji de Quatro Preços',signal:'neutro',diff:4,desc:'Abertura=fechamento=máxima=mínima. Mercado completamente parado, volume quase zero.',tip:'Extremamente raro.',target:'N/A',stop:'N/A',candles:[{o:50,h:50,l:50,c:50}]},
+  {id:'rickshaw',name:'Rickshaw Man',signal:'neutro',diff:3,desc:'Doji com pavios iguais e corpos no centro. Indecisão simétrica.',tip:'Aguarde rompimento.',target:'Aguarde',stop:'N/A',candles:[{o:50,h:85,l:15,c:50}]},
+
+  // TWO CANDLE - BULLISH
+  {id:'bull_engulfing',name:'Engolfo de Alta',signal:'alta',diff:1,desc:'Vela bearish seguida de vela bullish maior que engole o corpo anterior. Reversão de baixa.',tip:'Quanto maior o engolfo, mais forte o sinal.',target:'+2R',stop:'Mínima do par',candles:[{o:70,h:72,l:45,c:48},{o:42,h:80,l:40,c:78}]},
+  {id:'piercing',name:'Linha Penetrante',signal:'alta',diff:2,desc:'Bearish seguida de bullish que abre abaixo e fecha acima do meio da primeira. Em baixa.',tip:'Deve fechar acima de 50% da vela anterior.',target:'+2R',stop:'Mínima',candles:[{o:75,h:77,l:45,c:48},{o:43,h:72,l:40,c:70}]},
+  {id:'bull_harami',name:'Harami de Alta',signal:'alta',diff:2,desc:'Vela grande bearish seguida de vela menor bullish dentro do corpo anterior. Possível reversão.',tip:'Harami Cross (doji dentro) é mais forte.',target:'+1.5R',stop:'Mínima do padrão',candles:[{o:75,h:78,l:30,c:32},{o:40,h:60,l:38,c:58}]},
+  {id:'tweezer_bottom',name:'Fundo Pinça',signal:'alta',diff:3,desc:'Duas velas com a mesma mínima. Em fundo, indica suporte forte.',tip:'Funciona bem em suportes importantes.',target:'+2R',stop:'Mínima das pinças',candles:[{o:65,h:67,l:25,c:27},{o:30,h:70,l:25,c:68}]},
+  {id:'bull_kicker',name:'Kicker de Alta',signal:'alta',diff:3,desc:'Vela bearish seguida de gap e vela bullish forte. Reversão abrupta de sentimento.',tip:'Um dos sinais mais fortes de reversão.',target:'+3R',stop:'Gap',candles:[{o:72,h:74,l:40,c:42},{o:65,h:85,l:63,c:83}]},
+  {id:'bull_meeting',name:'Linhas de Encontro Alta',signal:'alta',diff:3,desc:'Bearish e bullish com mesmo fechamento. Em fundo, possível reversão.',tip:'Confirme com próxima vela.',target:'+1.5R',stop:'Mínima',candles:[{o:75,h:77,l:45,c:50},{o:40,h:75,l:38,c:50}]},
+  {id:'on_neck_bull',name:'On Neck Alta',signal:'alta',diff:4,desc:'Bearish grande, seguida de bullish pequena que fecha na mínima da anterior. Padrão ambíguo.',tip:'Não é reversão forte, cuidado.',target:'+1R',stop:'Mínima',candles:[{o:75,h:77,l:30,c:32},{o:28,h:38,l:26,c:32}]},
+  {id:'mat_hold_bull',name:'Mat Hold Alta',signal:'alta',diff:4,desc:'Vela bullish grande, pullback de 3 velas pequenas, outra bullish forte. Continuação.',tip:'Padrão de 5 velas.',target:'+3R',stop:'Abertura da primeira',candles:[{o:20,h:65,l:18,c:62},{o:60,h:64,l:55,c:57},{o:55,h:60,l:52,c:54},{o:52,h:58,l:50,c:53},{o:53,h:80,l:51,c:78}]},
+
+  // TWO CANDLE - BEARISH
+  {id:'bear_engulfing',name:'Engolfo de Baixa',signal:'baixa',diff:1,desc:'Vela bullish seguida de vela bearish maior. Reversão de alta para baixa.',tip:'Volume crescente confirma.',target:'-2R',stop:'Máxima do par',candles:[{o:30,h:55,l:28,c:52},{o:58,h:60,l:25,c:28}]},
+  {id:'dark_cloud',name:'Nuvem Negra',signal:'baixa',diff:2,desc:'Bullish seguida de bearish que abre acima e fecha abaixo do meio da primeira. Em topo.',tip:'Deve fechar abaixo de 50% da vela anterior.',target:'-2R',stop:'Máxima',candles:[{o:25,h:53,l:23,c:50},{o:57,h:59,l:28,c:30}]},
+  {id:'bear_harami',name:'Harami de Baixa',signal:'baixa',diff:2,desc:'Vela grande bullish seguida de vela menor bearish dentro do corpo. Possível topo.',tip:'Mais forte se segunda for doji.',target:'-1.5R',stop:'Máxima do padrão',candles:[{o:25,h:72,l:22,c:70},{o:60,h:62,l:40,c:42}]},
+  {id:'tweezer_top',name:'Topo Pinça',signal:'baixa',diff:3,desc:'Duas velas com a mesma máxima. Em topo, indica resistência forte.',tip:'Funciona bem em resistências históricas.',target:'-2R',stop:'Máxima das pinças',candles:[{o:35,h:75,l:33,c:72},{o:70,h:75,l:30,c:32}]},
+  {id:'bear_kicker',name:'Kicker de Baixa',signal:'baixa',diff:3,desc:'Bullish seguida de gap e bearish forte. Virada agressiva de sentimento.',tip:'Sinal de reversão muito confiável.',target:'-3R',stop:'Gap',candles:[{o:28,h:60,l:26,c:58},{o:35,h:38,l:15,c:17}]},
+  {id:'bear_meeting',name:'Linhas de Encontro Baixa',signal:'baixa',diff:3,desc:'Bullish e bearish com mesmo fechamento em topo. Sinal de reversão.',tip:'Aguarde vela de confirmação.',target:'-1.5R',stop:'Máxima',candles:[{o:25,h:55,l:23,c:50},{o:60,h:62,l:28,c:50}]},
+
+  // THREE CANDLE - BULLISH
+  {id:'morning_star',name:'Estrela da Manhã',signal:'alta',diff:2,desc:'Bearish grande, vela de indecisão (gap), bullish grande. Reversão clássica em fundo.',tip:'A segunda vela deve ser isolada (gap).',target:'+2R',stop:'Mínima do padrão',candles:[{o:75,h:77,l:42,c:45},{o:40,h:43,l:30,c:33},{o:35,h:75,l:33,c:73}]},
+  {id:'morning_doji_star',name:'Estrela da Manhã Doji',signal:'alta',diff:3,desc:'Como Estrela da Manhã mas com doji no meio. Mais forte que a versão normal.',tip:'Doji indica equilíbrio antes da reversão.',target:'+2.5R',stop:'Mínima',candles:[{o:75,h:77,l:42,c:45},{o:38,h:42,l:36,c:38},{o:35,h:75,l:33,c:73}]},
+  {id:'three_white_soldiers',name:'Três Soldados Brancos',signal:'alta',diff:1,desc:'Três velas bullish consecutivas, cada uma abrindo dentro e fechando acima da anterior.',tip:'Sem pavios superiores longos = mais forte.',target:'+3R',stop:'Abertura da primeira',candles:[{o:20,h:48,l:18,c:45},{o:44,h:65,l:42,c:62},{o:61,h:82,l:59,c:80}]},
+  {id:'three_inside_up',name:'Três de Dentro para Cima',signal:'alta',diff:3,desc:'Bearish, harami bullish dentro, e confirmação bullish. Reversão confirmada.',tip:'Confirmação é a chave.',target:'+2R',stop:'Mínima do padrão',candles:[{o:75,h:77,l:35,c:38},{o:45,h:65,l:43,c:63},{o:62,h:82,l:60,c:80}]},
+  {id:'three_outside_up',name:'Três de Fora para Cima',signal:'alta',diff:3,desc:'Bearish, engolfo bullish, confirmação bullish. Reversão forte.',tip:'Mais confiável que Three Inside Up.',target:'+2.5R',stop:'Mínima',candles:[{o:70,h:72,l:42,c:45},{o:40,h:75,l:38,c:72},{o:71,h:85,l:69,c:83}]},
+  {id:'abandoned_baby_bull',name:'Bebê Abandonado de Alta',signal:'alta',diff:4,desc:'Bearish, doji com gap duplo, bullish com gap. Sinal extremamente raro e forte.',tip:'Gaps completos dos dois lados do doji.',target:'+3R',stop:'Mínima',candles:[{o:72,h:74,l:40,c:43},{o:35,h:38,l:33,c:35},{o:42,h:75,l:40,c:73}]},
+  {id:'tri_star_bull',name:'Tri-Star de Alta',signal:'alta',diff:4,desc:'Três dojis em fundo, com o central mais baixo. Reversão rara.',tip:'Extremamente raro.',target:'+2R',stop:'Mínima',candles:[{o:45,h:48,l:42,c:45},{o:38,h:40,l:35,c:38},{o:43,h:46,l:40,c:43}]},
+  {id:'upside_gap_two_crows',name:'Dois Corvos do Gap',signal:'baixa',diff:4,desc:'Gap bullish, depois duas bearish que fecham o gap. Padrão de reversão complexo.',tip:'Incomum mas eficaz.',target:'-2R',stop:'Máxima da primeira',candles:[{o:30,h:75,l:28,c:72},{o:75,h:82,l:65,c:68},{o:70,h:74,l:35,c:38}]},
+  {id:'three_line_strike_bull',name:'Golpe de Três Linhas Alta',signal:'alta',diff:4,desc:'Três bearish seguidas de bullish que engole todas. Continuação de alta (counterintuitive).',tip:'A quarta vela deve engolir as três.',target:'+2R',stop:'Mínima das 3',candles:[{o:72,h:74,l:55,c:58},{o:57,h:59,l:42,c:45},{o:44,h:46,l:30,c:33},{o:28,h:75,l:26,c:73}]},
+
+  // THREE CANDLE - BEARISH
+  {id:'evening_star',name:'Estrela da Tarde',signal:'baixa',diff:2,desc:'Bullish grande, vela de indecisão (gap), bearish grande. Reversão clássica em topo.',tip:'Segunda vela deve ser pequena e isolada.',target:'-2R',stop:'Máxima do padrão',candles:[{o:25,h:58,l:23,c:55},{o:60,h:63,l:57,c:60},{o:65,h:67,l:28,c:30}]},
+  {id:'evening_doji_star',name:'Estrela da Tarde Doji',signal:'baixa',diff:3,desc:'Como Estrela da Tarde mas com doji no meio. Sinal mais forte.',tip:'Doji com gap é sinal muito forte.',target:'-2.5R',stop:'Máxima',candles:[{o:25,h:58,l:23,c:55},{o:60,h:63,l:58,c:60},{o:65,h:67,l:28,c:30}]},
+  {id:'three_black_crows',name:'Três Corvos Negros',signal:'baixa',diff:1,desc:'Três velas bearish consecutivas, cada uma abrindo dentro e fechando abaixo da anterior.',tip:'Sem pavios inferiores longos = mais forte.',target:'-3R',stop:'Máxima da primeira',candles:[{o:80,h:82,l:55,c:58},{o:56,h:58,l:35,c:38},{o:37,h:39,l:18,c:20}]},
+  {id:'three_inside_down',name:'Três de Dentro para Baixo',signal:'baixa',diff:3,desc:'Bullish, harami bearish, confirmação bearish. Reversão confirmada em topo.',tip:'Padrão de confirmação confiável.',target:'-2R',stop:'Máxima do padrão',candles:[{o:25,h:65,l:23,c:62},{o:55,h:57,l:38,c:40},{o:39,h:41,l:20,c:22}]},
+  {id:'three_outside_down',name:'Três de Fora para Baixo',signal:'baixa',diff:3,desc:'Bullish, engolfo bearish, confirmação bearish. Reversão mais forte.',tip:'A terceira vela confirma o engolfo.',target:'-2.5R',stop:'Máxima',candles:[{o:30,h:58,l:28,c:55},{o:60,h:62,l:28,c:30},{o:32,h:34,l:15,c:18}]},
+  {id:'abandoned_baby_bear',name:'Bebê Abandonado de Baixa',signal:'baixa',diff:4,desc:'Bullish, doji com gap duplo, bearish com gap. Reversão rara e poderosa.',tip:'Ambos os gaps devem ser completos.',target:'-3R',stop:'Máxima',candles:[{o:28,h:60,l:26,c:57},{o:62,h:65,l:60,c:63},{o:58,h:60,l:25,c:28}]},
+  {id:'three_line_strike_bear',name:'Golpe de Três Linhas Baixa',signal:'baixa',diff:4,desc:'Três bullish seguidas de bearish que engole todas. Continuação de baixa.',tip:'Padrão de continuação, não reversão!',target:'-2R',stop:'Máxima das 3',candles:[{o:28,h:45,l:26,c:42},{o:43,h:60,l:41,c:57},{o:56,h:72,l:54,c:70},{o:75,h:77,l:28,c:30}]},
+
+  // CONTINUATION PATTERNS
+  {id:'bull_flag',name:'Bandeira de Alta',signal:'alta',diff:2,desc:'Forte rally (mastro) seguido de consolidação em leve queda. Continuação de alta.',tip:'Entrada no rompimento da consolidação.',target:'+Altura do mastro',stop:'Base da bandeira',candles:[{o:20,h:55,l:18,c:52},{o:50,h:54,l:44,c:46},{o:44,h:50,l:42,c:48},{o:46,h:52,l:44,c:50},{o:48,h:75,l:46,c:73}]},
+  {id:'bear_flag',name:'Bandeira de Baixa',signal:'baixa',diff:2,desc:'Queda forte (mastro) seguida de consolidação em leve alta. Continuação de baixa.',tip:'Entrada no rompimento para baixo.',target:'-Altura do mastro',stop:'Topo da bandeira',candles:[{o:80,h:82,l:45,c:48},{o:50,h:58,l:48,c:56},{o:54,h:60,l:52,c:58},{o:56,h:62,l:54,c:60},{o:58,h:60,l:25,c:27}]},
+  {id:'rising_window',name:'Janela de Alta',signal:'alta',diff:2,desc:'Gap de alta entre velas. Em contexto bullish, o gap atua como suporte.',tip:'Gap não preenchido = sinal mais forte.',target:'+2R',stop:'Abaixo do gap',candles:[{o:20,h:50,l:18,c:48},{o:55,h:75,l:53,c:73}]},
+  {id:'falling_window',name:'Janela de Baixa',signal:'baixa',diff:2,desc:'Gap de baixa entre velas. Em contexto bearish, o gap atua como resistência.',tip:'Gap não preenchido = tendência forte.',target:'-2R',stop:'Acima do gap',candles:[{o:75,h:77,l:48,c:50},{o:43,h:45,l:23,c:25}]},
+  {id:'tasuki_bull',name:'Tasuki de Alta',signal:'alta',diff:4,desc:'Duas bullish com gap, bearish que preenche parte do gap. Continuação de alta.',tip:'Bearish não deve fechar abaixo do gap.',target:'+2R',stop:'Abaixo do gap',candles:[{o:20,h:50,l:18,c:48},{o:52,h:72,l:50,c:70},{o:67,h:69,l:52,c:54}]},
+  {id:'tasuki_bear',name:'Tasuki de Baixa',signal:'baixa',diff:4,desc:'Duas bearish com gap, bullish que preenche parte do gap. Continuação de baixa.',tip:'Bullish não deve fechar acima do gap.',target:'-2R',stop:'Acima do gap',candles:[{o:78,h:80,l:50,c:52},{o:48,h:50,l:28,c:30},{o:33,h:48,l:31,c:46}]},
+  {id:'side_by_side_bull',name:'Velas Lado a Lado Alta',signal:'alta',diff:4,desc:'Bullish grande com gap, duas bullish menores com abertura semelhante. Continuação.',tip:'Padrão de continuação raro.',target:'+2R',stop:'Abaixo do gap',candles:[{o:20,h:55,l:18,c:52},{o:54,h:68,l:52,c:65},{o:54,h:70,l:52,c:67}]},
+
+  // COMPLEX / SPECIAL PATTERNS
+  {id:'rising_three',name:'Três Métodos de Alta',signal:'alta',diff:3,desc:'Bullish longa, três velas bearish pequenas dentro do range, bullish que supera a máxima.',tip:'Padrão de continuação muito confiável.',target:'+3R',stop:'Mínima da primeira',candles:[{o:20,h:65,l:18,c:62},{o:60,h:63,l:52,c:55},{o:53,h:57,l:48,c:51},{o:49,h:53,l:45,c:48},{o:46,h:78,l:44,c:76}]},
+  {id:'falling_three',name:'Três Métodos de Baixa',signal:'baixa',diff:3,desc:'Bearish longa, três bullish pequenas dentro do range, bearish que rompe a mínima.',tip:'Continuação de baixa confirmada.',target:'-3R',stop:'Máxima da primeira',candles:[{o:80,h:82,l:35,c:38},{o:40,h:50,l:37,c:47},{o:45,h:54,l:42,c:51},{o:49,h:57,l:46,c:54},{o:52,h:55,l:20,c:22}]},
+  {id:'unique_river_bottom',name:'Fundo Rio Único',signal:'alta',diff:4,desc:'Bearish longa, depois bearish com hammer longo abaixo da mínima anterior. Reversão rara.',tip:'Muito raro, confirme com próxima.',target:'+2R',stop:'Mínima',candles:[{o:75,h:77,l:35,c:38},{o:42,h:44,l:10,c:15}]},
+  {id:'concealing_baby_swallow',name:'Bebê Camuflado',signal:'alta',diff:4,desc:'Dois maru de baixa, bearish com pavio inferior (dentro do anterior), engolfo bullish.',tip:'Padrão raro de 4 velas.',target:'+2R',stop:'Mínima',candles:[{o:75,h:75,l:35,c:35},{o:33,h:33,l:10,c:10},{o:12,h:22,l:8,c:18},{o:15,h:70,l:13,c:68}]},
+  {id:'kicking_bull',name:'Chute de Alta',signal:'alta',diff:3,desc:'Marubozu de baixa seguido de gap e marubozu de alta. Virada explosiva.',tip:'Sem pavios em nenhuma das duas.',target:'+3R',stop:'Gap',candles:[{o:75,h:75,l:35,c:35},{o:55,h:85,l:55,c:85}]},
+  {id:'kicking_bear',name:'Chute de Baixa',signal:'baixa',diff:3,desc:'Marubozu de alta seguido de gap e marubozu de baixa. Queda explosiva.',tip:'Dois marubozus opostos com gap.',target:'-3R',stop:'Gap',candles:[{o:25,h:65,l:25,c:65},{o:45,h:45,l:15,c:15}]},
+  {id:'stick_sandwich',name:'Sanduíche de Velas',signal:'alta',diff:4,desc:'Bearish, bullish, bearish com mesmo fechamento que a primeira. Reversão em fundo.',tip:'O fechamento igual é crucial.',target:'+2R',stop:'Mínima',candles:[{o:65,h:67,l:35,c:38},{o:36,h:70,l:34,c:68},{o:65,h:67,l:35,c:38}]},
+  {id:'homing_pigeon',name:'Pombo Mensageiro',signal:'alta',diff:4,desc:'Bearish grande, bearish pequena dentro do corpo da primeira. Reversão potencial.',tip:'Semelhante ao Harami mas ambas bearish.',target:'+1.5R',stop:'Mínima',candles:[{o:75,h:77,l:25,c:28},{o:55,h:60,l:40,c:42}]},
+  {id:'matching_low',name:'Fundo Equivalente',signal:'alta',diff:3,desc:'Duas bearish com mesmo fechamento. Suporte forte naquele preço.',tip:'Fechamentos iguais indicam suporte.',target:'+2R',stop:'Fechamento das velas',candles:[{o:72,h:74,l:30,c:32},{o:55,h:58,l:30,c:32}]},
+  {id:'separating_lines_bull',name:'Linhas de Separação Alta',signal:'alta',diff:4,desc:'Bearish abre e fecha num nível, bullish abre no mesmo preço. Continuação de alta.',tip:'Mesmo preço de abertura é essencial.',target:'+2R',stop:'Abertura comum',candles:[{o:55,h:57,l:30,c:32},{o:55,h:80,l:53,c:78}]},
+  {id:'separating_lines_bear',name:'Linhas de Separação Baixa',signal:'baixa',diff:4,desc:'Bullish abre e fecha num nível, bearish abre no mesmo preço. Continuação de baixa.',tip:'Continuação bearish confirmada.',target:'-2R',stop:'Abertura comum',candles:[{o:45,h:70,l:43,c:68},{o:45,h:47,l:20,c:22}]},
+  {id:'in_neck',name:'Em Pescoço',signal:'baixa',diff:4,desc:'Bearish, bullish que fecha na mínima da anterior. Continuação de baixa.',tip:'A bullish pequena é armadilha.',target:'-2R',stop:'Fechamento bullish',candles:[{o:72,h:74,l:38,c:40},{o:37,h:48,l:35,c:40}]},
+  {id:'thrusting',name:'Empurrão',signal:'baixa',diff:4,desc:'Bearish, bullish que penetra mas não chega ao meio. Continuação de baixa fraca.',tip:'Sinal mais fraco que dark cloud.',target:'-1.5R',stop:'Máxima bullish',candles:[{o:72,h:74,l:38,c:40},{o:36,h:58,l:34,c:56}]},
+  {id:'ladder_bottom',name:'Fundo Escada',signal:'alta',diff:4,desc:'Três bearish, bearish com pavio superior, bullish. Reversão rara em fundo.',tip:'Pavio superior indica rejeição antes da reversão.',target:'+2R',stop:'Mínima',candles:[{o:72,h:74,l:52,c:55},{o:54,h:56,l:38,c:40},{o:39,h:41,l:25,c:28},{o:27,h:35,l:23,c:26},{o:24,h:45,l:22,c:43}]},
+  {id:'advance_block',name:'Bloco Avançado',signal:'baixa',diff:4,desc:'Três soldados mas com pavios superiores crescentes. Momentum de alta perdendo força.',tip:'Exaustão do lado comprador.',target:'-1.5R',stop:'Máxima',candles:[{o:20,h:48,l:18,c:43},{o:42,h:65,l:40,c:58},{o:57,h:78,l:55,c:66}]},
+  {id:'deliberation',name:'Deliberação',signal:'baixa',diff:4,desc:'Dois soldados fortes, terceiro com gap para cima mas corpo menor. Exaustão.',tip:'Perda de impulso no topo.',target:'-1.5R',stop:'Máxima da 3ª',candles:[{o:20,h:50,l:18,c:47},{o:46,h:72,l:44,c:69},{o:73,h:78,l:70,c:73}]},
+  {id:'two_crows',name:'Dois Corvos',signal:'baixa',diff:4,desc:'Bullish, bearish com gap acima mas fechando dentro da primeira, bearish menor. Topo.',tip:'Padrão de 3 velas, reversão em topo.',target:'-2R',stop:'Máxima do gap',candles:[{o:25,h:58,l:23,c:55},{o:60,h:65,l:50,c:52},{o:55,h:58,l:38,c:40}]},
+  {id:'three_stars_south',name:'Três Estrelas no Sul',signal:'alta',diff:4,desc:'Três bearish com cada uma tendo corpo menor e mínima mais alta. Exaustão vendedora.',tip:'Mínimas crescentes indicam suporte.',target:'+2R',stop:'Mínima da primeira',candles:[{o:72,h:74,l:20,c:28},{o:55,h:57,l:28,c:38},{o:48,h:50,l:38,c:42}]},
+
+  // EXTRA PATTERNS
+  {id:'bullish_doji_star',name:'Estrela Doji de Alta',signal:'alta',diff:3,desc:'Bearish com gap para doji abaixo. Reversão potencial em fundo.',tip:'Precisa de confirmação na próxima vela.',target:'+1.5R',stop:'Mínima do doji',candles:[{o:72,h:74,l:42,c:45},{o:38,h:42,l:36,c:38}]},
+  {id:'bearish_doji_star',name:'Estrela Doji de Baixa',signal:'baixa',diff:3,desc:'Bullish com gap para doji acima. Reversão potencial em topo.',tip:'Doji em gap é sinal forte.',target:'-1.5R',stop:'Máxima do doji',candles:[{o:28,h:60,l:26,c:58},{o:62,h:66,l:60,c:62}]},
+  {id:'harami_cross_bull',name:'Harami Cross de Alta',signal:'alta',diff:2,desc:'Bearish grande, doji pequeno dentro do corpo. Mais forte que harami normal.',tip:'Doji indica equilíbrio total.',target:'+2R',stop:'Mínima do padrão',candles:[{o:72,h:74,l:30,c:32},{o:45,h:55,l:43,c:45}]},
+  {id:'harami_cross_bear',name:'Harami Cross de Baixa',signal:'baixa',diff:2,desc:'Bullish grande, doji pequeno dentro do corpo em topo. Indecisão após rally.',tip:'Procure em topos com volume caindo.',target:'-2R',stop:'Máxima do padrão',candles:[{o:28,h:72,l:26,c:70},{o:55,h:65,l:53,c:55}]},
+  {id:'high_wave',name:'Vela High Wave',signal:'neutro',diff:3,desc:'Pavios muito longos dos dois lados com corpo pequeno no centro. Alta volatilidade e indecisão.',tip:'Em fundo pode antecipar reversão.',target:'Aguarde',stop:'N/A',candles:[{o:48,h:90,l:10,c:52}]},
+  {id:'spinning_top',name:'Pião',signal:'neutro',diff:2,desc:'Corpo pequeno com pavios moderados. Indecisão entre compradores e vendedores.',tip:'Contexto define o significado.',target:'Aguarde',stop:'N/A',candles:[{o:45,h:65,l:35,c:55}]},
+  {id:'bull_doji',name:'Doji Bullish',signal:'alta',diff:3,desc:'Doji em contexto de baixa (após queda). A indecisão pode sinalizar fim da tendência.',tip:'Precisa de confirmação na próxima vela.',target:'+1.5R',stop:'Mínima do doji',candles:[{o:50,h:65,l:35,c:50}]},
+  {id:'bear_doji',name:'Doji Bearish',signal:'baixa',diff:3,desc:'Doji em contexto de alta (após rally). Indecisão pode sinalizar fim da alta.',tip:'Aguarde vela de confirmação.',target:'-1.5R',stop:'Máxima do doji',candles:[{o:50,h:65,l:35,c:50}]},
+  {id:'inside_bar',name:'Inside Bar',signal:'neutro',diff:2,desc:'Segunda vela completamente dentro do range da primeira (incluindo pavios). Compressão.',tip:'Entrada no rompimento da mãe.',target:'+2R',stop:'Oposto do rompimento',candles:[{o:30,h:75,l:28,c:72},{o:48,h:65,l:45,c:62}]},
+  {id:'outside_bar',name:'Outside Bar',signal:'neutro',diff:2,desc:'Segunda vela engloba completamente a primeira (incluindo pavios). Volatilidade.',tip:'Direção do fechamento da mãe define viés.',target:'+2R',stop:'Oposto',candles:[{o:45,h:60,l:42,c:57},{o:35,h:75,l:32,c:72}]},
+  {id:'pin_bar_bull',name:'Pin Bar de Alta',signal:'alta',diff:2,desc:'Pavio longo para baixo (≥3× corpo), fecha próximo do topo. Rejeição de preço baixo.',tip:'Um dos padrões mais usados por price action traders.',target:'+2R',stop:'Mínima do pavio',candles:[{o:62,h:68,l:15,c:65}]},
+  {id:'pin_bar_bear',name:'Pin Bar de Baixa',signal:'baixa',diff:2,desc:'Pavio longo para cima (≥3× corpo), fecha próximo do fundo. Rejeição de preço alto.',tip:'Em resistência é muito confiável.',target:'-2R',stop:'Máxima do pavio',candles:[{o:38,h:85,l:32,c:35}]},
+  {id:'fakey_bull',name:'Fakey de Alta',signal:'alta',diff:3,desc:'Inside bar, rompimento falso para baixo (pin bar), reversão para cima.',tip:'O falso rompimento prende vendedores.',target:'+2R',stop:'Mínima do falso rompimento',candles:[{o:35,h:70,l:32,c:68},{o:48,h:65,l:45,c:62},{o:50,h:55,l:20,c:22},{o:20,h:75,l:18,c:73}]},
+  {id:'fakey_bear',name:'Fakey de Baixa',signal:'baixa',diff:3,desc:'Inside bar, rompimento falso para cima (pin bar), reversão para baixo.',tip:'Armadilha para compradores.',target:'-2R',stop:'Máxima do falso rompimento',candles:[{o:65,h:68,l:30,c:32},{o:35,h:50,l:33,c:48},{o:46,h:80,l:44,c:78},{o:80,h:82,l:25,c:27}]},
+  {id:'gap_up',name:'Gap de Alta',signal:'alta',diff:1,desc:'Abertura muito acima do fechamento anterior. Notícia ou evento positivo.',tip:'Volume confirma a força do gap.',target:'+Tamanho do gap',stop:'Abaixo do gap',candles:[{o:25,h:48,l:23,c:45},{o:55,h:75,l:53,c:73}]},
+  {id:'gap_down',name:'Gap de Baixa',signal:'baixa',diff:1,desc:'Abertura muito abaixo do fechamento anterior. Notícia ou evento negativo.',tip:'Gap não preenchido = força.',target:'-Tamanho do gap',stop:'Acima do gap',candles:[{o:75,h:78,l:55,c:58},{o:45,h:47,l:27,c:30}]},
+  {id:'island_reversal_bull',name:'Ilha de Reversão Alta',signal:'alta',diff:4,desc:'Gap de baixa, consolidação em ilha, gap de alta. Reversão muito forte.',tip:'Padrão raro de grande confiabilidade.',target:'+3R',stop:'Abaixo do gap de alta',candles:[{o:72,h:74,l:40,c:43},{o:35,h:38,l:32,c:35},{o:36,h:40,l:33,c:38},{o:43,h:75,l:41,c:73}]},
+  {id:'island_reversal_bear',name:'Ilha de Reversão Baixa',signal:'baixa',diff:4,desc:'Gap de alta, consolidação em ilha, gap de baixa. Reversão poderosa em topo.',tip:'Raro mas muito confiável.',target:'-3R',stop:'Acima do gap de baixa',candles:[{o:28,h:60,l:26,c:57},{o:62,h:66,l:60,c:63},{o:61,h:65,l:59,c:62},{o:57,h:59,l:25,c:28}]},
+  {id:'dark_cloud_v2',name:'Nuvem Escura Ampla',signal:'baixa',diff:3,desc:'Penetração profunda (abaixo de 2/3 do corpo anterior). Versão mais forte da Nuvem Negra.',tip:'Mais que 2/3 = forte reversão.',target:'-3R',stop:'Máxima',candles:[{o:25,h:55,l:23,c:52},{o:58,h:60,l:22,c:25}]},
+  {id:'piercing_v2',name:'Linha Penetrante Profunda',signal:'alta',diff:3,desc:'Penetração acima de 2/3 do corpo anterior. Versão mais forte da Linha Penetrante.',tip:'Acima de 2/3 = reversão forte.',target:'+3R',stop:'Mínima',candles:[{o:75,h:77,l:45,c:48},{o:43,h:78,l:40,c:76}]},
+  {id:'counterattack_bull',name:'Contraataque de Alta',signal:'alta',diff:3,desc:'Bearish e bullish com mesmo fechamento. Comprador absorveu toda a venda.',tip:'Fechamento igual é essencial.',target:'+2R',stop:'Mínima',candles:[{o:68,h:70,l:32,c:35},{o:30,h:72,l:28,c:35}]},
+  {id:'counterattack_bear',name:'Contraataque de Baixa',signal:'baixa',diff:3,desc:'Bullish e bearish com mesmo fechamento. Vendedor absorveu toda a compra.',tip:'Contraataque em topo = reversão.',target:'-2R',stop:'Máxima',candles:[{o:32,h:68,l:30,c:65},{o:70,h:72,l:28,c:65}]},
+  {id:'neck_line_bull',name:'Linha de Pescoço Alta',signal:'alta',diff:4,desc:'Bearish, pequena bullish com fechamento na mínima da anterior. Possível reversão se romper.',tip:'Aguarde rompimento acima da bearish.',target:'+2R',stop:'Mínima',candles:[{o:68,h:70,l:30,c:33},{o:28,h:35,l:25,c:33}]},
+  {id:'three_gap_bull',name:'Três Lacunas de Alta',signal:'baixa',diff:4,desc:'Três gaps de alta consecutivos. Sobrecomprado — possível reversão.',tip:'Três gaps = sobrecompra extrema.',target:'-2R',stop:'Acima do último gap',candles:[{o:20,h:32,l:18,c:30},{o:35,h:48,l:33,c:46},{o:50,h:63,l:48,c:61},{o:65,h:78,l:63,c:76}]},
+  {id:'three_gap_bear',name:'Três Lacunas de Baixa',signal:'alta',diff:4,desc:'Três gaps de baixa consecutivos. Sobrevendido — possível reversão.',tip:'Sobrevendido extremo.',target:'+2R',stop:'Abaixo do último gap',candles:[{o:80,h:82,l:68,c:70},{o:65,h:67,l:53,c:55},{o:50,h:52,l:38,c:40},{o:35,h:37,l:23,c:25}]},
+];
+
+// ==================== STATE ====================
+let storage = {};
+try { storage = JSON.parse(localStorage.getItem('mdv4') || '{}'); } catch(e) {}
+function save() { try { localStorage.setItem('mdv4', JSON.stringify(storage)); } catch(e) {} }
+
+let state = {
+  mode: 'normal',
+  score: 0,
+  errors: 0,
+  streak: 0,
+  bestStreak: storage.bestStreak || 0,
+  lives: 3,
+  currentPattern: null,
+  answered: false,
+  totalAnswered: storage.totalAnswered || 0,
+  totalCorrect: storage.totalCorrect || 0,
+  studiedPatterns: storage.studiedPatterns || [],
+  achievements: storage.achievements || [],
+  streakDays: storage.streakDays || 0,
+  lastPlayDate: storage.lastPlayDate || null,
+};
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach((b, i) => {
+    const pages = ['home','quiz','simulator','library','achievements'];
+    if (pages[i] === id) b.classList.add('active');
+    else b.classList.remove('active');
+  });
+  document.getElementById('page-' + id).classList.add('active');
+
+  if (id === 'home') updateHome();
+  if (id === 'library') renderLibrary();
+  if (id === 'achievements') renderAchievements();
+  if (id === 'simulator') { if (!simData.length) initSimulator(); drawSimulator(); }
+  if (id === 'quiz') nextQuestion();
+}
+
+function startMode(mode) {
+  state.mode = mode;
+  state.score = 0;
+  state.errors = 0;
+  state.streak = 0;
+  state.lives = 3;
+  // Corações só na sobrevivência
+  document.getElementById('livesDisplay').style.visibility = mode === 'survival' ? 'visible' : 'hidden';
+  if (mode === 'survival') updateLives();
+  showPage('quiz');
+}
+
+// ==================== HOME ====================
+function updateHome() {
+  const acc = state.totalAnswered ? Math.round(state.totalCorrect / state.totalAnswered * 100) : 0;
+  document.getElementById('homeTotal').textContent = state.totalAnswered;
+  document.getElementById('homeAcc').textContent = acc + '%';
+  document.getElementById('homePats').textContent = state.studiedPatterns.length;
+  document.getElementById('streakText').textContent = state.streakDays + ' dias seguidos';
+  document.getElementById('streakSub').textContent = state.streakDays > 0 ? 'Continue assim! 💪' : 'Faça seu primeiro quiz hoje!';
+}
+
+// ==================== QUIZ ====================
+let quizPatternPool = [];
+
+function getQuizPool() {
+  return PATTERNS.filter(p => p.candles && p.candles.length > 0);
+}
+
+function nextQuestion() {
+  if (!quizPatternPool.length) quizPatternPool = [...getQuizPool()].sort(() => Math.random() - .5);
+  state.currentPattern = quizPatternPool.pop();
+  state.answered = false;
+
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('quizScore').textContent = state.score;
+  document.getElementById('quizErrors').textContent = state.errors;
+  document.getElementById('quizStreak').textContent = state.streak;
+
+  const p = state.currentPattern;
+
+  // normal = sempre nome | signal = sempre sinal | survival = mistura os dois
+  const qType = state.mode === 'signal' ? 'signal'
+              : state.mode === 'survival' ? (Math.random() < .5 ? 'name' : 'signal')
+              : 'name';
+  state.quizType = qType;
+
+  if (qType === 'name') {
+    document.getElementById('quizSubQ').textContent = `Sinal: ${signalLabel(p.signal)}`;
+    const wrong = getWrongOptions(p, 'name');
+    renderOptions([p.name, ...wrong], p.name, 'name');
+  } else {
+    document.getElementById('quizSubQ').textContent = '';
+    const opts = ['📈 Alta', '📉 Baixa', '➡️ Neutro'];
+    renderOptions(opts, signalEmoji(p.signal), 'signal');
+  }
+
+  drawQuizCandles(p);
+}
+
+function signalLabel(s) { return {alta:'📈 Alta', baixa:'📉 Baixa', neutro:'➡️ Neutro'}[s]; }
+function signalEmoji(s) { return {alta:'📈 Alta', baixa:'📉 Baixa', neutro:'➡️ Neutro'}[s]; }
+
+function getWrongOptions(p, type) {
+  const pool = PATTERNS.filter(x => x.id !== p.id && x.candles.length > 0);
+  const shuffled = pool.sort(() => Math.random() - .5).slice(0, 3);
+  if (type === 'name') return shuffled.map(x => x.name);
+  return ['📈 Alta','📉 Baixa','➡️ Neutro'].filter(x => x !== signalEmoji(p.signal)).slice(0,2);
+}
+
+function getSignalForOption(optName) {
+  const pat = PATTERNS.find(p => p.name === optName);
+  return pat ? pat.signal : null;
+}
+
+function renderOptions(opts, correct, type) {
+  const grid = document.getElementById('optionsGrid');
+  const shuffled = [...opts].sort(() => Math.random() - .5);
+  grid.innerHTML = '';
+  shuffled.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+
+    if (type === 'name') {
+      const sig = getSignalForOption(opt);
+      const sigClass = sig || 'neutro';
+      const sigText = {alta:'Alta', baixa:'Baixa', neutro:'Neutro'}[sigClass] || '';
+      btn.innerHTML = `
+        <span class="opt-signal-badge ${sigClass}">${sigText}</span>
+        <span class="opt-label">${opt}</span>
+      `;
+    } else {
+      const sigMap = {'📈 Alta':'alta','📉 Baixa':'baixa','➡️ Neutro':'neutro'};
+      const sigClass = sigMap[opt] || 'neutro';
+      const icons = {alta:'📈',baixa:'📉',neutro:'➡️'};
+      const labels = {alta:'Alta',baixa:'Baixa',neutro:'Neutro'};
+      btn.innerHTML = `
+        <span style="font-size:1.5rem">${icons[sigClass]}</span>
+        <span class="opt-label" style="font-size:.95rem">${labels[sigClass]}</span>
+      `;
+    }
+
+    btn.onclick = () => answer(opt, correct, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function answer(chosen, correct, btn) {
+  if (state.answered) return;
+  state.answered = true;
+
+  const isCorrect = chosen === correct;
+  const p = state.currentPattern;
+
+  // Update stats
+  state.totalAnswered++;
+  if (isCorrect) {
+    state.totalCorrect++;
+    state.score++;
+    state.streak++;
+    if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+    storage.bestStreak = state.bestStreak;
+    playSound('correct');
+    if (state.streak >= 5) { showCombo('🔥 ' + state.streak + 'x'); if(state.streak % 5 === 0) { playSound('combo'); launchConfetti(); } }
+    btn.classList.add('correct');
+  } else {
+    state.errors++;
+    state.streak = 0;
+    playSound('wrong');
+    btn.classList.add('wrong');
+    // Highlight correct
+    document.querySelectorAll('.opt-btn').forEach(b => {
+      if (b.textContent === correct) b.classList.add('correct');
+      else b.classList.add('disabled');
+    });
+    if (state.mode === 'survival') {
+      state.lives = Math.max(0, state.lives - 1);
+      updateLives();
+      if (state.lives === 0) { setTimeout(showGameOver, 600); return; }
+    }
+  }
+
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.add('disabled'));
+
+  // Streak/day tracking
+  const today = new Date().toDateString();
+  if (state.lastPlayDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    state.streakDays = state.lastPlayDate === yesterday ? state.streakDays + 1 : 1;
+    state.lastPlayDate = today;
+    storage.streakDays = state.streakDays;
+    storage.lastPlayDate = today;
+  }
+  if (!state.studiedPatterns.includes(p.id)) state.studiedPatterns.push(p.id);
+  storage.totalAnswered = state.totalAnswered;
+  storage.totalCorrect = state.totalCorrect;
+  storage.studiedPatterns = state.studiedPatterns;
+  save();
+
+  // Feedback
+  const fb = document.getElementById('feedbackBox');
+  fb.className = 'feedback-box show ' + (isCorrect ? 'correct' : 'wrong');
+  document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ ' + p.name : '❌ Era: ' + p.name;
+  document.getElementById('feedbackText').textContent = p.desc;
+
+  const ti = document.getElementById('tradeInfo');
+  ti.innerHTML = `
+    <div class="ti"><div class="label">Sinal</div><div class="value">${signalLabel(p.signal)}</div></div>
+    <div class="ti"><div class="label">Alvo</div><div class="value">${p.target||'-'}</div></div>
+    <div class="ti"><div class="label">Stop</div><div class="value">${p.stop||'-'}</div></div>
+  `;
+
+  document.getElementById('nextBtn').style.display = 'block';
+  checkAchievements();
+}
+
+function updateLives() {
+  const hearts = document.querySelectorAll('.heart');
+  hearts.forEach((h, i) => h.classList.toggle('lost', i >= state.lives));
+}
+
+function showGameOver() {
+  playSound('gameover');
+  const acc = state.score + state.errors > 0 ? Math.round(state.score / (state.score + state.errors) * 100) : 0;
+  document.getElementById('goAcertos').textContent = state.score;
+  document.getElementById('goErros').textContent = state.errors;
+  document.getElementById('goAcc').textContent = acc + '%';
+  document.getElementById('goStreak').textContent = state.bestStreak;
+  document.getElementById('gameOverOverlay').classList.remove('hidden');
+}
+
+function restartSurvival() {
+  document.getElementById('gameOverOverlay').classList.add('hidden');
+  startMode('survival');
+}
+
+function closeGameOver() {
+  document.getElementById('gameOverOverlay').classList.add('hidden');
+  showPage('home');
+}
+
+function showCombo(text) {
+  const badge = document.getElementById('comboBadge');
+  badge.textContent = text;
+  badge.classList.add('show');
+  setTimeout(() => badge.classList.remove('show'), 1500);
+}
+
+// ==================== DRAW QUIZ CANDLES ====================
+function drawQuizCandles(pattern) {
+  const canvas = document.getElementById('quizCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = 400;
+  ctx.scale(2, 2);
+  const W = canvas.offsetWidth / 2;
+  const H = 200;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0d1520';
+  ctx.fillRect(0, 0, W, H);
+
+  const candles = pattern.candles;
+  const n = candles.length;
+  const margin = 20;
+  const slotW = (W - 2 * margin) / Math.max(n, 1);
+  const candleW = Math.min(slotW * 0.55, 28);
+
+  // Find global min/max across all candles
+  let gMin = Infinity, gMax = -Infinity;
+  candles.forEach(c => {
+    gMin = Math.min(gMin, c.l);
+    gMax = Math.max(gMax, c.h);
+  });
+  if (gMax === gMin) { gMax += 5; gMin -= 5; }
+  const range = gMax - gMin;
+  const pad = range * 0.15;
+  const lo = gMin - pad, hi = gMax + pad;
+
+  function yOf(v) { return H - margin - ((v - lo) / (hi - lo)) * (H - 2 * margin); }
+
+  candles.forEach((c, i) => {
+    const cx = margin + (i + 0.5) * slotW;
+    const open = c.o, high = c.h, low = c.l, close = c.c;
+    const isBull = close >= open;
+    const color = isBull ? '#00c896' : '#ff4560';
+
+    const yO = yOf(open), yC = yOf(close), yH = yOf(high), yL = yOf(low);
+    const bodyTop = Math.min(yO, yC);
+    const bodyH = Math.max(Math.abs(yO - yC), 1.5);
+
+    // Wicks
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, yH);
+    ctx.lineTo(cx, bodyTop);
+    ctx.moveTo(cx, bodyTop + bodyH);
+    ctx.lineTo(cx, yL);
+    ctx.stroke();
+
+    // Body
+    ctx.fillStyle = color;
+    if (bodyH < 2) {
+      // Doji — draw as horizontal line
+      ctx.fillStyle = '#f5a623';
+      ctx.fillRect(cx - candleW / 2, yO - 0.75, candleW, 1.5);
+    } else {
+      ctx.fillRect(cx - candleW / 2, bodyTop, candleW, bodyH);
+    }
+  });
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = margin + (H - 2 * margin) * (i / 4);
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    const price = hi - (hi - lo) * (i / 4);
+    ctx.fillStyle = 'rgba(122,139,168,0.7)';
+    ctx.font = '9px monospace';
+    ctx.fillText(price.toFixed(0), 2, y - 2);
+  }
+}
+
+// ==================== LIBRARY ====================
+let libFilterVal = 'all';
+
+function libFilter(val, btn) {
+  libFilterVal = val;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLibrary();
+}
+
+function renderLibrary() {
+  const search = document.getElementById('libSearch').value.toLowerCase();
+  const grid = document.getElementById('patternGrid');
+
+  let filtered = PATTERNS.filter(p => {
+    if (search && !p.name.toLowerCase().includes(search) && !p.desc.toLowerCase().includes(search)) return false;
+    if (libFilterVal === 'all') return true;
+    if (libFilterVal === 'alta') return p.signal === 'alta';
+    if (libFilterVal === 'baixa') return p.signal === 'baixa';
+    if (libFilterVal === 'neutro') return p.signal === 'neutro';
+    if (libFilterVal === 'd1') return p.diff === 1;
+    if (libFilterVal === 'd2') return p.diff === 2;
+    if (libFilterVal === 'd3') return p.diff === 3;
+    if (libFilterVal === 'd4') return p.diff === 4;
+    return true;
+  });
+
+  grid.innerHTML = '';
+  filtered.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'pattern-card';
+    card.onclick = () => showPatternDetail(p);
+    const signalClass = {alta:'signal-alta', baixa:'signal-baixa', neutro:'signal-neutro'}[p.signal];
+    const stars = '★'.repeat(p.diff) + '☆'.repeat(4 - p.diff);
+    card.innerHTML = `
+      <span class="pc-signal ${signalClass}">${signalLabel(p.signal)}</span>
+      <canvas id="libcanvas-${p.id}" height="60"></canvas>
+      <h4>${p.name}</h4>
+      <p>${stars}</p>
+    `;
+    grid.appendChild(card);
+    // Draw mini candles
+    setTimeout(() => drawMiniCandles(p, document.getElementById('libcanvas-' + p.id)), 10);
+  });
+}
+
+function drawMiniCandles(pattern, canvas) {
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * 2;
+  canvas.height = 120;
+  ctx.scale(2, 2);
+  const W = canvas.offsetWidth / 2;
+  const H = 60;
+
+  ctx.clearRect(0, 0, W, H);
+
+  const candles = pattern.candles;
+  const n = candles.length;
+  const margin = 4;
+  const slotW = (W - 2 * margin) / Math.max(n, 1);
+  const candleW = Math.min(slotW * 0.55, 16);
+
+  let gMin = Infinity, gMax = -Infinity;
+  candles.forEach(c => { gMin = Math.min(gMin, c.l); gMax = Math.max(gMax, c.h); });
+  if (gMax === gMin) { gMax += 5; gMin -= 5; }
+  const pad = (gMax - gMin) * 0.15;
+  const lo = gMin - pad, hi = gMax + pad;
+  function yOf(v) { return H - margin - ((v - lo) / (hi - lo)) * (H - 2 * margin); }
+
+  candles.forEach((c, i) => {
+    const cx = margin + (i + 0.5) * slotW;
+    const isBull = c.c >= c.o;
+    const color = isBull ? '#00c896' : '#ff4560';
+    const yO = yOf(c.o), yC = yOf(c.c), yH = yOf(c.h), yL = yOf(c.l);
+    const bodyTop = Math.min(yO, yC);
+    const bodyH = Math.max(Math.abs(yO - yC), 1);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, yH); ctx.lineTo(cx, bodyTop);
+    ctx.moveTo(cx, bodyTop + bodyH); ctx.lineTo(cx, yL);
+    ctx.stroke();
+
+    if (bodyH < 1.5) {
+      ctx.fillStyle = '#f5a623';
+      ctx.fillRect(cx - candleW / 2, yO - 0.5, candleW, 1);
+    } else {
+      ctx.fillStyle = color;
+      ctx.fillRect(cx - candleW / 2, bodyTop, candleW, bodyH);
+    }
+  });
+}
+
+function showPatternDetail(p) {
+  const modal = document.getElementById('patternModal');
+  modal.classList.remove('hidden');
+
+  document.getElementById('modalTitle').textContent = p.name;
+  const signalClass = {alta:'signal-alta', baixa:'signal-baixa', neutro:'signal-neutro'}[p.signal];
+  document.getElementById('modalSignalBadge').className = 'pc-signal ' + signalClass;
+  document.getElementById('modalSignalBadge').textContent = signalLabel(p.signal);
+  document.getElementById('modalSignal').textContent = signalLabel(p.signal);
+  document.getElementById('modalDiff').textContent = '★'.repeat(p.diff) + '☆'.repeat(4 - p.diff);
+  document.getElementById('modalTarget').textContent = p.target || '-';
+  document.getElementById('modalStop').textContent = p.stop || '-';
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalTip').textContent = '💡 ' + p.tip;
+
+  setTimeout(() => drawMiniCandles(p, document.getElementById('modalCanvas')), 10);
+}
+
+function closeModal() {
+  document.getElementById('patternModal').classList.add('hidden');
+}
+
+// ==================== SIMULATOR ====================
+let simData = [];
+let simOffset = 0;
+let simZoom = 4.5;
+let simTFVal = '1m';
+let simPinchDist = 0;
+let simDragging = false;
+let simLastX = 0;
+let simPL = 0;
+let simWins = 0, simLosses = 0;
+let simTrades = [];
+let crosshairX = -1, crosshairY = -1;
+
+function genOHLC(prev, volatility, trend) {
+  const change = (Math.random() - 0.5 + trend * 0.1) * volatility;
+  const open = prev;
+  const close = Math.max(1, prev + change);
+  const range = Math.abs(change) * (1 + Math.random());
+  const high = Math.max(open, close) + Math.random() * range * 0.5;
+  const low = Math.min(open, close) - Math.random() * range * 0.5;
+  return { o: open, h: high, l: low, c: close };
+}
+
+function genNewSimData() {
+  simData = [];
+  let price = 50 + Math.random() * 50;
+  const vol = 2 + Math.random() * 3;
+  let trend = (Math.random() - 0.5) * 0.5;
+  for (let i = 0; i < 200; i++) {
+    if (Math.random() < 0.05) trend = (Math.random() - 0.5) * 0.5;
+    const c = genOHLC(price, vol, trend);
+    simData.push(c);
+    price = c.c;
+  }
+  simOffset = 0;
+  simZoom = 4.5;
+  detectPattern();
+  drawSimulator();
+}
+
+function initSimulator() {
+  genNewSimData();
+  const canvas = document.getElementById('simCanvas');
+  canvas.addEventListener('mousemove', simMouseMove);
+  canvas.addEventListener('mouseleave', () => { crosshairX = -1; drawSimulator(); });
+  canvas.addEventListener('wheel', simWheel, {passive: false});
+  canvas.addEventListener('touchstart', simTouchStart, {passive: false});
+  canvas.addEventListener('touchmove', simTouchMove, {passive: false});
+  canvas.addEventListener('touchend', simTouchEnd);
+}
+
+function simTF(tf) {
+  simTFVal = tf;
+  document.querySelectorAll('.sim-controls button[id^="tf-"]').forEach(b => b.classList.remove('active'));
+  const el = document.getElementById('tf-' + tf);
+  if (el) el.classList.add('active');
+  genNewSimData();
+}
+
+function simWheel(e) {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  simZoom = Math.max(0.3, Math.min(5, simZoom * delta));
+  drawSimulator();
+}
+
+function simTouchStart(e) {
+  if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    simPinchDist = Math.sqrt(dx*dx + dy*dy);
+  } else if (e.touches.length === 1) {
+    simDragging = true;
+    simLastX = e.touches[0].clientX;
+  }
+}
+
+function simTouchMove(e) {
+  e.preventDefault();
+  if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (simPinchDist > 0) {
+      const ratio = dist / simPinchDist;
+      simZoom = Math.max(0.3, Math.min(5, simZoom * ratio));
+    }
+    simPinchDist = dist;
+    drawSimulator();
+  } else if (simDragging && e.touches.length === 1) {
+    const dx = e.touches[0].clientX - simLastX;
+    simLastX = e.touches[0].clientX;
+    const candleW = Math.max(4, 12 * simZoom);
+    simOffset = Math.max(0, Math.min(simData.length - 20, simOffset - dx / candleW));
+    drawSimulator();
+  }
+}
+
+function simTouchEnd() { simDragging = false; simPinchDist = 0; }
+
+function simMouseMove(e) {
+  const rect = e.target.getBoundingClientRect();
+  crosshairX = e.clientX - rect.left;
+  crosshairY = e.clientY - rect.top;
+  const W = e.target.offsetWidth;
+  const H = 340;
+  const candleW = Math.max(4, 12 * simZoom);
+  const visCount = Math.floor(W / candleW);
+  const start = Math.floor(simOffset);
+  const candleIdx = Math.floor(crosshairX / candleW) + start;
+  const info = simData[candleIdx];
+  if (info) {
+    const body = Math.abs(info.c - info.o);
+    const dir = info.c >= info.o ? '📈 Alta' : '📉 Baixa';
+    document.getElementById('crosshairInfo').textContent = `Vela: ${dir} | Corpo: ${body.toFixed(2)} | Máx: ${info.h.toFixed(2)} Mín: ${info.l.toFixed(2)}`;
+  }
+  drawSimulator();
+}
+
+function drawSimulator() {
+  const canvas = document.getElementById('simCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth;
+  const H = 340;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.scale(dpr, dpr);
+
+  ctx.fillStyle = '#090e18';
+  ctx.fillRect(0, 0, W, H);
+
+  const candleW = Math.max(4, 12 * simZoom);
+  const bodyW = Math.max(2, candleW * 0.65);
+  const visCount = Math.floor(W / candleW);
+  const start = Math.floor(simOffset);
+  const visible = simData.slice(start, start + visCount);
+
+  if (!visible.length) return;
+
+  let gMin = Infinity, gMax = -Infinity;
+  visible.forEach(c => { if(c){ gMin = Math.min(gMin, c.l); gMax = Math.max(gMax, c.h); }});
+  const pad = (gMax - gMin) * 0.1;
+  const lo = gMin - pad, hi = gMax + pad;
+  function yOf(v) { return H - 20 - ((v - lo) / (hi - lo)) * (H - 30); }
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = 10 + (H - 30) * i / 5;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // Candles
+  visible.forEach((c, i) => {
+    if (!c) return;
+    const cx = i * candleW + candleW / 2;
+    const isBull = c.c >= c.o;
+    const color = isBull ? '#00c896' : '#ff4560';
+    const yO = yOf(c.o), yC = yOf(c.c), yH = yOf(c.h), yL = yOf(c.l);
+    const bodyTop = Math.min(yO, yC);
+    const bodyH = Math.max(Math.abs(yO - yC), 1.5);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx, yH); ctx.lineTo(cx, bodyTop);
+    ctx.moveTo(cx, bodyTop + bodyH); ctx.lineTo(cx, yL);
+    ctx.stroke();
+
+    if (bodyH < 2) {
+      ctx.fillStyle = '#f5a623';
+      ctx.fillRect(cx - bodyW / 2, yO - 0.75, bodyW, 1.5);
+    } else {
+      ctx.fillStyle = color;
+      ctx.fillRect(cx - bodyW / 2, bodyTop, bodyW, bodyH);
+    }
+  });
+
+  // Crosshair
+  if (crosshairX >= 0) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(crosshairX, 0); ctx.lineTo(crosshairX, H); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, crosshairY); ctx.lineTo(W, crosshairY); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Trade annotations
+  simTrades.forEach(t => {
+    const idx = t.idx - start;
+    if (idx < 0 || idx >= visCount) return;
+    const cx = idx * candleW + candleW / 2;
+    ctx.fillStyle = t.result > 0 ? '#00c896' : '#ff4560';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(t.result > 0 ? '▲' : '▼', cx - 6, yOf(simData[t.idx].c) - 10);
+  });
+}
+
+function placeTrade(dir) {
+  if (!simData.length) return;
+  const candleW = Math.max(4, 12 * simZoom);
+  const visCount = Math.floor(document.getElementById('simCanvas').offsetWidth / candleW);
+  const start = Math.floor(simOffset);
+  const lastIdx = Math.min(start + visCount - 1, simData.length - 2);
+  const entry = simData[lastIdx];
+  const next = simData[lastIdx + 1];
+  if (!entry || !next) return;
+
+  let result = 0;
+  if (dir === 'wait') {
+    result = 0;
+  } else if (dir === 'buy') {
+    result = next.c - entry.c;
+  } else {
+    result = entry.c - next.c;
+  }
+
+  if (result > 0) simWins++;
+  else if (result < 0) simLosses++;
+
+  simTrades.push({ idx: lastIdx, result, dir });
+
+  // Streak tracking
+  if (!simData._streak) simData._streak = 0;
+  if (dir !== 'wait') {
+    if (result > 0) simData._streak = (simData._streak || 0) + 1;
+    else simData._streak = 0;
+  }
+
+  // Show result display
+  const resDisplay = document.getElementById('simResultDisplay');
+  const resIcon = document.getElementById('simResultIcon');
+  const resText = document.getElementById('simResultText');
+  const resSub = document.getElementById('simResultSub');
+
+  resDisplay.style.display = 'block';
+
+  const dirLabel = dir === 'buy' ? '▲ COMPRA' : dir === 'sell' ? '▼ VENDA' : '⏸ AGUARDOU';
+  const nextDir = next.c > entry.c ? 'subiu ▲' : 'caiu ▼';
+
+  if (dir === 'wait') {
+    resDisplay.className = 'sim-result-display aguardou';
+    resIcon.textContent = '⏸';
+    resText.textContent = 'AGUARDOU';
+    resSub.textContent = `O mercado ${nextDir} — próximo cenário em 2s`;
+  } else if (result > 0) {
+    resDisplay.className = 'sim-result-display acerto';
+    resIcon.textContent = '✅';
+    resText.textContent = 'ACERTOU!';
+    resSub.textContent = `${dirLabel} — mercado ${nextDir}`;
+    playSound('correct');
+    if (simData._streak >= 3) { showCombo('🔥 ' + simData._streak + 'x'); if (simData._streak % 3 === 0) playSound('combo'); }
+  } else {
+    resDisplay.className = 'sim-result-display erro';
+    resIcon.textContent = '❌';
+    resText.textContent = 'ERROU!';
+    resSub.textContent = `${dirLabel} — mas o mercado ${nextDir}`;
+    playSound('wrong');
+  }
+
+  // Update stats
+  const total = simWins + simLosses;
+  document.getElementById('simWins').textContent = simWins;
+  document.getElementById('simLosses').textContent = simLosses;
+  document.getElementById('simWR').textContent = total ? Math.round(simWins / total * 100) + '%' : '-';
+  document.getElementById('simStreak').textContent = simData._streak || 0;
+
+  // Disable buttons temporarily
+  document.querySelectorAll('.trade-btns button').forEach(b => b.disabled = true);
+
+  // Auto-advance after 2 seconds
+  setTimeout(() => {
+    resDisplay.style.display = 'none';
+    document.querySelectorAll('.trade-btns button').forEach(b => b.disabled = false);
+
+    // Advance to next scenario
+    simOffset = Math.min(simData.length - 20, simOffset + 3);
+
+    // If near end, generate new data
+    if (simOffset >= simData.length - 25) {
+      genNewSimData();
+    } else {
+      detectPattern();
+      drawSimulator();
+    }
+  }, 2000);
+}
+
+function detectPattern() {
+  const n = simData.length;
+  if (n < 3) return;
+  const c = simData[n-1];
+  const p = simData[n-2];
+  const alert = document.getElementById('patternAlert');
+  const alertName = document.getElementById('patternAlertName');
+
+  // Simple detection
+  const bullEngulf = c.c > c.o && p.c < p.o && c.o < p.c && c.c > p.o;
+  const bearEngulf = c.c < c.o && p.c > p.o && c.o > p.c && c.c < p.o;
+  const hammer = (c.c >= c.o) && ((c.o - c.l) >= 2 * Math.abs(c.c - c.o)) && ((c.h - c.c) < 0.3 * Math.abs(c.c - c.o));
+  const shootingStar = (c.c <= c.o) && ((c.h - c.o) >= 2 * Math.abs(c.c - c.o));
+  const doji = Math.abs(c.c - c.o) < (c.h - c.l) * 0.1;
+
+  if (bullEngulf) { alert.classList.add('show'); alertName.textContent = 'Engolfo de Alta 📈'; }
+  else if (bearEngulf) { alert.classList.add('show'); alertName.textContent = 'Engolfo de Baixa 📉'; }
+  else if (hammer) { alert.classList.add('show'); alertName.textContent = 'Martelo 📈'; }
+  else if (shootingStar) { alert.classList.add('show'); alertName.textContent = 'Estrela Cadente 📉'; }
+  else if (doji) { alert.classList.add('show'); alertName.textContent = 'Doji ➡️'; }
+  else { alert.classList.remove('show'); }
+}
+
+// ==================== ACHIEVEMENTS ====================
+const ACHIEVEMENTS = [
+  {id:'first',name:'Primeira Vela',desc:'Responda sua primeira questão',icon:'🕯️',check: s => s.totalAnswered >= 1},
+  {id:'ten',name:'Aprendiz',desc:'Responda 10 questões',icon:'📚',check: s => s.totalAnswered >= 10},
+  {id:'fifty',name:'Estudioso',desc:'Responda 50 questões',icon:'🎓',check: s => s.totalAnswered >= 50},
+  {id:'hundred',name:'Centurião',desc:'Responda 100 questões',icon:'💯',check: s => s.totalAnswered >= 100},
+  {id:'streak5',name:'Combo x5',desc:'5 acertos seguidos',icon:'🔥',check: s => s.bestStreak >= 5},
+  {id:'streak10',name:'Em Chamas',desc:'10 acertos seguidos',icon:'🌋',check: s => s.bestStreak >= 10},
+  {id:'acc80',name:'Mira Afiada',desc:'80% de precisão (min 20 questões)',icon:'🎯',check: s => s.totalAnswered >= 20 && s.totalCorrect / s.totalAnswered >= 0.8},
+  {id:'acc90',name:'Sniper',desc:'90% de precisão (min 50 questões)',icon:'🏹',check: s => s.totalAnswered >= 50 && s.totalCorrect / s.totalAnswered >= 0.9},
+  {id:'pat20',name:'Colecionador',desc:'Estude 20 padrões diferentes',icon:'🗺️',check: s => s.studiedPatterns.length >= 20},
+  {id:'pat50',name:'Mestre',desc:'Estude 50 padrões diferentes',icon:'👑',check: s => s.studiedPatterns.length >= 50},
+  {id:'pat_all',name:'Lendário',desc:'Estude todos os padrões',icon:'🌟',check: s => s.studiedPatterns.length >= PATTERNS.length},
+  {id:'streak3',name:'Dedicado',desc:'3 dias seguidos de treino',icon:'📅',check: s => s.streakDays >= 3},
+  {id:'streak7',name:'Semana Perfeita',desc:'7 dias seguidos',icon:'🗓️',check: s => s.streakDays >= 7},
+];
+
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    if (!state.achievements.includes(a.id) && a.check(state)) {
+      state.achievements.push(a.id);
+      storage.achievements = state.achievements;
+      save();
+      showCombo('🏆 ' + a.name);
+      playSound('combo');
+      launchConfetti();
+    }
+  });
+}
+
+function renderAchievements() {
+  const grid = document.getElementById('achGrid');
+  grid.innerHTML = '';
+  ACHIEVEMENTS.forEach(a => {
+    const earned = state.achievements.includes(a.id);
+    const card = document.createElement('div');
+    card.className = 'ach-card' + (earned ? ' earned' : '');
+    card.innerHTML = `
+      <div class="ach-icon" style="${earned ? '' : 'filter:grayscale(1);opacity:.4'}">${a.icon}</div>
+      <div>
+        <h4 style="${earned ? 'color:var(--gold)' : ''}">${a.name}</h4>
+        <p>${a.desc}</p>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// ==================== CONFETTI ====================
+function launchConfetti() {
+  const container = document.getElementById('confettiContainer');
+  const colors = ['#00c896','#ff4560','#3b82f6','#fbbf24','#a78bfa','#f472b6'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDuration = (1 + Math.random()) + 's';
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.width = piece.style.height = (6 + Math.random() * 8) + 'px';
+    container.appendChild(piece);
+    setTimeout(() => piece.remove(), 2500);
+  }
+}
+
+// ==================== INIT ====================
+updateHome();
+
+// ==================== SERVICE WORKER ====================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('SW registrado:', reg.scope))
+      .catch(err => console.log('SW erro:', err));
+  });
+}
+</script>
+</body>
+</html>

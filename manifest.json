@@ -1,0 +1,43 @@
+{
+  "name": "Mestre das Velas",
+  "short_name": "Mestre Velas",
+  "description": "Aprenda padrões de candlestick com quizzes, simulador e biblioteca completa.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "lang": "pt-BR",
+  "categories": ["education", "finance"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Iniciar Quiz",
+      "short_name": "Quiz",
+      "description": "Ir direto para o Quiz",
+      "url": "/index.html#quiz",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Simulador",
+      "short_name": "Simulador",
+      "description": "Praticar no Simulador",
+      "url": "/index.html#simulator",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
