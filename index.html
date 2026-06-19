@@ -366,6 +366,37 @@
     transition: all .2s;
   }
   .onb-skip:hover { color: var(--text); background: rgba(255,255,255,.05); }
+
+  /* ONBOARDING LANGUAGE SELECTION SCREEN */
+  .onb-lang-screen {
+    position: absolute; inset: 0; z-index: 20;
+    display: flex; flex-direction: column;
+    padding: 50px 20px 30px;
+    overflow-y: auto;
+  }
+  .onb-lang-screen.hidden { display: none; }
+  .onb-lang-header { text-align: center; margin-bottom: 24px; flex-shrink: 0; }
+  .onb-lang-icon { font-size: 2.6rem; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
+  .onb-lang-header h1 {
+    font-size: 1.3rem; font-weight: 900; margin-bottom: 8px;
+    background: linear-gradient(90deg, #ffd700, #d4a017, #ffe066, #ffd700);
+    background-size: 300% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+  .onb-lang-header p { color: var(--text2); font-size: .78rem; line-height: 1.5; }
+  .onb-lang-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    max-width: 460px; margin: 0 auto; width: 100%;
+  }
+  .onb-lang-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-size: 1.8rem; cursor: pointer; transition: all .2s;
+  }
+  .onb-lang-card span { font-size: .8rem; font-weight: 700; color: var(--text); }
+  .onb-lang-card:hover, .onb-lang-card:active { border-color: var(--gold); background: var(--surface2); transform: translateY(-2px); }
   .onb-slides {
     flex: 1; display: flex; position: relative;
     width: 100%; height: 100%;
@@ -437,9 +468,42 @@
 <!-- ONBOARDING -->
 <div class="onboarding-overlay" id="onboardingOverlay">
   <div class="onb-particles" id="onbParticles"></div>
+
+  <!-- LANGUAGE SELECTION SCREEN (always first, language-neutral text) -->
+  <div class="onb-lang-screen" id="onbLangScreen">
+    <div class="onb-lang-header">
+      <div class="onb-lang-icon">🌍</div>
+      <h1>Choose your language</h1>
+      <p>Escolha seu idioma · Elige tu idioma · Choisissez votre langue</p>
+    </div>
+    <div class="onb-lang-grid">
+      <button class="onb-lang-card" onclick="selectOnbLang('pt')">🇧🇷<span>Português</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('en')">🇺🇸<span>English</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('es')">🇪🇸<span>Español</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('zh')">🇨🇳<span>中文</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('hi')">🇮🇳<span>हिन्दी</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('ar')">🇸🇦<span>العربية</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('bn')">🇧🇩<span>বাংলা</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('ru')">🇷🇺<span>Русский</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('ja')">🇯🇵<span>日本語</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('fr')">🇫🇷<span>Français</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('de')">🇩🇪<span>Deutsch</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('ko')">🇰🇷<span>한국어</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('vi')">🇻🇳<span>Tiếng Việt</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('tr')">🇹🇷<span>Türkçe</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('it')">🇮🇹<span>Italiano</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('th')">🇹🇭<span>ไทย</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('pl')">🇵🇱<span>Polski</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('nl')">🇳🇱<span>Nederlands</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('uk')">🇺🇦<span>Українська</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('id')">🇮🇩<span>Indonesia</span></button>
+      <button class="onb-lang-card" onclick="selectOnbLang('ur')">🇵🇰<span>اردو</span></button>
+    </div>
+  </div>
+
   <div class="onb-skip" id="onbSkip" onclick="finishOnboarding()" data-i18n="onb_skip">Pular</div>
 
-  <div class="onb-slides" id="onbSlides">
+  <div class="onb-slides hidden" id="onbSlides">
 
     <div class="onb-slide active">
       <div class="onb-icon-wrap">
@@ -470,14 +534,14 @@
 
   </div>
 
-  <div class="onb-dots" id="onbDots">
+  <div class="onb-dots hidden" id="onbDots">
     <span class="onb-dot active"></span>
     <span class="onb-dot"></span>
     <span class="onb-dot"></span>
     <span class="onb-dot"></span>
   </div>
 
-  <div class="onb-nav">
+  <div class="onb-nav hidden" id="onbNavWrap">
     <button class="onb-next" id="onbNext" onclick="onbNextSlide()" data-i18n="onb_next">Próximo →</button>
   </div>
 </div>
@@ -2161,6 +2225,9 @@ function initOnboarding() {
     overlay.classList.add('hidden');
     return;
   }
+  // Skip button only appears after language is chosen
+  document.getElementById('onbSkip').style.display = 'none';
+
   // Particles for onboarding background
   const container = document.getElementById('onbParticles');
   const colors = ['#ffd700','#d4a017','#ffe066','#00c853'];
@@ -2180,6 +2247,16 @@ function initOnboarding() {
     container.appendChild(p);
   }
   drawOnbCandle();
+}
+
+function selectOnbLang(lang) {
+  setLang(lang);
+  // Hide language screen, reveal slides
+  document.getElementById('onbLangScreen').classList.add('hidden');
+  document.getElementById('onbSlides').classList.remove('hidden');
+  document.getElementById('onbDots').classList.remove('hidden');
+  document.getElementById('onbNavWrap').classList.remove('hidden');
+  document.getElementById('onbSkip').style.display = 'block';
 }
 
 function drawOnbCandle() {
