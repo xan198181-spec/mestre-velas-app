@@ -349,9 +349,138 @@
     .home-hero h1 { font-size: 1.5rem; }
     .modal-content { padding: 16px; }
   }
+  /* ========== ONBOARDING ========== */
+  .onboarding-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg);
+    background-image: radial-gradient(ellipse at top, #1a1400 0%, #080600 70%);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .onboarding-overlay.hidden { display: none; }
+  .onb-particles { position: absolute; inset: 0; pointer-events: none; }
+  .onb-skip {
+    position: absolute; top: 18px; right: 18px; z-index: 10;
+    color: var(--text2); font-size: .85rem; font-weight: 600;
+    padding: 8px 14px; cursor: pointer; border-radius: 8px;
+    transition: all .2s;
+  }
+  .onb-skip:hover { color: var(--text); background: rgba(255,255,255,.05); }
+  .onb-slides {
+    flex: 1; display: flex; position: relative;
+    width: 100%; height: 100%;
+  }
+  .onb-slide {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px 28px 120px;
+    opacity: 0; transform: translateX(40px);
+    transition: opacity .4s ease, transform .4s ease;
+    pointer-events: none;
+  }
+  .onb-slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
+  .onb-slide.prev { transform: translateX(-40px); }
+  .onb-icon-wrap {
+    width: 140px; height: 140px; margin-bottom: 32px;
+    display: flex; align-items: center; justify-content: center;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px rgba(212,160,23,.35));
+  }
+  .onb-emoji { font-size: 5rem; line-height: 1; }
+  .onb-slide h1 {
+    font-size: 1.6rem; font-weight: 900; margin-bottom: 14px;
+    background: linear-gradient(90deg, #ffd700, #d4a017, #ffe066, #ffd700);
+    background-size: 300% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+    line-height: 1.3;
+  }
+  .onb-slide p {
+    color: var(--text2); font-size: .95rem; line-height: 1.6;
+    max-width: 340px;
+  }
+  .onb-cta {
+    margin-top: 28px;
+    background: linear-gradient(135deg, var(--gold), var(--accent));
+    color: #1a1400; border: none; border-radius: 14px;
+    padding: 16px 36px; font-size: 1rem; font-weight: 800;
+    cursor: pointer; transition: all .25s;
+    box-shadow: 0 8px 24px rgba(212,160,23,.35);
+    animation: pulse-glow 2.5s ease-in-out infinite;
+  }
+  .onb-cta:active { transform: scale(.96); }
+  .onb-dots {
+    position: absolute; bottom: 84px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 8px; z-index: 5;
+  }
+  .onb-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: all .3s;
+  }
+  .onb-dot.active { background: var(--gold); width: 22px; border-radius: 4px; }
+  .onb-nav {
+    position: absolute; bottom: 24px; left: 0; right: 0;
+    display: flex; justify-content: center; padding: 0 28px; z-index: 5;
+  }
+  .onb-next {
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); border-radius: 12px;
+    padding: 13px 32px; font-size: .9rem; font-weight: 700;
+    cursor: pointer; transition: all .2s; width: 100%; max-width: 320px;
+  }
+  .onb-next:hover { border-color: var(--gold); }
+  .onb-slide:last-child ~ .onb-nav, .onb-nav.hide-next { display: none; }
 </style>
 </head>
 <body>
+
+<!-- ONBOARDING -->
+<div class="onboarding-overlay" id="onboardingOverlay">
+  <div class="onb-particles" id="onbParticles"></div>
+  <div class="onb-skip" id="onbSkip" onclick="finishOnboarding()" data-i18n="onb_skip">Pular</div>
+
+  <div class="onb-slides" id="onbSlides">
+
+    <div class="onb-slide active">
+      <div class="onb-icon-wrap">
+        <canvas id="onbCandle1" width="140" height="100"></canvas>
+      </div>
+      <h1 data-i18n="onb_s1_title">Aprenda a ler o mercado</h1>
+      <p data-i18n="onb_s1_text">Domine os padrões de candlestick usados por traders profissionais — de forma visual, prática e no seu ritmo.</p>
+    </div>
+
+    <div class="onb-slide">
+      <div class="onb-icon-wrap"><div class="onb-emoji">🎯</div></div>
+      <h1 data-i18n="onb_s2_title">Aprenda jogando</h1>
+      <p data-i18n="onb_s2_text">Identifique padrões em quizzes rápidos, ganhe sequências de acertos e desbloqueie conquistas. Sem decoreba, sem pressão.</p>
+    </div>
+
+    <div class="onb-slide">
+      <div class="onb-icon-wrap"><div class="onb-emoji">📊</div></div>
+      <h1 data-i18n="onb_s3_title">Pratique sem arriscar nada</h1>
+      <p data-i18n="onb_s3_text">Use o simulador para treinar decisões de compra e venda em cenários reais — tudo de graça, sem dinheiro de verdade.</p>
+    </div>
+
+    <div class="onb-slide">
+      <div class="onb-icon-wrap"><div class="onb-emoji">🔥</div></div>
+      <h1 data-i18n="onb_s4_title">Pronto para começar?</h1>
+      <p data-i18n="onb_s4_text">120+ padrões te esperam. Vamos identificar o primeiro agora?</p>
+      <button class="onb-cta" onclick="finishOnboarding()" data-i18n="onb_start">Começar a Aprender</button>
+    </div>
+
+  </div>
+
+  <div class="onb-dots" id="onbDots">
+    <span class="onb-dot active"></span>
+    <span class="onb-dot"></span>
+    <span class="onb-dot"></span>
+    <span class="onb-dot"></span>
+  </div>
+
+  <div class="onb-nav">
+    <button class="onb-next" id="onbNext" onclick="onbNextSlide()" data-i18n="onb_next">Próximo →</button>
+  </div>
+</div>
 
 <!-- PARTICLES -->
 <div class="particles-bg" id="particlesBg"></div>
@@ -828,6 +957,18 @@ const UI_I18N = {
   quiz_q_signal: {pt:'O que este padrão indica?',en:'What does this pattern indicate?',es:'¿Qué indica este patrón?',fr:'Que indique ce motif?',zh:'这个形态表明什么？',hi:'यह पैटर्न क्या दर्शाता है?',ar:'ماذا يشير هذا النمط؟',bn:'এই প্যাটার্নটি কী নির্দেশ করে?',ru:'Что указывает эта модель?',ja:'このパターンは何を示していますか？',de:'Was zeigt dieses Muster an?',ko:'이 패턴은 무엇을 나타내나요?',vi:'Mẫu hình này chỉ ra điều gì?',tr:'Bu formasyon neyi gösteriyor?',it:'Cosa indica questo pattern?',th:'รูปแบบนี้บ่งบอกอะไร?',pl:'Co wskazuje ta formacja?',nl:'Wat geeft dit patroon aan?',uk:'Що вказує ця модель?',id:'Apa yang ditunjukkan pola ini?',ur:'یہ پیٹرن کیا ظاہر کرتا ہے؟'},
 
   extra_heart: {pt:'Vida Extra!',en:'Extra Life!',es:'¡Vida Extra!',fr:'Vie Bonus!',zh:'额外生命！',hi:'अतिरिक्त जीवन!',ar:'حياة إضافية!',bn:'অতিরিক্ত জীবন!',ru:'Доп. жизнь!',ja:'ライフ追加！',de:'Extra-Leben!',ko:'추가 생명!',vi:'Mạng Thêm!',tr:'Ekstra Can!',it:'Vita Extra!',th:'ชีวิตพิเศษ!',pl:'Dodatkowe Życie!',nl:'Extra Leven!',uk:'Додаткове життя!',id:'Nyawa Ekstra!',ur:'اضافی زندگی!'},
+
+  onb_skip: {pt:'Pular',en:'Skip',es:'Omitir',fr:'Passer',zh:'跳过',hi:'छोड़ें',ar:'تخطي',bn:'এড়িয়ে যান',ru:'Пропустить',ja:'スキップ',de:'Überspringen',ko:'건너뛰기',vi:'Bỏ Qua',tr:'Atla',it:'Salta',th:'ข้าม',pl:'Pomiń',nl:'Overslaan',uk:'Пропустити',id:'Lewati',ur:'چھوڑیں'},
+  onb_next: {pt:'Próximo →',en:'Next →',es:'Siguiente →',fr:'Suivant →',zh:'下一步 →',hi:'अगला →',ar:'التالي ←',bn:'পরবর্তী →',ru:'Далее →',ja:'次へ →',de:'Weiter →',ko:'다음 →',vi:'Tiếp Theo →',tr:'İleri →',it:'Avanti →',th:'ถัดไป →',pl:'Dalej →',nl:'Volgende →',uk:'Далі →',id:'Lanjut →',ur:'اگلا ←'},
+  onb_start: {pt:'Começar a Aprender',en:'Start Learning',es:'Empezar a Aprender',fr:'Commencer à Apprendre',zh:'开始学习',hi:'सीखना शुरू करें',ar:'ابدأ التعلم',bn:'শেখা শুরু করুন',ru:'Начать обучение',ja:'学習を始める',de:'Mit dem Lernen Beginnen',ko:'학습 시작하기',vi:'Bắt Đầu Học',tr:'Öğrenmeye Başla',it:'Inizia a Imparare',th:'เริ่มเรียนรู้',pl:'Zacznij Się Uczyć',nl:'Begin met Leren',uk:'Почати навчання',id:'Mulai Belajar',ur:'سیکھنا شروع کریں'},
+  onb_s1_title: {pt:'Aprenda a ler o mercado',en:'Learn to read the market',es:'Aprende a leer el mercado',fr:'Apprenez à lire le marché',zh:'学会读懂市场',hi:'बाजार पढ़ना सीखें',ar:'تعلم قراءة السوق',bn:'বাজার পড়তে শিখুন',ru:'Научитесь читать рынок',ja:'市場の読み方を学ぼう',de:'Lerne, den Markt zu lesen',ko:'시장을 읽는 법을 배우세요',vi:'Học cách đọc thị trường',tr:'Piyasayı okumayı öğrenin',it:'Impara a leggere il mercato',th:'เรียนรู้การอ่านตลาด',pl:'Naucz się czytać rynek',nl:'Leer de markt te lezen',uk:'Навчіться читати ринок',id:'Belajar membaca pasar',ur:'مارکیٹ پڑھنا سیکھیں'},
+  onb_s1_text: {pt:'Domine os padrões de candlestick usados por traders profissionais — de forma visual, prática e no seu ritmo.',en:'Master the candlestick patterns used by professional traders — visually, practically, at your own pace.',es:'Domina los patrones de velas japonesas usados por traders profesionales, de forma visual, práctica y a tu ritmo.',fr:'Maîtrisez les motifs de chandeliers utilisés par les traders professionnels — de façon visuelle, pratique et à votre rythme.',zh:'掌握专业交易者使用的蜡烛图形态——直观、实用、按自己的节奏学习。',hi:'पेशेवर ट्रेडर्स द्वारा उपयोग किए जाने वाले कैंडलस्टिक पैटर्न में महारत हासिल करें — दृश्य, व्यावहारिक और अपनी गति से।',ar:'أتقن أنماط الشموع اليابانية التي يستخدمها المتداولون المحترفون — بطريقة بصرية وعملية وبالسرعة التي تناسبك.',bn:'পেশাদার ট্রেডারদের ব্যবহৃত ক্যান্ডেলস্টিক প্যাটার্নে দক্ষতা অর্জন করুন — দৃশ্যমান, ব্যবহারিক এবং নিজের গতিতে।',ru:'Освойте свечные модели, которые используют профессиональные трейдеры — наглядно, практично, в своём темпе.',ja:'プロのトレーダーが使うローソク足パターンをマスターしよう — 視覚的に、実践的に、自分のペースで。',de:'Meistere die Candlestick-Muster, die professionelle Trader verwenden — visuell, praktisch und in deinem eigenen Tempo.',ko:'전문 트레이더가 사용하는 캔들스틱 패턴을 마스터하세요 — 시각적으로, 실용적으로, 자신의 속도로.',vi:'Làm chủ các mẫu hình nến mà các nhà giao dịch chuyên nghiệp sử dụng — trực quan, thực tế và theo nhịp độ của bạn.',tr:'Profesyonel yatırımcıların kullandığı mum formasyonlarında ustalaşın — görsel, pratik ve kendi hızınızda.',it:'Padroneggia i pattern delle candele usati dai trader professionisti — in modo visivo, pratico e al tuo ritmo.',th:'เชี่ยวชาญรูปแบบแท่งเทียนที่นักเทรดมืออาชีพใช้ — แบบเห็นภาพ ใช้งานได้จริง และตามจังหวะของคุณเอง',pl:'Opanuj formacje świecowe używane przez profesjonalnych traderów — wizualnie, praktycznie, w swoim tempie.',nl:'Beheers de candlestick-patronen die professionele traders gebruiken — visueel, praktisch en in je eigen tempo.',uk:'Опануйте свічкові моделі, які використовують професійні трейдери — наочно, практично, у своєму темпі.',id:'Kuasai pola candlestick yang digunakan trader profesional — secara visual, praktis, sesuai kecepatan Anda.',ur:'پیشہ ور ٹریڈرز کے استعمال کردہ کینڈل سٹک پیٹرنز میں مہارت حاصل کریں — بصری، عملی، اور اپنی رفتار سے۔'},
+  onb_s2_title: {pt:'Aprenda jogando',en:'Learn by playing',es:'Aprende jugando',fr:'Apprenez en jouant',zh:'在游戏中学习',hi:'खेल-खेल में सीखें',ar:'تعلم باللعب',bn:'খেলে খেলে শিখুন',ru:'Учитесь играя',ja:'遊びながら学ぼう',de:'Lerne durch Spielen',ko:'놀면서 배우세요',vi:'Học qua trò chơi',tr:'Oynayarak Öğren',it:'Impara giocando',th:'เรียนรู้ผ่านการเล่น',pl:'Ucz się grając',nl:'Leer door te spelen',uk:'Навчайтеся граючи',id:'Belajar sambil bermain',ur:'کھیل کر سیکھیں'},
+  onb_s2_text: {pt:'Identifique padrões em quizzes rápidos, ganhe sequências de acertos e desbloqueie conquistas. Sem decoreba, sem pressão.',en:'Identify patterns in quick quizzes, build winning streaks and unlock achievements. No memorization, no pressure.',es:'Identifica patrones en quizzes rápidos, consigue rachas de aciertos y desbloquea logros. Sin memorizar, sin presión.',fr:'Identifiez des motifs dans des quiz rapides, enchaînez les bonnes réponses et débloquez des succès. Sans bachotage, sans pression.',zh:'在快速测验中识别形态，连续答对解锁成就。无需死记硬背，没有压力。',hi:'त्वरित क्विज़ में पैटर्न पहचानें, सही उत्तरों की लड़ी बनाएं और उपलब्धियां अनलॉक करें। बिना रटे, बिना दबाव के।',ar:'حدد الأنماط في اختبارات سريعة، واكسب سلاسل من الإجابات الصحيحة وافتح الإنجازات. بدون حفظ، بدون ضغط.',bn:'দ্রুত কুইজে প্যাটার্ন চিহ্নিত করুন, সঠিক উত্তরের ধারা তৈরি করুন এবং অর্জন আনলক করুন। মুখস্থ নয়, চাপ নয়।',ru:'Распознавайте модели в быстрых тестах, набирайте серии правильных ответов и открывайте достижения. Без зубрёжки, без давления.',ja:'クイズでパターンを識別し、連続正解で実績を解除しよう。暗記不要、プレッシャーなし。',de:'Erkenne Muster in kurzen Quiz, baue Erfolgsserien auf und schalte Erfolge frei. Kein Auswendiglernen, kein Druck.',ko:'빠른 퀴즈로 패턴을 식별하고, 연속 정답을 쌓아 업적을 해제하세요. 암기 없이, 부담 없이.',vi:'Nhận diện mẫu hình qua các bài quiz nhanh, tạo chuỗi đúng liên tiếp và mở khóa thành tích. Không học vẹt, không áp lực.',tr:'Hızlı testlerle formasyonları tanı, doğru cevap serileri oluştur ve başarımların kilidini aç. Ezbersiz, baskısız.',it:'Identifica i pattern in quiz veloci, costruisci serie di risposte corrette e sblocca obiettivi. Senza memorizzare, senza pressione.',th:'ระบุรูปแบบในแบบทดสอบรวดเร็ว สร้างสถิติตอบถูกต่อเนื่องและปลดล็อกความสำเร็จ ไม่ต้องท่องจำ ไม่มีความกดดัน',pl:'Identyfikuj formacje w szybkich quizach, buduj serie poprawnych odpowiedzi i odblokowuj osiągnięcia. Bez wkuwania, bez presji.',nl:'Identificeer patronen in snelle quizzen, bouw winstreeks op en ontgrendel prestaties. Geen uit het hoofd leren, geen druk.',uk:'Розпізнавайте моделі у швидких тестах, накопичуйте серії правильних відповідей і відкривайте досягнення. Без зубріння, без тиску.',id:'Identifikasi pola dalam kuis cepat, bangun rangkaian jawaban benar, dan buka pencapaian. Tanpa hafalan, tanpa tekanan.',ur:'تیز کوئز میں پیٹرنز کی شناخت کریں، درست جوابات کا تسلسل بنائیں اور کامیابیاں حاصل کریں۔ رٹے بغیر، دباؤ کے بغیر۔'},
+  onb_s3_title: {pt:'Pratique sem arriscar nada',en:'Practice with zero risk',es:'Practica sin arriesgar nada',fr:'Entraînez-vous sans rien risquer',zh:'零风险练习',hi:'बिना जोखिम के अभ्यास करें',ar:'تدرب دون أي مخاطرة',bn:'কোনো ঝুঁকি ছাড়াই অনুশীলন করুন',ru:'Тренируйтесь без риска',ja:'リスクゼロで練習',de:'Übe ohne jedes Risiko',ko:'위험 부담 없이 연습하세요',vi:'Luyện tập không rủi ro',tr:'Hiç Risk Almadan Pratik Yap',it:'Esercitati senza alcun rischio',th:'ฝึกฝนโดยไม่มีความเสี่ยง',pl:'Ćwicz bez żadnego ryzyka',nl:'Oefen zonder enig risico',uk:'Тренуйтеся без жодного ризику',id:'Berlatih tanpa risiko',ur:'بغیر کسی خطرے کے مشق کریں'},
+  onb_s3_text: {pt:'Use o simulador para treinar decisões de compra e venda em cenários reais — tudo de graça, sem dinheiro de verdade.',en:'Use the simulator to practice buy and sell decisions in realistic scenarios — all free, with no real money.',es:'Usa el simulador para practicar decisiones de compra y venta en escenarios reales, todo gratis, sin dinero real.',fr:'Utilisez le simulateur pour vous entraîner aux décisions d\'achat et de vente dans des scénarios réalistes — gratuitement, sans argent réel.',zh:'使用模拟器在真实场景中练习买卖决策——完全免费，无需真钱。',hi:'वास्तविक परिदृश्यों में खरीद और बिक्री के निर्णयों का अभ्यास करने के लिए सिम्युलेटर का उपयोग करें — सब मुफ़्त, बिना असली पैसे के।',ar:'استخدم المحاكي لتدريب قرارات الشراء والبيع في سيناريوهات واقعية — كل ذلك مجانًا، دون أموال حقيقية.',bn:'বাস্তব দৃশ্যে কেনা-বেচার সিদ্ধান্ত অনুশীলন করতে সিমুলেটর ব্যবহার করুন — সবই বিনামূল্যে, আসল টাকা ছাড়াই।',ru:'Используйте симулятор для тренировки решений о покупке и продаже в реалистичных сценариях — бесплатно, без реальных денег.',ja:'シミュレーターでリアルなシナリオの売買判断を練習しよう — 無料、本物のお金は不要。',de:'Nutze den Simulator, um Kauf- und Verkaufsentscheidungen in realistischen Szenarien zu üben — alles kostenlos, ohne echtes Geld.',ko:'시뮬레이터로 실제와 같은 시나리오에서 매수/매도 결정을 연습하세요 — 모두 무료, 실제 돈 없이.',vi:'Sử dụng trình mô phỏng để luyện tập quyết định mua bán trong các kịch bản thực tế — hoàn toàn miễn phí, không cần tiền thật.',tr:'Gerçekçi senaryolarda alım satım kararlarını pratik etmek için simülatörü kullanın — tamamen ücretsiz, gerçek para olmadan.',it:'Usa il simulatore per esercitarti con decisioni di acquisto e vendita in scenari realistici — tutto gratis, senza soldi veri.',th:'ใช้ตัวจำลองเพื่อฝึกตัดสินใจซื้อขายในสถานการณ์จริง — ฟรีทั้งหมด ไม่ใช้เงินจริง',pl:'Użyj symulatora, aby ćwiczyć decyzje kupna i sprzedaży w realistycznych scenariuszach — wszystko za darmo, bez prawdziwych pieniędzy.',nl:'Gebruik de simulator om koop- en verkoopbeslissingen te oefenen in realistische scenario\'s — allemaal gratis, zonder echt geld.',uk:'Використовуйте симулятор для тренування рішень про купівлю та продаж у реалістичних сценаріях — все безкоштовно, без реальних грошей.',id:'Gunakan simulator untuk berlatih keputusan beli dan jual dalam skenario nyata — semua gratis, tanpa uang sungguhan.',ur:'حقیقی منظرناموں میں خرید و فروخت کے فیصلوں کی مشق کے لیے سمیولیٹر استعمال کریں — سب مفت، اصلی پیسوں کے بغیر۔'},
+  onb_s4_title: {pt:'Pronto para começar?',en:'Ready to start?',es:'¿Listo para empezar?',fr:'Prêt à commencer?',zh:'准备好了吗？',hi:'शुरू करने के लिए तैयार?',ar:'هل أنت مستعد للبدء؟',bn:'শুরু করতে প্রস্তুত?',ru:'Готовы начать?',ja:'準備はいい？',de:'Bereit anzufangen?',ko:'시작할 준비 되셨나요?',vi:'Sẵn sàng bắt đầu?',tr:'Başlamaya Hazır mısın?',it:'Pronto per iniziare?',th:'พร้อมเริ่มหรือยัง?',pl:'Gotowy zacząć?',nl:'Klaar om te beginnen?',uk:'Готові почати?',id:'Siap memulai?',ur:'شروع کرنے کے لیے تیار؟'},
+  onb_s4_text: {pt:'120+ padrões te esperam. Vamos identificar o primeiro agora?',en:'120+ patterns are waiting for you. Let\'s identify the first one now?',es:'Más de 120 patrones te esperan. ¿Identificamos el primero ahora?',fr:'Plus de 120 motifs vous attendent. On identifie le premier maintenant?',zh:'120多种形态等着你。现在就来识别第一个吧？',hi:'120+ पैटर्न आपका इंतज़ार कर रहे हैं। चलिए अभी पहला पहचानते हैं?',ar:'أكثر من 120 نمطًا في انتظارك. هل نحدد الأول الآن؟',bn:'১২০+ প্যাটার্ন আপনার জন্য অপেক্ষা করছে। চলুন এখনই প্রথমটি চিহ্নিত করি?',ru:'Вас ждут более 120 моделей. Определим первую прямо сейчас?',ja:'120以上のパターンがあなたを待っています。今すぐ最初のパターンを識別しよう？',de:'Über 120 Muster warten auf dich. Lass uns jetzt das erste identifizieren?',ko:'120개 이상의 패턴이 기다리고 있습니다. 지금 첫 번째를 식별해볼까요?',vi:'Hơn 120 mẫu hình đang chờ bạn. Cùng nhận diện mẫu đầu tiên ngay nhé?',tr:'120\'den fazla formasyon seni bekliyor. Şimdi ilkini tanımlayalım mı?',it:'Più di 120 pattern ti aspettano. Identifichiamo il primo adesso?',th:'รูปแบบมากกว่า 120 แบบรอคุณอยู่ มาระบุรูปแบบแรกกันเลยไหม?',pl:'Ponad 120 formacji na ciebie czeka. Zidentyfikujmy pierwszą już teraz?',nl:'120+ patronen wachten op je. Laten we de eerste nu identificeren?',uk:'На вас чекає понад 120 моделей. Визначимо першу прямо зараз?',id:'120+ pola menanti Anda. Mari identifikasi yang pertama sekarang?',ur:'120+ پیٹرنز آپ کا انتظار کر رہے ہیں۔ آئیے ابھی پہلے کی شناخت کریں؟'},
 };
 
 let currentLang = 'pt';
@@ -2007,6 +2148,111 @@ applyTranslations();
 updateHome();
 initHeroCanvas();
 initParticles();
+initOnboarding();
+
+// ==================== ONBOARDING ====================
+let onbCurrentSlide = 0;
+const ONB_TOTAL_SLIDES = 4;
+
+function initOnboarding() {
+  const seen = localStorage.getItem('mdv4_onboarded');
+  const overlay = document.getElementById('onboardingOverlay');
+  if (seen) {
+    overlay.classList.add('hidden');
+    return;
+  }
+  // Particles for onboarding background
+  const container = document.getElementById('onbParticles');
+  const colors = ['#ffd700','#d4a017','#ffe066','#00c853'];
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      position:absolute; border-radius:50%;
+      left: ${Math.random()*100}%;
+      width: ${2+Math.random()*4}px;
+      height: ${2+Math.random()*4}px;
+      background: ${colors[Math.floor(Math.random()*colors.length)]};
+      opacity: ${0.15+Math.random()*0.35};
+      animation: particle-float ${6+Math.random()*12}s linear infinite;
+      animation-delay: ${Math.random()*10}s;
+    `;
+    container.appendChild(p);
+  }
+  drawOnbCandle();
+}
+
+function drawOnbCandle() {
+  const canvas = document.getElementById('onbCandle1');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 140, H = 100;
+  const candles = [
+    {o:55,h:65,l:30,c:35,x:14},
+    {o:35,h:42,l:22,c:38,x:34},
+    {o:40,h:60,l:36,c:58,x:54},
+    {o:58,h:70,l:52,c:54,x:74},
+    {o:54,h:68,l:32,c:64,x:94},
+    {o:64,h:78,l:60,c:74,x:114},
+  ];
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    candles.forEach((c, i) => {
+      const delay = i * 8;
+      const progress = Math.max(0, Math.min(1, (frame - delay) / 20));
+      const isBull = c.c >= c.o;
+      const color = isBull ? '#00c896' : '#ff4560';
+      const yOf = v => 6 + (1 - v/100) * (H - 12);
+      const yO = yOf(c.o), yC = yOf(c.c), yH = yOf(c.h), yL = yOf(c.l);
+      const bodyTop = Math.min(yO,yC);
+      const bodyH = Math.max(Math.abs(yO-yC),2) * progress;
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 8;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(c.x+7, yH); ctx.lineTo(c.x+7, yL); ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.fillRect(c.x, bodyTop, 14, bodyH);
+      ctx.shadowBlur = 0;
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function onbNextSlide() {
+  if (onbCurrentSlide >= ONB_TOTAL_SLIDES - 1) {
+    finishOnboarding();
+    return;
+  }
+  const slides = document.querySelectorAll('.onb-slide');
+  const dots = document.querySelectorAll('.onb-dot');
+  slides[onbCurrentSlide].classList.remove('active');
+  slides[onbCurrentSlide].classList.add('prev');
+  dots[onbCurrentSlide].classList.remove('active');
+  onbCurrentSlide++;
+  slides[onbCurrentSlide].classList.add('active');
+  slides[onbCurrentSlide].classList.remove('prev');
+  dots[onbCurrentSlide].classList.add('active');
+
+  const nextBtn = document.getElementById('onbNext');
+  if (onbCurrentSlide === ONB_TOTAL_SLIDES - 1) {
+    nextBtn.style.display = 'none';
+  }
+}
+
+function finishOnboarding() {
+  localStorage.setItem('mdv4_onboarded', '1');
+  const overlay = document.getElementById('onboardingOverlay');
+  overlay.style.transition = 'opacity .4s ease';
+  overlay.style.opacity = '0';
+  setTimeout(() => {
+    overlay.classList.add('hidden');
+    overlay.style.opacity = '1';
+  }, 400);
+}
 
 // ==================== HERO CANVAS ====================
 function initHeroCanvas() {
