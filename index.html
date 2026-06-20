@@ -41,17 +41,6 @@
   nav button { flex: none; padding: 14px 18px; background: none; border: none; color: var(--text2); font-size: 13px; font-weight: 600; cursor: pointer; letter-spacing: .5px; white-space: nowrap; border-bottom: 2px solid transparent; transition: all .2s; }
   nav button.active { color: var(--gold); border-bottom-color: var(--gold); }
 
-  /* LANGUAGE SWITCHER */
-  .lang-switcher { position: relative; display: flex; justify-content: center; padding: 8px 12px; background: var(--bg); border-bottom: 1px solid var(--border); }
-  .lang-current { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 7px 14px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .2s; }
-  .lang-current:hover { border-color: var(--gold); }
-  .lang-arrow { font-size: 11px; color: var(--text2); margin-left: 2px; }
-  .lang-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); margin-top: 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 6px; max-height: 320px; overflow-y: auto; z-index: 200; width: 220px; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
-  .lang-menu.open { display: block; }
-  .lang-opt { display: block; width: 100%; text-align: left; background: none; border: none; color: var(--text); font-size: 13.5px; font-weight: 500; padding: 9px 12px; border-radius: 8px; cursor: pointer; transition: all .15s; }
-  .lang-opt:hover { background: var(--surface2); }
-  .lang-opt.active { background: rgba(212,160,23,.15); color: var(--gold); font-weight: 700; }
-
   /* PAGES */
   .page { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
   .page.active { display: block; }
@@ -349,304 +338,81 @@
     .home-hero h1 { font-size: 1.5rem; }
     .modal-content { padding: 16px; }
   }
-  /* ========== ONBOARDING ========== */
-  .onboarding-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: var(--bg);
-    background-image: radial-gradient(ellipse at top, #1a1400 0%, #080600 70%);
-    display: flex; flex-direction: column;
-    overflow: hidden;
-  }
-  .onboarding-overlay.hidden { display: none; }
-  .onb-particles { position: absolute; inset: 0; pointer-events: none; }
-  .onb-skip {
-    position: absolute; top: 18px; right: 18px; z-index: 10;
-    color: var(--text2); font-size: .85rem; font-weight: 600;
-    padding: 8px 14px; cursor: pointer; border-radius: 8px;
-    transition: all .2s;
-  }
-  .onb-skip:hover { color: var(--text); background: rgba(255,255,255,.05); }
-
-  /* ONBOARDING LANGUAGE SELECTION SCREEN */
-  .onb-lang-screen {
-    position: absolute; inset: 0; z-index: 20;
-    display: flex; flex-direction: column;
-    padding: 50px 20px 30px;
-    overflow-y: auto;
-  }
-  .onb-lang-screen.hidden { display: none; }
-  .onb-lang-header { text-align: center; margin-bottom: 24px; flex-shrink: 0; }
-  .onb-lang-icon { font-size: 2.6rem; margin-bottom: 10px; animation: float 3s ease-in-out infinite; }
-  .onb-lang-header h1 {
-    font-size: 1.3rem; font-weight: 900; margin-bottom: 8px;
-    background: linear-gradient(90deg, #ffd700, #d4a017, #ffe066, #ffd700);
-    background-size: 300% auto;
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    animation: shimmer 4s linear infinite;
-  }
-  .onb-lang-header p { color: var(--text2); font-size: .78rem; line-height: 1.5; }
-  .onb-lang-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-    max-width: 460px; margin: 0 auto; width: 100%;
-  }
-  .onb-lang-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 14px 10px;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    font-size: 1.8rem; cursor: pointer; transition: all .2s;
-  }
-  .onb-lang-card span { font-size: .8rem; font-weight: 700; color: var(--text); }
-  .onb-lang-card:hover, .onb-lang-card:active { border-color: var(--gold); background: var(--surface2); transform: translateY(-2px); }
-  .onb-slides {
-    flex: 1; display: flex; position: relative;
-    width: 100%; height: 100%;
-  }
-  .onb-slide {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 40px 28px 120px;
-    opacity: 0; transform: translateX(40px);
-    transition: opacity .4s ease, transform .4s ease;
-    pointer-events: none;
-  }
-  .onb-slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; }
-  .onb-slide.prev { transform: translateX(-40px); }
-  .onb-icon-wrap {
-    width: 140px; height: 140px; margin-bottom: 32px;
-    display: flex; align-items: center; justify-content: center;
-    animation: float 3s ease-in-out infinite;
-    filter: drop-shadow(0 0 24px rgba(212,160,23,.35));
-  }
-  .onb-emoji { font-size: 5rem; line-height: 1; }
-  .onb-slide h1 {
-    font-size: 1.6rem; font-weight: 900; margin-bottom: 14px;
-    background: linear-gradient(90deg, #ffd700, #d4a017, #ffe066, #ffd700);
-    background-size: 300% auto;
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    animation: shimmer 4s linear infinite;
-    line-height: 1.3;
-  }
-  .onb-slide p {
-    color: var(--text2); font-size: .95rem; line-height: 1.6;
-    max-width: 340px;
-  }
-  .onb-cta {
-    margin-top: 28px;
-    background: linear-gradient(135deg, var(--gold), var(--accent));
-    color: #1a1400; border: none; border-radius: 14px;
-    padding: 16px 36px; font-size: 1rem; font-weight: 800;
-    cursor: pointer; transition: all .25s;
-    box-shadow: 0 8px 24px rgba(212,160,23,.35);
-    animation: pulse-glow 2.5s ease-in-out infinite;
-  }
-  .onb-cta:active { transform: scale(.96); }
-  .onb-dots {
-    position: absolute; bottom: 84px; left: 0; right: 0;
-    display: flex; justify-content: center; gap: 8px; z-index: 5;
-  }
-  .onb-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--border); transition: all .3s;
-  }
-  .onb-dot.active { background: var(--gold); width: 22px; border-radius: 4px; }
-  .onb-nav {
-    position: absolute; bottom: 24px; left: 0; right: 0;
-    display: flex; justify-content: center; padding: 0 28px; z-index: 5;
-  }
-  .onb-next {
-    background: var(--surface); border: 1px solid var(--border);
-    color: var(--text); border-radius: 12px;
-    padding: 13px 32px; font-size: .9rem; font-weight: 700;
-    cursor: pointer; transition: all .2s; width: 100%; max-width: 320px;
-  }
-  .onb-next:hover { border-color: var(--gold); }
-  .onb-slide:last-child ~ .onb-nav, .onb-nav.hide-next { display: none; }
 </style>
 </head>
 <body>
 
-<!-- ONBOARDING -->
-<div class="onboarding-overlay" id="onboardingOverlay">
-  <div class="onb-particles" id="onbParticles"></div>
-
-  <!-- LANGUAGE SELECTION SCREEN (always first, language-neutral text) -->
-  <div class="onb-lang-screen" id="onbLangScreen">
-    <div class="onb-lang-header">
-      <div class="onb-lang-icon">🌍</div>
-      <h1>Choose your language</h1>
-      <p>Escolha seu idioma · Elige tu idioma · Choisissez votre langue</p>
-    </div>
-    <div class="onb-lang-grid">
-      <button class="onb-lang-card" onclick="selectOnbLang('pt')">🇧🇷<span>Português</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('en')">🇺🇸<span>English</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('es')">🇪🇸<span>Español</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('zh')">🇨🇳<span>中文</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('hi')">🇮🇳<span>हिन्दी</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('ar')">🇸🇦<span>العربية</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('bn')">🇧🇩<span>বাংলা</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('ru')">🇷🇺<span>Русский</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('ja')">🇯🇵<span>日本語</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('fr')">🇫🇷<span>Français</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('de')">🇩🇪<span>Deutsch</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('ko')">🇰🇷<span>한국어</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('vi')">🇻🇳<span>Tiếng Việt</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('tr')">🇹🇷<span>Türkçe</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('it')">🇮🇹<span>Italiano</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('th')">🇹🇭<span>ไทย</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('pl')">🇵🇱<span>Polski</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('nl')">🇳🇱<span>Nederlands</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('uk')">🇺🇦<span>Українська</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('id')">🇮🇩<span>Indonesia</span></button>
-      <button class="onb-lang-card" onclick="selectOnbLang('ur')">🇵🇰<span>اردو</span></button>
-    </div>
-  </div>
-
-  <div class="onb-skip" id="onbSkip" onclick="finishOnboarding()" data-i18n="onb_skip">Pular</div>
-
-  <div class="onb-slides hidden" id="onbSlides">
-
-    <div class="onb-slide active">
-      <div class="onb-icon-wrap">
-        <canvas id="onbCandle1" width="140" height="100"></canvas>
-      </div>
-      <h1 data-i18n="onb_s1_title">Aprenda a ler o mercado</h1>
-      <p data-i18n="onb_s1_text">Domine os padrões de candlestick usados por traders profissionais — de forma visual, prática e no seu ritmo.</p>
-    </div>
-
-    <div class="onb-slide">
-      <div class="onb-icon-wrap"><div class="onb-emoji">🎯</div></div>
-      <h1 data-i18n="onb_s2_title">Aprenda jogando</h1>
-      <p data-i18n="onb_s2_text">Identifique padrões em quizzes rápidos, ganhe sequências de acertos e desbloqueie conquistas. Sem decoreba, sem pressão.</p>
-    </div>
-
-    <div class="onb-slide">
-      <div class="onb-icon-wrap"><div class="onb-emoji">📊</div></div>
-      <h1 data-i18n="onb_s3_title">Pratique sem arriscar nada</h1>
-      <p data-i18n="onb_s3_text">Use o simulador para treinar decisões de compra e venda em cenários reais — tudo de graça, sem dinheiro de verdade.</p>
-    </div>
-
-    <div class="onb-slide">
-      <div class="onb-icon-wrap"><div class="onb-emoji">🔥</div></div>
-      <h1 data-i18n="onb_s4_title">Pronto para começar?</h1>
-      <p data-i18n="onb_s4_text">120+ padrões te esperam. Vamos identificar o primeiro agora?</p>
-      <button class="onb-cta" onclick="finishOnboarding()" data-i18n="onb_start">Começar a Aprender</button>
-    </div>
-
-  </div>
-
-  <div class="onb-dots hidden" id="onbDots">
-    <span class="onb-dot active"></span>
-    <span class="onb-dot"></span>
-    <span class="onb-dot"></span>
-    <span class="onb-dot"></span>
-  </div>
-
-  <div class="onb-nav hidden" id="onbNavWrap">
-    <button class="onb-next" id="onbNext" onclick="onbNextSlide()" data-i18n="onb_next">Próximo →</button>
-  </div>
-</div>
-
 <!-- PARTICLES -->
 <div class="particles-bg" id="particlesBg"></div>
 
-<div class="lang-switcher">
-  <button class="lang-current" onclick="toggleLangMenu()">
-    <span id="langCurrentFlag">🇧🇷</span>
-    <span id="langCurrentName">Português</span>
-    <span class="lang-arrow">▾</span>
-  </button>
-  <div class="lang-menu" id="langMenu">
-    <button class="lang-opt active" data-lang="pt" onclick="setLang('pt')">🇧🇷 Português</button>
-    <button class="lang-opt" data-lang="en" onclick="setLang('en')">🇺🇸 English</button>
-    <button class="lang-opt" data-lang="es" onclick="setLang('es')">🇪🇸 Español</button>
-    <button class="lang-opt" data-lang="zh" onclick="setLang('zh')">🇨🇳 中文</button>
-    <button class="lang-opt" data-lang="hi" onclick="setLang('hi')">🇮🇳 हिन्दी</button>
-    <button class="lang-opt" data-lang="ar" onclick="setLang('ar')">🇸🇦 العربية</button>
-    <button class="lang-opt" data-lang="bn" onclick="setLang('bn')">🇧🇩 বাংলা</button>
-    <button class="lang-opt" data-lang="ru" onclick="setLang('ru')">🇷🇺 Русский</button>
-    <button class="lang-opt" data-lang="ja" onclick="setLang('ja')">🇯🇵 日本語</button>
-    <button class="lang-opt" data-lang="fr" onclick="setLang('fr')">🇫🇷 Français</button>
-    <button class="lang-opt" data-lang="de" onclick="setLang('de')">🇩🇪 Deutsch</button>
-    <button class="lang-opt" data-lang="ko" onclick="setLang('ko')">🇰🇷 한국어</button>
-    <button class="lang-opt" data-lang="vi" onclick="setLang('vi')">🇻🇳 Tiếng Việt</button>
-    <button class="lang-opt" data-lang="tr" onclick="setLang('tr')">🇹🇷 Türkçe</button>
-    <button class="lang-opt" data-lang="it" onclick="setLang('it')">🇮🇹 Italiano</button>
-    <button class="lang-opt" data-lang="th" onclick="setLang('th')">🇹🇭 ไทย</button>
-    <button class="lang-opt" data-lang="pl" onclick="setLang('pl')">🇵🇱 Polski</button>
-    <button class="lang-opt" data-lang="nl" onclick="setLang('nl')">🇳🇱 Nederlands</button>
-    <button class="lang-opt" data-lang="uk" onclick="setLang('uk')">🇺🇦 Українська</button>
-    <button class="lang-opt" data-lang="id" onclick="setLang('id')">🇮🇩 Indonesia</button>
-    <button class="lang-opt" data-lang="ur" onclick="setLang('ur')">🇵🇰 اردو</button>
-  </div>
-</div>
-
 <nav>
-  <button class="active" onclick="showPage('home')">🏠 <span data-i18n="nav_home">Início</span></button>
-  <button onclick="showPage('quiz')">🎯 <span data-i18n="nav_quiz">Quiz</span></button>
-  <button onclick="showPage('simulator')">📊 <span data-i18n="nav_sim">Simulador</span></button>
-  <button onclick="showPage('library')">📖 <span data-i18n="nav_lib">Biblioteca</span></button>
-  <button onclick="showPage('achievements')">🏆 <span data-i18n="nav_ach">Conquistas</span></button>
+  <button class="active" onclick="showPage('home')">🏠 Início</button>
+  <button onclick="showPage('quiz')">🎯 Quiz</button>
+  <button onclick="showPage('simulator')">📊 Simulador</button>
+  <button onclick="showPage('library')">📖 Biblioteca</button>
+  <button onclick="showPage('achievements')">🏆 Conquistas</button>
 </nav>
 
 <!-- HOME PAGE -->
 <div id="page-home" class="page active">
   <div class="home-hero">
-
     <div class="hero-canvas-wrap">
       <canvas id="heroCanvas" width="120" height="80"></canvas>
     </div>
-    <h1 data-i18n="app_title">Mestre das Velas</h1>
-    <p data-i18n="app_subtitle">Domine os padrões de candlestick</p>
+    <h1>Mestre das Velas</h1>
+    <p>Domine os padrões de candlestick</p>
   </div>
 
   <div id="streakBanner" class="streak-banner">
     <div class="fire">🔥</div>
     <div class="info">
-      <h3 id="streakText">0 <span data-i18n="days_streak">dias seguidos</span></h3>
-      <p id="streakSub" data-i18n="streak_sub_start">Faça seu primeiro quiz hoje!</p>
+      <h3 id="streakText">0 dias seguidos</h3>
+      <p id="streakSub">Faça seu primeiro quiz hoje!</p>
     </div>
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card"><div class="val" id="homeTotal">0</div><div class="lbl" data-i18n="stat_questions">Questões</div></div>
-    <div class="stat-card"><div class="val" id="homeAcc">0%</div><div class="lbl" data-i18n="stat_accuracy">Precisão</div></div>
-    <div class="stat-card"><div class="val" id="homePats">0</div><div class="lbl" data-i18n="stat_patterns">Padrões</div></div>
+    <div class="stat-card"><div class="val" id="homeTotal">0</div><div class="lbl">Questões</div></div>
+    <div class="stat-card"><div class="val" id="homeAcc">0%</div><div class="lbl">Precisão</div></div>
+    <div class="stat-card"><div class="val" id="homePats">0</div><div class="lbl">Padrões</div></div>
   </div>
 
-  <div class="section-title" data-i18n="game_modes">Modos de Jogo</div>
+  <div class="section-title">Modos de Jogo</div>
   <div class="mode-grid">
     <div class="mode-card m-normal" onclick="startMode('normal')">
-      <span class="mode-badge badge-free" data-i18n="badge_free">Livre</span>
+      <span class="mode-badge badge-free">Livre</span>
       <div class="icon">🔍</div>
-      <h3 data-i18n="mode_identify_title">Identificar Padrão</h3>
-      <p data-i18n="mode_identify_desc">Questões ilimitadas, sem pressão</p>
+      <h3>Identificar Padrão</h3>
+      <p>Questões ilimitadas, sem pressão</p>
     </div>
     <div class="mode-card m-survival" onclick="startMode('survival')">
-      <span class="mode-badge badge-hard" data-i18n="badge_hard">Difícil</span>
+      <span class="mode-badge badge-hard">Difícil</span>
       <div class="icon">💀</div>
-      <h3 data-i18n="mode_survival_title">Sobrevivência</h3>
-      <p data-i18n="mode_survival_desc">3 vidas — perde tudo se errar 3×</p>
+      <h3>Sobrevivência</h3>
+      <p>3 vidas — perde tudo se errar 3×</p>
     </div>
     <div class="mode-card m-signal" onclick="startMode('signal')">
-      <span class="mode-badge badge-fun" data-i18n="badge_fast">Rápido</span>
+      <span class="mode-badge badge-fun">Rápido</span>
       <div class="icon">🎲</div>
-      <h3 data-i18n="mode_signal_title">Adivinhe o Sinal</h3>
-      <p data-i18n="mode_signal_desc">Alta, Baixa ou Indecisão?</p>
+      <h3>Adivinhe o Sinal</h3>
+      <p>Alta, Baixa ou Indecisão?</p>
     </div>
   </div>
 
-  <div class="tip-box">💡 <strong data-i18n="tip_label">Dica do dia:</strong> <span data-i18n="tip_text">O Martelo tem pavio inferior longo (≥2× corpo) e sugere reversão de baixa para alta. Procure sempre confirmar com a vela seguinte!</span></div>
+  <div class="tip-box">💡 <strong>Dica do dia:</strong> O Martelo tem pavio inferior longo (≥2× corpo) e sugere reversão de baixa para alta. Procure sempre confirmar com a vela seguinte!</div>
 </div>
 
 <!-- QUIZ PAGE -->
 <div id="page-quiz" class="page">
   <div class="quiz-header">
-    <div class="lives" id="livesDisplay" style="visibility:hidden"></div>
+    <div class="lives" id="livesDisplay" style="visibility:hidden">
+      <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+    </div>
     <div class="score-badge">✅ <span id="quizScore">0</span> | ❌ <span id="quizErrors">0</span> | 🔥 <span id="quizStreak">0</span></div>
   </div>
 
   <canvas id="quizCanvas" height="200"></canvas>
-  <div class="quiz-question"><span data-i18n="quiz_q_pattern">Qual é este padrão?</span> <br><span id="quizSubQ"></span></div>
+  <div class="quiz-question">Qual é este padrão? <br><span id="quizSubQ"></span></div>
 
   <div class="options-grid" id="optionsGrid"></div>
   <div class="feedback-box" id="feedbackBox">
@@ -654,7 +420,7 @@
     <p id="feedbackText"></p>
     <div class="trade-info" id="tradeInfo"></div>
   </div>
-  <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none" data-i18n="btn_next">Próxima →</button>
+  <button class="next-btn" id="nextBtn" onclick="nextQuestion()" style="display:none">Próxima →</button>
 </div>
 
 <div class="combo-badge" id="comboBadge"></div>
@@ -662,21 +428,21 @@
 <!-- SIMULATOR PAGE -->
 <div id="page-simulator" class="page">
   <canvas id="simCanvas" height="340"></canvas>
-  <div class="crosshair-info" id="crosshairInfo" data-i18n="sim_analyze">Analise o gráfico e tome sua decisão</div>
+  <div class="crosshair-info" id="crosshairInfo">Analise o gráfico e tome sua decisão</div>
 
   <div class="sim-controls">
     <button onclick="simTF('1m')" id="tf-1m" class="active">1m</button>
     <button onclick="simTF('5m')" id="tf-5m">5m</button>
-    <button onclick="genNewSimData()" style="margin-left:auto">🔄 <span data-i18n="sim_new_scenario">Novo Cenário</span></button>
+    <button onclick="genNewSimData()" style="margin-left:auto">🔄 Novo Cenário</button>
   </div>
 
-  <div class="pattern-alert" id="patternAlert">⚠️ <span data-i18n="sim_pattern_detected">Padrão detectado:</span> <strong id="patternAlertName"></strong></div>
+  <div class="pattern-alert" id="patternAlert">⚠️ Padrão detectado: <strong id="patternAlertName"></strong></div>
 
-  <div class="section-title" data-i18n="sim_operation">Operação</div>
+  <div class="section-title">Operação</div>
   <div class="trade-btns">
-    <button class="btn-buy" onclick="placeTrade('buy')">▲ <span data-i18n="sim_buy">COMPRAR</span></button>
-    <button class="btn-wait" onclick="placeTrade('wait')">⏸ <span data-i18n="sim_wait">AGUARDAR</span></button>
-    <button class="btn-sell" onclick="placeTrade('sell')">▼ <span data-i18n="sim_sell">VENDER</span></button>
+    <button class="btn-buy" onclick="placeTrade('buy')">▲ COMPRAR</button>
+    <button class="btn-wait" onclick="placeTrade('wait')">⏸ AGUARDAR</button>
+    <button class="btn-sell" onclick="placeTrade('sell')">▼ VENDER</button>
   </div>
 
   <div class="sim-result-display" id="simResultDisplay" style="display:none">
@@ -686,32 +452,32 @@
   </div>
 
   <div class="sim-stats">
-    <div class="sim-stat"><div class="v" id="simWins">0</div><div class="l" data-i18n="sim_wins">Acertos</div></div>
-    <div class="sim-stat"><div class="v" id="simLosses">0</div><div class="l" data-i18n="sim_losses">Erros</div></div>
-    <div class="sim-stat"><div class="v" id="simWR">-</div><div class="l" data-i18n="sim_performance">Aproveitamento</div></div>
-    <div class="sim-stat"><div class="v" id="simStreak">0</div><div class="l" data-i18n="sim_streak">Sequência</div></div>
+    <div class="sim-stat"><div class="v" id="simWins">0</div><div class="l">Acertos</div></div>
+    <div class="sim-stat"><div class="v" id="simLosses">0</div><div class="l">Erros</div></div>
+    <div class="sim-stat"><div class="v" id="simWR">-</div><div class="l">Aproveitamento</div></div>
+    <div class="sim-stat"><div class="v" id="simStreak">0</div><div class="l">Sequência</div></div>
   </div>
 </div>
 
 <!-- LIBRARY PAGE -->
 <div id="page-library" class="page">
-  <input class="lib-search" id="libSearch" data-i18n-placeholder="lib_search_ph" placeholder="🔍 Buscar padrão..." oninput="renderLibrary()">
+  <input class="lib-search" id="libSearch" placeholder="🔍 Buscar padrão..." oninput="renderLibrary()">
   <div class="filter-row">
-    <button class="filter-btn active" onclick="libFilter('all',this)" data-i18n="lib_all">Todos</button>
-    <button class="filter-btn" onclick="libFilter('alta',this)">📈 <span data-i18n="lib_up">Alta</span></button>
-    <button class="filter-btn" onclick="libFilter('baixa',this)">📉 <span data-i18n="lib_down">Baixa</span></button>
-    <button class="filter-btn" onclick="libFilter('neutro',this)">➡️ <span data-i18n="lib_neutral">Neutro</span></button>
-    <button class="filter-btn" onclick="libFilter('d1',this)">★ <span data-i18n="lib_easy">Fácil</span></button>
-    <button class="filter-btn" onclick="libFilter('d2',this)">★★ <span data-i18n="lib_medium">Médio</span></button>
-    <button class="filter-btn" onclick="libFilter('d3',this)">★★★ <span data-i18n="lib_hard">Difícil</span></button>
-    <button class="filter-btn" onclick="libFilter('d4',this)">★★★★ <span data-i18n="lib_expert">Expert</span></button>
+    <button class="filter-btn active" onclick="libFilter('all',this)">Todos</button>
+    <button class="filter-btn" onclick="libFilter('alta',this)">📈 Alta</button>
+    <button class="filter-btn" onclick="libFilter('baixa',this)">📉 Baixa</button>
+    <button class="filter-btn" onclick="libFilter('neutro',this)">➡️ Neutro</button>
+    <button class="filter-btn" onclick="libFilter('d1',this)">★ Fácil</button>
+    <button class="filter-btn" onclick="libFilter('d2',this)">★★ Médio</button>
+    <button class="filter-btn" onclick="libFilter('d3',this)">★★★ Difícil</button>
+    <button class="filter-btn" onclick="libFilter('d4',this)">★★★★ Expert</button>
   </div>
   <div class="pattern-grid" id="patternGrid"></div>
 </div>
 
 <!-- ACHIEVEMENTS PAGE -->
 <div id="page-achievements" class="page">
-  <div class="section-title" data-i18n="section_your_achievements">Suas Conquistas</div>
+  <div class="section-title">Suas Conquistas</div>
   <div class="ach-grid" id="achGrid"></div>
 </div>
 
@@ -722,30 +488,30 @@
     <h2 id="modalTitle"></h2>
     <canvas id="modalCanvas" height="120"></canvas>
     <div class="modal-detail-row">
-      <div class="modal-detail-item"><div class="lbl" data-i18n="modal_signal">Sinal</div><div class="val" id="modalSignal"></div></div>
-      <div class="modal-detail-item"><div class="lbl" data-i18n="modal_difficulty">Dificuldade</div><div class="val" id="modalDiff"></div></div>
-      <div class="modal-detail-item"><div class="lbl" data-i18n="modal_target">Alvo</div><div class="val" id="modalTarget"></div></div>
-      <div class="modal-detail-item"><div class="lbl" data-i18n="modal_stop">Stop</div><div class="val" id="modalStop"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Sinal</div><div class="val" id="modalSignal"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Dificuldade</div><div class="val" id="modalDiff"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Alvo</div><div class="val" id="modalTarget"></div></div>
+      <div class="modal-detail-item"><div class="lbl">Stop</div><div class="val" id="modalStop"></div></div>
     </div>
     <p class="modal-desc" id="modalDesc"></p>
     <div class="tip-box" id="modalTip"></div>
-    <button class="close-btn" onclick="closeModal()" data-i18n="btn_close">Fechar</button>
+    <button class="close-btn" onclick="closeModal()">Fechar</button>
   </div>
 </div>
 
 <!-- GAMEOVER -->
 <div class="gameover-overlay hidden" id="gameOverOverlay">
   <div class="gameover-box">
-    <h2>💀 <span data-i18n="go_title">Game Over</span></h2>
-    <p data-i18n="go_subtitle">Suas 3 vidas se esgotaram!</p>
+    <h2>💀 Game Over</h2>
+    <p>Suas 3 vidas se esgotaram!</p>
     <div class="go-stats">
-      <div class="go-stat"><div class="v" id="goAcertos">0</div><div class="l" data-i18n="go_wins">Acertos</div></div>
-      <div class="go-stat"><div class="v" id="goErros">0</div><div class="l" data-i18n="go_losses">Erros</div></div>
-      <div class="go-stat"><div class="v" id="goAcc">0%</div><div class="l" data-i18n="stat_accuracy">Precisão</div></div>
-      <div class="go-stat"><div class="v" id="goStreak">0</div><div class="l" data-i18n="go_best_streak">Melhor Streak</div></div>
+      <div class="go-stat"><div class="v" id="goAcertos">0</div><div class="l">Acertos</div></div>
+      <div class="go-stat"><div class="v" id="goErros">0</div><div class="l">Erros</div></div>
+      <div class="go-stat"><div class="v" id="goAcc">0%</div><div class="l">Precisão</div></div>
+      <div class="go-stat"><div class="v" id="goStreak">0</div><div class="l">Melhor Streak</div></div>
     </div>
-    <button class="go-btn go-btn-primary" onclick="restartSurvival()">🔄 <span data-i18n="go_retry">Tentar Novamente</span></button>
-    <button class="go-btn go-btn-secondary" onclick="closeGameOver()" data-i18n="btn_close">Fechar</button>
+    <button class="go-btn go-btn-primary" onclick="restartSurvival()">🔄 Tentar Novamente</button>
+    <button class="go-btn go-btn-secondary" onclick="closeGameOver()">Fechar</button>
   </div>
 </div>
 
@@ -804,386 +570,6 @@ function playSound(type) {
     }
   } catch(e) { /* silently fail */ }
 }
-
-
-const PATTERN_DESC_I18N = {
-  hammer: {desc:{zh:'小实体在顶部，下影线长（≥2倍实体），上影线很少或没有。预示下跌反转。',hi:'शीर्ष पर छोटा शरीर, लंबी निचली छाया (≥2× शरीर), ऊपरी छाया बहुत कम या नहीं। मंदी से उलटाव का संकेत देता है।',ar:'جسم صغير في الأعلى، ظل سفلي طويل (≥2× الجسم)، ظل علوي قليل أو معدوم. يشير إلى انعكاس من الهبوط.',bn:'শীর্ষে ছোট বডি, লম্বা নিম্ন ছায়া (≥২× বডি), সামান্য বা কোনো উপরের ছায়া নেই। নিম্নমুখী থেকে রিভার্সাল নির্দেশ করে।',ru:'Маленькое тело сверху, длинная нижняя тень (≥2× тела), почти нет верхней тени. Сигнализирует о развороте с понижения.',ja:'上部に小さい実体、長い下ヒゲ（実体の2倍以上）、上ヒゲはほとんどなし。下落からの反転を示唆。',de:'Kleiner Körper oben, lange untere Lunte (≥2× Körper), kaum obere Lunte. Signalisiert Trendumkehr von unten.',ko:'상단에 작은 몸통, 긴 아래꼬리(몸통의 2배 이상), 위꼬리는 거의 없음. 하락에서 반전을 알림.',vi:'Thân nhỏ ở trên, bóng dưới dài (≥2× thân), ít hoặc không có bóng trên. Báo hiệu đảo chiều từ giảm.',tr:'Üstte küçük gövde, uzun alt gölge (gövdenin ≥2 katı), üst gölge az veya yok. Düşüşten dönüşü işaret eder.',it:'Corpo piccolo in alto, ombra inferiore lunga (≥2× corpo), poca o nessuna ombra superiore. Segnala inversione da ribasso.',th:'ตัวเทียนเล็กด้านบน ไส้ล่างยาว (≥2 เท่าของตัวเทียน) ไส้บนน้อยหรือไม่มี บ่งบอกการกลับตัวจากขาลง',pl:'Małe korpus na górze, długi dolny cień (≥2× korpus), mały lub brak górnego cienia. Sygnalizuje odwrócenie ze spadku.',nl:'Klein lichaam bovenaan, lange onderste schaduw (≥2× lichaam), weinig of geen bovenste schaduw. Signaleert omkering van dalend.',uk:'Маленьке тіло зверху, довга нижня тінь (≥2× тіла), мало або немає верхньої тіні. Сигналізує про розворот зі спаду.',id:'Badan kecil di atas, bayangan bawah panjang (≥2× badan), sedikit atau tanpa bayangan atas. Menandakan pembalikan dari turun.',ur:'اوپر چھوٹا جسم، لمبا نچلا سایہ (≥2× جسم)، اوپری سایہ کم یا نہیں۔ مندی سے الٹ پھیر کا اشارہ دیتا ہے۔'}, tip:{zh:'用后续阳线确认。',hi:'अगली बुलिश कैंडल से पुष्टि करें।',ar:'تأكد بشمعة صاعدة تالية.',bn:'পরবর্তী বুলিশ মোমবাতি দিয়ে নিশ্চিত করুন।',ru:'Подтвердите следующей бычьей свечой.',ja:'次の陽線で確認しよう。',de:'Mit der nächsten bullischen Kerze bestätigen.',ko:'다음 양봉으로 확인하세요.',vi:'Xác nhận bằng nến tăng tiếp theo.',tr:'Sonraki yükseliş mumuyla teyit et.',it:'Conferma con la candela rialzista successiva.',th:'ยืนยันด้วยแท่งเทียนขาขึ้นถัดไป',pl:'Potwierdź następną świecą wzrostową.',nl:'Bevestig met de volgende bullish kaars.',uk:'Підтвердіть наступною бичачою свічкою.',id:'Konfirmasi dengan candle bullish berikutnya.',ur:'اگلی تیزی کینڈل سے تصدیق کریں۔'}},
-  inv_hammer: {desc:{zh:'实体在底部，上影线长。在下跌底部出现，暗示反转上涨。',hi:'नीचे शरीर, लंबी ऊपरी छाया। मंदी के निचले स्तर पर, ऊपर की ओर उलटाव का सुझाव देता है।',ar:'الجسم في الأسفل، ظل علوي طويل. في قاع الهبوط، يشير إلى انعكاس نحو الصعود.',bn:'নিচে বডি, লম্বা উপরের ছায়া। নিম্নমুখী তলদেশে, ঊর্ধ্বমুখী রিভার্সালের ইঙ্গিত দেয়।',ru:'Тело внизу, длинная верхняя тень. На дне падения предполагает разворот к росту.',ja:'下部に実体、長い上ヒゲ。下落の底で、上昇への反転を示唆。',de:'Körper unten, lange obere Lunte. Am Boden eines Abwärtstrends deutet es auf eine Umkehr nach oben hin.',ko:'하단에 몸통, 긴 위꼬리. 하락 바닥에서 상승 반전을 암시.',vi:'Thân ở dưới, bóng trên dài. Ở đáy giảm, gợi ý đảo chiều lên.',tr:'Gövde altta, uzun üst gölge. Düşüş dibinde yukarı dönüşü ima eder.',it:'Corpo in basso, ombra superiore lunga. Sul fondo di un ribasso, suggerisce un\'inversione al rialzo.',th:'ตัวเทียนด้านล่าง ไส้บนยาว ที่ฐานขาลง บ่งบอกการกลับตัวขึ้น',pl:'Korpus na dole, długi górny cień. Na dole spadku sugeruje odwrócenie w górę.',nl:'Lichaam onderaan, lange bovenste schaduw. Op de bodem van een daling suggereert het een omkering naar boven.',uk:'Тіло знизу, довга верхня тінь. На дні падіння натякає на розворот вгору.',id:'Badan di bawah, bayangan atas panjang. Di dasar penurunan, menunjukkan pembalikan naik.',ur:'نیچے جسم، لمبا اوپری سایہ۔ مندی کے نچلے حصے میں اوپر کی طرف الٹ پھیر کا اشارہ۔'}, tip:{zh:'比锤子线可信度低，需确认。',hi:'हैमर से कम विश्वसनीय, पुष्टि करें।',ar:'أقل موثوقية من المطرقة، تأكد.',bn:'হাতুড়ির চেয়ে কম নির্ভরযোগ্য, নিশ্চিত করুন।',ru:'Менее надёжен, чем Молот, подтвердите.',ja:'ハンマーより信頼性が低いので確認を。',de:'Weniger zuverlässig als der Hammer, bestätige.',ko:'망치형보다 신뢰도가 낮으니 확인하세요.',vi:'Ít tin cậy hơn Búa, hãy xác nhận.',tr:'Çekiçten daha az güvenilir, teyit et.',it:'Meno affidabile del Martello, conferma.',th:'น่าเชื่อถือน้อยกว่าค้อน ควรยืนยัน',pl:'Mniej wiarygodny niż Młot, potwierdź.',nl:'Minder betrouwbaar dan de Hamer, bevestig.',uk:'Менш надійний, ніж Молот, підтвердьте.',id:'Kurang andal dibanding Hammer, konfirmasi.',ur:'ہیمر سے کم قابل اعتماد، تصدیق کریں۔'}},
-  bull_marubozu: {desc:{zh:'无影线的阳线。开盘即最低价，收盘即最高价。买方完全主导。',hi:'बिना छाया वाली बुलिश कैंडल। शुरुआत सबसे कम, समापन सबसे ऊंचा। पूर्ण खरीद शक्ति।',ar:'شمعة صاعدة بدون ظلال. الافتتاح هو الأدنى، الإغلاق هو الأعلى. قوة شرائية كاملة.',bn:'কোনো ছায়া ছাড়া বুলিশ মোমবাতি। শুরু সর্বনিম্ন, শেষ সর্বোচ্চ। সম্পূর্ণ ক্রয় শক্তি।',ru:'Бычья свеча без теней. Открытие — минимум, закрытие — максимум. Полное доминирование покупателей.',ja:'ヒゲのない陽線。始値が最安値、終値が最高値。完全な買い支配。',de:'Bullische Kerze ohne Lunten. Eröffnung ist das Tief, Schluss ist das Hoch. Vollständige Kaufkraft.',ko:'꼬리 없는 양봉. 시가가 최저, 종가가 최고. 완전한 매수 지배.',vi:'Nến tăng không có bóng. Mở cửa là thấp nhất, đóng cửa là cao nhất. Lực mua hoàn toàn.',tr:'Gölgesiz yükseliş mumu. Açılış en düşük, kapanış en yüksek. Tam alım gücü.',it:'Candela rialzista senza ombre. L\'apertura è il minimo, la chiusura è il massimo. Forza d\'acquisto totale.',th:'แท่งเทียนขาขึ้นไม่มีไส้ ราคาเปิดต่ำสุด ราคาปิดสูงสุด แรงซื้อเต็มที่',pl:'Świeca wzrostowa bez cieni. Otwarcie to minimum, zamknięcie to maksimum. Pełna siła kupujących.',nl:'Bullish kaars zonder schaduwen. Opening is het laagste, slot is het hoogste. Volledige koopkracht.',uk:'Бичача свічка без тіней. Відкриття — мінімум, закриття — максимум. Повне домінування покупців.',id:'Candle bullish tanpa bayangan. Pembukaan adalah terendah, penutupan adalah tertinggi. Kekuatan beli total.',ur:'بغیر سائے کی تیزی کینڈل۔ ابتدا کم ترین، اختتام بلند ترین۔ مکمل خریداری طاقت۔'}, tip:{zh:'在突破时非常可靠。',hi:'ब्रेकआउट में बहुत विश्वसनीय।',ar:'موثوق جداً عند الاختراق.',bn:'ব্রেকআউটে খুব নির্ভরযোগ্য।',ru:'Очень надёжен при прорыве.',ja:'ブレイクアウト時に非常に信頼できる。',de:'Beim Ausbruch sehr zuverlässig.',ko:'돌파 시 매우 신뢰할 수 있음.',vi:'Rất đáng tin cậy khi phá vỡ.',tr:'Kırılmada çok güvenilir.',it:'Molto affidabile in un breakout.',th:'น่าเชื่อถือมากในการทะลุแนวรับแนวต้าน',pl:'Bardzo wiarygodny przy wybiciu.',nl:'Zeer betrouwbaar bij een breakout.',uk:'Дуже надійний при пробої.',id:'Sangat andal saat breakout.',ur:'بریک آؤٹ میں بہت قابل اعتماد۔'}},
-  dragonfly: {desc:{zh:'下影线长，几乎没有上影线的十字星。底部反转。',hi:'लंबी निचली छाया और लगभग कोई ऊपरी छाया नहीं वाला दोजी। तल पर उलटाव।',ar:'دوجي بظل سفلي طويل وبدون ظل علوي تقريباً. انعكاس في القاع.',bn:'লম্বা নিম্ন ছায়া এবং প্রায় কোনো উপরের ছায়া নেই এমন দোজি। তলদেশে রিভার্সাল।',ru:'Додж с длинной нижней тенью и почти без верхней. Разворот на дне.',ja:'長い下ヒゲとほぼ上ヒゲのない同事線。底での反転。',de:'Doji mit langer unterer Lunte und kaum oberer Lunte. Umkehr am Boden.',ko:'긴 아래꼬리와 위꼬리가 거의 없는 도지. 바닥에서 반전.',vi:'Doji với bóng dưới dài và gần như không có bóng trên. Đảo chiều ở đáy.',tr:'Uzun alt gölgeli ve neredeyse üst gölgesiz doji. Dipte dönüş.',it:'Doji con ombra inferiore lunga e quasi nessuna ombra superiore. Inversione sul fondo.',th:'โดจิที่มีไส้ล่างยาวและแทบไม่มีไส้บน การกลับตัวที่ฐาน',pl:'Doji z długim dolnym cieniem i prawie bez górnego. Odwrócenie na dole.',nl:'Doji met lange onderste schaduw en bijna geen bovenste. Omkering op de bodem.',uk:'Додж із довгою нижньою тінню і майже без верхньої. Розворот на дні.',id:'Doji dengan bayangan bawah panjang dan hampir tanpa bayangan atas. Pembalikan di dasar.',ur:'لمبے نچلے سائے اور تقریباً بغیر اوپری سائے کا دوجی۔ نچلے حصے میں الٹ پھیر۔'}, tip:{zh:'在支撑底部信号强烈。',hi:'समर्थन तल पर मजबूत संकेत।',ar:'إشارة قوية في قاع الدعم.',bn:'সাপোর্ট তলদেশে শক্তিশালী সংকেত।',ru:'Сильный сигнал на дне поддержки.',ja:'サポートの底で強いシグナル。',de:'Starkes Signal am Unterstützungsboden.',ko:'지지선 바닥에서 강한 신호.',vi:'Tín hiệu mạnh ở đáy hỗ trợ.',tr:'Destek dibinde güçlü sinyal.',it:'Segnale forte sul fondo di supporto.',th:'สัญญาณแข็งแกร่งที่ฐานแนวรับ',pl:'Silny sygnał na dole wsparcia.',nl:'Sterk signaal op de steunbodem.',uk:'Сильний сигнал на дні підтримки.',id:'Sinyal kuat di dasar support.',ur:'سپورٹ کے نچلے حصے میں مضبوط اشارہ۔'}},
-  spin_bull: {desc:{zh:'实体很小，两侧影线都长。犹豫不决但处于看涨背景中。',hi:'बहुत छोटा शरीर, दोनों ओर लंबी छाया। अनिर्णय लेकिन बुलिश संदर्भ में।',ar:'جسم صغير جداً، ظلال طويلة في كلا الجانبين. تردد لكن في سياق صاعد.',bn:'খুব ছোট বডি, উভয় পাশে লম্বা ছায়া। অনিশ্চয়তা কিন্তু বুলিশ প্রেক্ষাপটে।',ru:'Очень маленькое тело, длинные тени с обеих сторон. Нерешительность, но в бычьем контексте.',ja:'非常に小さい実体、両側に長いヒゲ。迷いがあるが強気の文脈で。',de:'Sehr kleiner Körper, lange Lunten auf beiden Seiten. Unentschlossenheit, aber im bullischen Kontext.',ko:'매우 작은 몸통, 양쪽 모두 긴 꼬리. 망설임이지만 상승 맥락에서.',vi:'Thân rất nhỏ, bóng dài cả hai bên. Do dự nhưng trong bối cảnh tăng.',tr:'Çok küçük gövde, her iki tarafta uzun gölgeler. Kararsızlık ama yükseliş bağlamında.',it:'Corpo molto piccolo, ombre lunghe su entrambi i lati. Indecisione ma in un contesto rialzista.',th:'ตัวเทียนเล็กมาก ไส้ยาวทั้งสองด้าน ความลังเลแต่ในบริบทขาขึ้น',pl:'Bardzo mały korpus, długie cienie po obu stronach. Niezdecydowanie, ale w kontekście wzrostowym.',nl:'Heel klein lichaam, lange schaduwen aan beide kanten. Besluiteloosheid maar in bullish context.',uk:'Дуже маленьке тіло, довгі тіні з обох боків. Нерішучість, але в бичачому контексті.',id:'Badan sangat kecil, bayangan panjang di kedua sisi. Keraguan namun dalam konteks bullish.',ur:'بہت چھوٹا جسم، دونوں طرف لمبے سائے۔ غیر یقینی لیکن تیزی کے تناظر میں۔'}, tip:{zh:'背景至关重要。',hi:'संदर्भ बुनियादी है।',ar:'السياق أساسي.',bn:'প্রেক্ষাপট মৌলিক।',ru:'Контекст имеет основополагающее значение.',ja:'文脈が基本。',de:'Der Kontext ist grundlegend.',ko:'맥락이 기본입니다.',vi:'Bối cảnh là yếu tố cơ bản.',tr:'Bağlam temeldir.',it:'Il contesto è fondamentale.',th:'บริบทเป็นสิ่งพื้นฐาน',pl:'Kontekst jest kluczowy.',nl:'Context is fundamenteel.',uk:'Контекст є основоположним.',id:'Konteks adalah fundamental.',ur:'سیاق و سباق بنیادی ہے۔'}},
-  long_bull: {desc:{zh:'实体大的阳线。显示该时段买方占主导。',hi:'बड़े शरीर वाली बुलिश कैंडल। अवधि में खरीद वर्चस्व दिखाती है।',ar:'شمعة صاعدة بجسم كبير. تُظهر هيمنة الشراء في الفترة.',bn:'বড় বডিযুক্ত বুলিশ মোমবাতি। সময়কালে ক্রয় আধিপত্য দেখায়।',ru:'Бычья свеча с большим телом. Показывает доминирование покупателей в периоде.',ja:'実体の大きい陽線。期間中の買い支配を示す。',de:'Bullische Kerze mit großem Körper. Zeigt Käuferdominanz in der Periode.',ko:'몸통이 큰 양봉. 기간 동안 매수 우위를 보여줌.',vi:'Nến tăng với thân lớn. Cho thấy sự thống trị của bên mua trong giai đoạn.',tr:'Büyük gövdeli yükseliş mumu. Dönemde alım hakimiyetini gösterir.',it:'Candela rialzista con corpo grande. Mostra il dominio degli acquirenti nel periodo.',th:'แท่งเทียนขาขึ้นที่มีตัวใหญ่ แสดงการครอบงำของฝ่ายซื้อในช่วงเวลานั้น',pl:'Świeca wzrostowa z dużym korpusem. Pokazuje dominację kupujących w okresie.',nl:'Bullish kaars met groot lichaam. Toont koopdominantie in de periode.',uk:'Бичача свічка з великим тілом. Показує домінування покупців у періоді.',id:'Candle bullish dengan badan besar. Menunjukkan dominasi pembeli pada periode tersebut.',ur:'بڑے جسم کی تیزی کینڈل۔ مدت میں خریداری کا غلبہ ظاہر کرتی ہے۔'}, tip:{zh:'成交量确认力量。',hi:'वॉल्यूम ताकत की पुष्टि करता है।',ar:'الحجم يؤكد القوة.',bn:'ভলিউম শক্তি নিশ্চিত করে।',ru:'Объём подтверждает силу.',ja:'出来高が力を確認する。',de:'Das Volumen bestätigt die Stärke.',ko:'거래량이 강도를 확인합니다.',vi:'Khối lượng xác nhận sức mạnh.',tr:'Hacim gücü teyit eder.',it:'Il volume conferma la forza.',th:'ปริมาณยืนยันความแข็งแกร่ง',pl:'Wolumen potwierdza siłę.',nl:'Volume bevestigt de kracht.',uk:'Обсяг підтверджує силу.',id:'Volume mengonfirmasi kekuatan.',ur:'حجم طاقت کی تصدیق کرتا ہے۔'}},
-  belt_hold_bull: {desc:{zh:'在最低点开盘（无下影线），接近最高点收盘。强烈反转。',hi:'न्यूनतम पर खुलती है (कोई निचली छाया नहीं), अधिकतम के पास बंद होती है। मजबूत मोड़।',ar:'يفتح عند الأدنى (بدون ظل سفلي)، يغلق قرب الأعلى. تحول قوي.',bn:'সর্বনিম্নে খোলে (নিম্ন ছায়া নেই), সর্বোচ্চের কাছে বন্ধ হয়। শক্তিশালী মোড়।',ru:'Открывается на минимуме (без нижней тени), закрывается возле максимума. Сильный разворот.',ja:'安値で寄り付き（下ヒゲなし）、高値近くで引ける。強い転換。',de:'Eröffnet am Tief (keine untere Lunte), schließt nahe dem Hoch. Starke Wende.',ko:'최저가에서 시작(아래꼬리 없음), 최고가 근처에서 마감. 강한 전환.',vi:'Mở cửa ở mức thấp nhất (không có bóng dưới), đóng cửa gần cao nhất. Sự đảo chiều mạnh.',tr:'Düşükten açılır (alt gölge yok), yükseğe yakın kapanır. Güçlü dönüş.',it:'Apre al minimo (senza ombra inferiore), chiude vicino al massimo. Forte svolta.',th:'เปิดที่จุดต่ำสุด (ไม่มีไส้ล่าง) ปิดใกล้จุดสูงสุด การพลิกกลับที่แข็งแกร่ง',pl:'Otwiera się na minimum (bez dolnego cienia), zamyka blisko maksimum. Silny zwrot.',nl:'Opent op het laagste punt (geen onderste schaduw), sluit dicht bij het hoogste. Sterke ommekeer.',uk:'Відкривається на мінімумі (без нижньої тіні), закривається біля максимуму. Сильний поворот.',id:'Dibuka pada titik terendah (tanpa bayangan bawah), ditutup mendekati titik tertinggi. Pembalikan kuat.',ur:'کم ترین پر کھلتا ہے (کوئی نچلا سایہ نہیں)، بلند ترین کے قریب بند ہوتا ہے۔ مضبوط موڑ۔'}, tip:{zh:'罕见但可信。',hi:'दुर्लभ लेकिन विश्वसनीय।',ar:'نادر لكنه موثوق.',bn:'বিরল কিন্তু নির্ভরযোগ্য।',ru:'Редко, но надёжно.',ja:'稀だが信頼できる。',de:'Selten, aber zuverlässig.',ko:'드물지만 신뢰할 수 있음.',vi:'Hiếm nhưng đáng tin cậy.',tr:'Nadir ama güvenilir.',it:'Raro ma affidabile.',th:'พบยากแต่น่าเชื่อถือ',pl:'Rzadki, ale wiarygodny.',nl:'Zeldzaam maar betrouwbaar.',uk:'Рідкісний, але надійний.',id:'Jarang tapi andal.',ur:'نایاب لیکن قابل اعتماد۔'}},
-  closing_marubozu_bull: {desc:{zh:'无上影线，有下影线。买方主导直到收盘。',hi:'कोई ऊपरी छाया नहीं, निचली छाया है। समापन तक खरीद हावी रही।',ar:'بدون ظل علوي، له ظل سفلي. سيطر الشراء حتى الإغلاق.',bn:'কোনো উপরের ছায়া নেই, নিম্ন ছায়া আছে। সমাপনী পর্যন্ত ক্রয় আধিপত্য করেছে।',ru:'Без верхней тени, есть нижняя. Покупка доминировала до закрытия.',ja:'上ヒゲなし、下ヒゲあり。引けまで買いが支配。',de:'Keine obere Lunte, hat untere Lunte. Kauf dominierte bis zum Schluss.',ko:'위꼬리 없음, 아래꼬리 있음. 종가까지 매수 우위.',vi:'Không có bóng trên, có bóng dưới. Bên mua thống trị đến khi đóng cửa.',tr:'Üst gölge yok, alt gölge var. Kapanışa kadar alım hakim oldu.',it:'Senza ombra superiore, ha ombra inferiore. L\'acquisto ha dominato fino alla chiusura.',th:'ไม่มีไส้บน มีไส้ล่าง แรงซื้อครอบงำจนถึงปิดตลาด',pl:'Bez górnego cienia, ma dolny. Kupno dominowało do zamknięcia.',nl:'Geen bovenste schaduw, heeft onderste. Koop domineerde tot het slot.',uk:'Без верхньої тіні, є нижня. Купівля домінувала до закриття.',id:'Tanpa bayangan atas, ada bayangan bawah. Pembelian mendominasi hingga penutupan.',ur:'بغیر اوپری سائے کے، نچلا سایہ ہے۔ خریداری اختتام تک حاوی رہی۔'}, tip:{zh:'在支撑位表现良好。',hi:'समर्थन में अच्छा।',ar:'جيد عند الدعم.',bn:'সাপোর্টে ভালো।',ru:'Хорошо у поддержки.',ja:'サポートで良好。',de:'Gut bei Unterstützungen.',ko:'지지선에서 좋음.',vi:'Tốt ở vùng hỗ trợ.',tr:'Destekte iyi.',it:'Buono sui supporti.',th:'ดีที่แนวรับ',pl:'Dobry przy wsparciach.',nl:'Goed bij steunniveaus.',uk:'Добре біля підтримки.',id:'Bagus di level support.',ur:'سپورٹ پر اچھا۔'}},
-  shooting_star: {desc:{zh:'实体小在下方，上影线长（≥2倍实体）。在上涨顶部，预示反转。',hi:'नीचे छोटा शरीर, लंबी ऊपरी छाया (≥2× शरीर)। तेजी के शीर्ष पर, उलटाव का संकेत।',ar:'جسم صغير بالأسفل، ظل علوي طويل (≥2× الجسم). في قمة الصعود، يشير إلى انعكاس.',bn:'নিচে ছোট বডি, লম্বা উপরের ছায়া (≥২× বডি)। ঊর্ধ্বমুখী শীর্ষে, রিভার্সাল নির্দেশ করে।',ru:'Маленькое тело внизу, длинная верхняя тень (≥2× тела). На вершине роста сигнализирует о развороте.',ja:'下部に小さい実体、長い上ヒゲ（実体の2倍以上）。上昇の天井で反転を示唆。',de:'Kleiner Körper unten, lange obere Lunte (≥2× Körper). Am Hoch eines Aufwärtstrends signalisiert es eine Umkehr.',ko:'하단에 작은 몸통, 긴 위꼬리(몸통의 2배 이상). 상승 정점에서 반전을 알림.',vi:'Thân nhỏ ở dưới, bóng trên dài (≥2× thân). Ở đỉnh tăng, báo hiệu đảo chiều.',tr:'Altta küçük gövde, uzun üst gölge (gövdenin ≥2 katı). Yükseliş tepesinde dönüşü işaret eder.',it:'Corpo piccolo in basso, ombra superiore lunga (≥2× corpo). Sulla cima di un rialzo, segnala inversione.',th:'ตัวเทียนเล็กด้านล่าง ไส้บนยาว (≥2 เท่าของตัวเทียน) ที่จุดสูงสุดขาขึ้น บ่งบอกการกลับตัว',pl:'Mały korpus na dole, długi górny cień (≥2× korpus). Na szczycie wzrostu sygnalizuje odwrócenie.',nl:'Klein lichaam onderaan, lange bovenste schaduw (≥2× lichaam). Op de top van een stijging signaleert het een omkering.',uk:'Маленьке тіло знизу, довга верхня тінь (≥2× тіла). На вершині зростання сигналізує про розворот.',id:'Badan kecil di bawah, bayangan atas panjang (≥2× badan). Di puncak kenaikan, menandakan pembalikan.',ur:'نیچے چھوٹا جسم، لمبا اوپری سایہ (≥2× جسم)۔ تیزی کی چوٹی پر، الٹ پھیر کا اشارہ۔'}, tip:{zh:'长上影线=高价被拒绝。',hi:'लंबी ऊपरी छाया = उच्च मूल्य अस्वीकृति।',ar:'الظل العلوي الطويل = رفض السعر المرتفع.',bn:'লম্বা উপরের ছায়া = উচ্চ মূল্য প্রত্যাখ্যান।',ru:'Длинная верхняя тень = отказ от высокой цены.',ja:'長い上ヒゲ＝高値の拒絶。',de:'Lange obere Lunte = Ablehnung des hohen Preises.',ko:'긴 위꼬리 = 고가 거부.',vi:'Bóng trên dài = từ chối giá cao.',tr:'Uzun üst gölge = yüksek fiyat reddi.',it:'Ombra superiore lunga = rifiuto del prezzo alto.',th:'ไส้บนยาว = การปฏิเสธราคาสูง',pl:'Długi górny cień = odrzucenie wysokiej ceny.',nl:'Lange bovenste schaduw = afwijzing van hoge prijs.',uk:'Довга верхня тінь = відмова від високої ціни.',id:'Bayangan atas panjang = penolakan harga tinggi.',ur:'لمبا اوپری سایہ = اونچی قیمت کا رد۔'}},
-  hang_man: {desc:{zh:'与锤子线相同但出现在上涨顶部。买方衰竭的信号。',hi:'हैमर जैसा लेकिन तेजी के शीर्ष पर। खरीद थकावट का संकेत।',ar:'مثل المطرقة لكن في قمة الصعود. إشارة استنزاف الشراء.',bn:'হাতুড়ির মতো কিন্তু ঊর্ধ্বমুখী শীর্ষে। ক্রয় ক্লান্তির সংকেত।',ru:'Как Молот, но на вершине роста. Сигнал истощения покупателей.',ja:'ハンマーと同じだが上昇の天井で。買いの疲弊シグナル。',de:'Wie der Hammer, aber am Hoch eines Aufwärtstrends. Signal für Käufererschöpfung.',ko:'망치형과 같지만 상승 정점에서. 매수 소진 신호.',vi:'Giống Búa nhưng ở đỉnh tăng. Tín hiệu kiệt sức của bên mua.',tr:'Çekiç gibi ama yükseliş tepesinde. Alım tükenmesi sinyali.',it:'Come il Martello ma sulla cima di un rialzo. Segnale di esaurimento degli acquirenti.',th:'เหมือนค้อนแต่ที่จุดสูงสุดขาขึ้น สัญญาณความอ่อนแรงของแรงซื้อ',pl:'Jak Młot, ale na szczycie wzrostu. Sygnał wyczerpania kupujących.',nl:'Zoals de Hamer maar op de top van een stijging. Signaal van koperserschoppting.',uk:'Як Молот, але на вершині зростання. Сигнал виснаження покупців.',id:'Seperti Hammer tapi di puncak kenaikan. Sinyal kelelahan pembeli.',ur:'ہیمر کی طرح لیکن تیزی کی چوٹی پر۔ خریداری کی تھکن کا اشارہ۔'}, tip:{zh:'下影线越长越可信。',hi:'लंबी निचली छाया के साथ अधिक विश्वसनीय।',ar:'أكثر موثوقية مع ظل سفلي طويل.',bn:'লম্বা নিম্ন ছায়ার সাথে আরও নির্ভরযোগ্য।',ru:'Надёжнее с длинной нижней тенью.',ja:'長い下ヒゲでより信頼できる。',de:'Zuverlässiger mit langer unterer Lunte.',ko:'긴 아래꼬리가 있으면 더 신뢰할 수 있음.',vi:'Đáng tin cậy hơn với bóng dưới dài.',tr:'Uzun alt gölgeyle daha güvenilir.',it:'Più affidabile con un\'ombra inferiore lunga.',th:'น่าเชื่อถือมากขึ้นเมื่อมีไส้ล่างยาว',pl:'Bardziej wiarygodny z długim dolnym cieniem.',nl:'Betrouwbaarder met lange onderste schaduw.',uk:'Надійніший із довгою нижньою тінню.',id:'Lebih andal dengan bayangan bawah panjang.',ur:'لمبے نچلے سائے کے ساتھ زیادہ قابل اعتماد۔'}},
-  bear_marubozu: {desc:{zh:'无影线的阴线。开盘即最高价，收盘即最低价。卖方完全压制。',hi:'बिना छाया वाली बेयरिश कैंडल। शुरुआत सबसे ऊंचा, समापन सबसे कम। पूर्ण बिक्री दबाव।',ar:'شمعة هابطة بدون ظلال. الافتتاح هو الأعلى، الإغلاق هو الأدنى. ضغط بيع كامل.',bn:'কোনো ছায়া ছাড়া বেয়ারিশ মোমবাতি। শুরু সর্বোচ্চ, শেষ সর্বনিম্ন। সম্পূর্ণ বিক্রয় চাপ।',ru:'Медвежья свеча без теней. Открытие — максимум, закрытие — минимум. Полное давление продавцов.',ja:'ヒゲのない陰線。始値が最高値、終値が最安値。完全な売り圧力。',de:'Bärische Kerze ohne Lunten. Eröffnung ist das Hoch, Schluss ist das Tief. Vollständiger Verkaufsdruck.',ko:'꼬리 없는 음봉. 시가가 최고, 종가가 최저. 완전한 매도 압력.',vi:'Nến giảm không có bóng. Mở cửa là cao nhất, đóng cửa là thấp nhất. Áp lực bán hoàn toàn.',tr:'Gölgesiz düşüş mumu. Açılış en yüksek, kapanış en düşük. Tam satış baskısı.',it:'Candela ribassista senza ombre. L\'apertura è il massimo, la chiusura è il minimo. Pressione di vendita totale.',th:'แท่งเทียนขาลงไม่มีไส้ ราคาเปิดสูงสุด ราคาปิดต่ำสุด แรงขายเต็มที่',pl:'Świeca spadkowa bez cieni. Otwarcie to maksimum, zamknięcie to minimum. Pełna presja sprzedających.',nl:'Bearish kaars zonder schaduwen. Opening is het hoogste, slot is het laagste. Volledige verkoopdruk.',uk:'Ведмежа свічка без тіней. Відкриття — максимум, закриття — мінімум. Повний тиск продавців.',id:'Candle bearish tanpa bayangan. Pembukaan adalah tertinggi, penutupan adalah terendah. Tekanan jual total.',ur:'بغیر سائے کی مندی کینڈل۔ ابتدا بلند ترین، اختتام کم ترین۔ مکمل فروخت کا دباؤ۔'}, tip:{zh:'在阻力位非常可靠。',hi:'प्रतिरोध में बहुत विश्वसनीय।',ar:'موثوق جداً عند المقاومة.',bn:'রেজিস্ট্যান্সে খুব নির্ভরযোগ্য।',ru:'Очень надёжен у сопротивления.',ja:'レジスタンスで非常に信頼できる。',de:'Bei Widerständen sehr zuverlässig.',ko:'저항선에서 매우 신뢰할 수 있음.',vi:'Rất đáng tin cậy ở vùng kháng cự.',tr:'Dirençte çok güvenilir.',it:'Molto affidabile sulle resistenze.',th:'น่าเชื่อถือมากที่แนวต้าน',pl:'Bardzo wiarygodny przy oporach.',nl:'Zeer betrouwbaar bij weerstanden.',uk:'Дуже надійний біля опору.',id:'Sangat andal di level resistance.',ur:'مزاحمت پر بہت قابل اعتماد۔'}},
-  gravestone: {desc:{zh:'上影线长，几乎没有下影线的十字星。顶部强烈拒绝。',hi:'लंबी ऊपरी छाया और लगभग कोई निचली छाया नहीं वाला दोजी। शीर्ष पर मजबूत अस्वीकृति।',ar:'دوجي بظل علوي طويل وبدون ظل سفلي تقريباً. رفض قوي في القمة.',bn:'লম্বা উপরের ছায়া এবং প্রায় কোনো নিম্ন ছায়া নেই এমন দোজি। শীর্ষে শক্তিশালী প্রত্যাখ্যান।',ru:'Додж с длинной верхней тенью и почти без нижней. Сильный отказ на вершине.',ja:'長い上ヒゲとほぼ下ヒゲのない同事線。天井での強い拒絶。',de:'Doji mit langer oberer Lunte und kaum unterer Lunte. Starke Ablehnung am Hoch.',ko:'긴 위꼬리와 아래꼬리가 거의 없는 도지. 정점에서 강한 거부.',vi:'Doji với bóng trên dài và gần như không có bóng dưới. Sự từ chối mạnh ở đỉnh.',tr:'Uzun üst gölgeli ve neredeyse alt gölgesiz doji. Tepede güçlü ret.',it:'Doji con ombra superiore lunga e quasi nessuna ombra inferiore. Forte rifiuto sulla cima.',th:'โดจิที่มีไส้บนยาวและแทบไม่มีไส้ล่าง การปฏิเสธที่แข็งแกร่งที่จุดสูงสุด',pl:'Doji z długim górnym cieniem i prawie bez dolnego. Silne odrzucenie na szczycie.',nl:'Doji met lange bovenste schaduw en bijna geen onderste. Sterke afwijzing op de top.',uk:'Додж із довгою верхньою тінню і майже без нижньої. Сильна відмова на вершині.',id:'Doji dengan bayangan atas panjang dan hampir tanpa bayangan bawah. Penolakan kuat di puncak.',ur:'لمبے اوپری سائے اور تقریباً بغیر نچلے سائے کا دوجی۔ چوٹی پر مضبوط رد۔'}, tip:{zh:'在高成交量的顶部=反转。',hi:'उच्च वॉल्यूम के साथ शीर्ष पर = उलटाव।',ar:'في القمة مع حجم مرتفع = انعكاس.',bn:'উচ্চ ভলিউম সহ শীর্ষে = রিভার্সাল।',ru:'На вершине с большим объёмом = разворот.',ja:'高出来高の天井＝反転。',de:'Am Hoch mit hohem Volumen = Umkehr.',ko:'높은 거래량의 정점 = 반전.',vi:'Ở đỉnh với khối lượng cao = đảo chiều.',tr:'Yüksek hacimli tepede = dönüş.',it:'Sulla cima con volume alto = inversione.',th:'ที่จุดสูงสุดพร้อมปริมาณสูง = การกลับตัว',pl:'Na szczycie z dużym wolumenem = odwrócenie.',nl:'Op de top met hoog volume = omkering.',uk:'На вершині з великим обсягом = розворот.',id:'Di puncak dengan volume tinggi = pembalikan.',ur:'بلند حجم کے ساتھ چوٹی پر = الٹ پھیر۔'}},
-  spin_bear: {desc:{zh:'小阴线实体，两侧都有影线。在看跌背景中犹豫不决。',hi:'छोटा बेयरिश शरीर, दोनों ओर छाया। बेयरिश संदर्भ में अनिर्णय।',ar:'جسم هابط صغير، ظلال في كلا الجانبين. تردد في سياق هابط.',bn:'ছোট বেয়ারিশ বডি, উভয় পাশে ছায়া। বেয়ারিশ প্রেক্ষাপটে অনিশ্চয়তা।',ru:'Маленькое медвежье тело, тени с обеих сторон. Нерешительность в медвежьем контексте.',ja:'小さい陰線実体、両側にヒゲ。弱気の文脈での迷い。',de:'Kleiner bärischer Körper, Lunten auf beiden Seiten. Unentschlossenheit im bärischen Kontext.',ko:'작은 음봉 몸통, 양쪽 모두 꼬리. 하락 맥락에서 망설임.',vi:'Thân giảm nhỏ, bóng cả hai bên. Do dự trong bối cảnh giảm.',tr:'Küçük düşüş gövdesi, her iki tarafta gölgeler. Düşüş bağlamında kararsızlık.',it:'Corpo ribassista piccolo, ombre su entrambi i lati. Indecisione in un contesto ribassista.',th:'ตัวเทียนขาลงเล็ก ไส้ทั้งสองด้าน ความลังเลในบริบทขาลง',pl:'Mały spadkowy korpus, cienie po obu stronach. Niezdecydowanie w kontekście spadkowym.',nl:'Klein bearish lichaam, schaduwen aan beide kanten. Besluiteloosheid in bearish context.',uk:'Маленьке ведмеже тіло, тіні з обох боків. Нерішучість у ведмежому контексті.',id:'Badan bearish kecil, bayangan di kedua sisi. Keraguan dalam konteks bearish.',ur:'چھوٹا مندی جسم، دونوں طرف سائے۔ مندی کے تناظر میں غیر یقینی۔'}, tip:{zh:'背景和位置是关键。',hi:'संदर्भ और स्थिति महत्वपूर्ण हैं।',ar:'السياق والموقع أساسيان.',bn:'প্রেক্ষাপট এবং অবস্থান মূল চাবিকাঠি।',ru:'Контекст и положение — ключ.',ja:'文脈と位置が鍵。',de:'Kontext und Position sind entscheidend.',ko:'맥락과 위치가 핵심입니다.',vi:'Bối cảnh và vị trí là chìa khóa.',tr:'Bağlam ve konum anahtardır.',it:'Contesto e posizione sono fondamentali.',th:'บริบทและตำแหน่งเป็นกุญแจสำคัญ',pl:'Kontekst i pozycja są kluczowe.',nl:'Context en positie zijn cruciaal.',uk:'Контекст і позиція є ключовими.',id:'Konteks dan posisi adalah kunci.',ur:'سیاق و سباق اور پوزیشن کلیدی ہیں۔'}},
-  long_bear: {desc:{zh:'实体大的阴线。明确的卖方主导。',hi:'बड़े शरीर वाली बेयरिश कैंडल। स्पष्ट बिक्री वर्चस्व।',ar:'شمعة هابطة بجسم كبير. هيمنة بيع واضحة.',bn:'বড় বডিযুক্ত বেয়ারিশ মোমবাতি। স্পষ্ট বিক্রয় আধিপত্য।',ru:'Медвежья свеча с большим телом. Явное доминирование продавцов.',ja:'実体の大きい陰線。明確な売り支配。',de:'Bärische Kerze mit großem Körper. Klare Verkäuferdominanz.',ko:'몸통이 큰 음봉. 명확한 매도 우위.',vi:'Nến giảm với thân lớn. Sự thống trị rõ ràng của bên bán.',tr:'Büyük gövdeli düşüş mumu. Net satış hakimiyeti.',it:'Candela ribassista con corpo grande. Dominio chiaro dei venditori.',th:'แท่งเทียนขาลงที่มีตัวใหญ่ การครอบงำของฝ่ายขายที่ชัดเจน',pl:'Świeca spadkowa z dużym korpusem. Wyraźna dominacja sprzedających.',nl:'Bearish kaars met groot lichaam. Duidelijke verkoopdominantie.',uk:'Ведмежа свічка з великим тілом. Чітке домінування продавців.',id:'Candle bearish dengan badan besar. Dominasi penjual yang jelas.',ur:'بڑے جسم کی مندی کینڈل۔ واضح فروخت کا غلبہ۔'}, tip:{zh:'在阻力位有成交量确认。',hi:'प्रतिरोध में वॉल्यूम के साथ पुष्टि।',ar:'عند المقاومة مع تأكيد الحجم.',bn:'রেজিস্ট্যান্সে ভলিউম দিয়ে নিশ্চিতকরণ।',ru:'У сопротивления подтверждается объёмом.',ja:'レジスタンスで出来高が確認。',de:'Bei Widerständen mit Volumen bestätigt.',ko:'저항선에서 거래량으로 확인.',vi:'Ở kháng cự với khối lượng xác nhận.',tr:'Dirençte hacimle teyit edilir.',it:'Sulla resistenza con conferma del volume.',th:'ที่แนวต้านพร้อมการยืนยันด้วยปริมาณ',pl:'Przy oporze potwierdzone wolumenem.',nl:'Bij weerstand bevestigd met volume.',uk:'Біля опору підтверджено обсягом.',id:'Di resistance dikonfirmasi dengan volume.',ur:'مزاحمت پر حجم کے ساتھ تصدیق شدہ۔'}},
-  belt_hold_bear: {desc:{zh:'在最高点开盘（无上影线），接近最低点收盘。强烈卖方反转。',hi:'अधिकतम पर खुलती है (कोई ऊपरी छाया नहीं), न्यूनतम के पास बंद होती है। मजबूत बिक्री मोड़।',ar:'يفتح عند الأعلى (بدون ظل علوي)، يغلق قرب الأدنى. تحول بيع قوي.',bn:'সর্বোচ্চে খোলে (উপরের ছায়া নেই), সর্বনিম্নের কাছে বন্ধ হয়। শক্তিশালী বিক্রয় মোড়।',ru:'Открывается на максимуме (без верхней тени), закрывается возле минимума. Сильный медвежий разворот.',ja:'高値で寄り付き（上ヒゲなし）、安値近くで引ける。強い売り転換。',de:'Eröffnet am Hoch (keine obere Lunte), schließt nahe dem Tief. Starke bärische Wende.',ko:'최고가에서 시작(위꼬리 없음), 최저가 근처에서 마감. 강한 매도 전환.',vi:'Mở cửa ở mức cao nhất (không có bóng trên), đóng cửa gần thấp nhất. Sự đảo chiều bán mạnh.',tr:'Yüksekten açılır (üst gölge yok), düşüğe yakın kapanır. Güçlü satış dönüşü.',it:'Apre al massimo (senza ombra superiore), chiude vicino al minimo. Forte svolta di vendita.',th:'เปิดที่จุดสูงสุด (ไม่มีไส้บน) ปิดใกล้จุดต่ำสุด การพลิกกลับขายที่แข็งแกร่ง',pl:'Otwiera się na maksimum (bez górnego cienia), zamyka blisko minimum. Silny zwrot spadkowy.',nl:'Opent op het hoogste punt (geen bovenste schaduw), sluit dicht bij het laagste. Sterke bearish ommekeer.',uk:'Відкривається на максимумі (без верхньої тіні), закривається біля мінімуму. Сильний ведмежий поворот.',id:'Dibuka pada titik tertinggi (tanpa bayangan atas), ditutup mendekati titik terendah. Pembalikan jual kuat.',ur:'بلند ترین پر کھلتا ہے (کوئی اوپری سایہ نہیں)، کم ترین کے قریب بند ہوتا ہے۔ مضبوط فروخت موڑ۔'}, tip:{zh:'等待确认。',hi:'पुष्टि की प्रतीक्षा करें।',ar:'انتظر التأكيد.',bn:'নিশ্চিতকরণের জন্য অপেক্ষা করুন।',ru:'Дождитесь подтверждения.',ja:'確認を待とう。',de:'Auf Bestätigung warten.',ko:'확인을 기다리세요.',vi:'Chờ xác nhận.',tr:'Teyidi bekle.',it:'Attendi conferma.',th:'รอการยืนยัน',pl:'Poczekaj na potwierdzenie.',nl:'Wacht op bevestiging.',uk:'Зачекайте на підтвердження.',id:'Tunggu konfirmasi.',ur:'تصدیق کا انتظار کریں۔'}},
-  closing_marubozu_bear: {desc:{zh:'无下影线，有上影线。卖方主导直到收盘。',hi:'कोई निचली छाया नहीं, ऊपरी छाया है। समापन तक बिक्री हावी रही।',ar:'بدون ظل سفلي، له ظل علوي. سيطر البيع حتى الإغلاق.',bn:'কোনো নিম্ন ছায়া নেই, উপরের ছায়া আছে। সমাপনী পর্যন্ত বিক্রয় আধিপত্য করেছে।',ru:'Без нижней тени, есть верхняя. Продажа доминировала до закрытия.',ja:'下ヒゲなし、上ヒゲあり。引けまで売りが支配。',de:'Keine untere Lunte, hat obere Lunte. Verkauf dominierte bis zum Schluss.',ko:'아래꼬리 없음, 위꼬리 있음. 종가까지 매도 우위.',vi:'Không có bóng dưới, có bóng trên. Bên bán thống trị đến khi đóng cửa.',tr:'Alt gölge yok, üst gölge var. Kapanışa kadar satış hakim oldu.',it:'Senza ombra inferiore, ha ombra superiore. La vendita ha dominato fino alla chiusura.',th:'ไม่มีไส้ล่าง มีไส้บน แรงขายครอบงำจนถึงปิดตลาด',pl:'Bez dolnego cienia, ma górny. Sprzedaż dominowała do zamknięcia.',nl:'Geen onderste schaduw, heeft bovenste. Verkoop domineerde tot het slot.',uk:'Без нижньої тіні, є верхня. Продаж домінував до закриття.',id:'Tanpa bayangan bawah, ada bayangan atas. Penjualan mendominasi hingga penutupan.',ur:'بغیر نچلے سائے کے، اوپری سایہ ہے۔ فروخت اختتام تک حاوی رہی۔'}, tip:{zh:'在阻力位是强烈信号。',hi:'प्रतिरोध में मजबूत संकेत।',ar:'إشارة قوية عند المقاومة.',bn:'রেজিস্ট্যান্সে শক্তিশালী সংকেত।',ru:'Сильный сигнал у сопротивления.',ja:'レジスタンスで強いシグナル。',de:'Starkes Signal bei Widerständen.',ko:'저항선에서 강한 신호.',vi:'Tín hiệu mạnh ở vùng kháng cự.',tr:'Dirençte güçlü sinyal.',it:'Segnale forte sulle resistenze.',th:'สัญญาณแข็งแกร่งที่แนวต้าน',pl:'Silny sygnał przy oporach.',nl:'Sterk signaal bij weerstanden.',uk:'Сильний сигнал біля опору.',id:'Sinyal kuat di level resistance.',ur:'مزاحمت پر مضبوط اشارہ۔'}},
-};
-
-const PATTERN_I18N = {
-  hammer: {en:'Hammer',es:'Martillo',fr:'Marteau',zh:'锤子线',hi:'हैमर',ar:'المطرقة',bn:'হাতুড়ি',ru:'Молот',ja:'ハンマー',de:'Hammer',ko:'망치형',vi:'Búa',tr:'Çekiç',it:'Martello',th:'ค้อน',pl:'Młot',nl:'Hamer',uk:'Молот',id:'Palu',ur:'ہتھوڑا'},
-  inv_hammer: {en:'Inverted Hammer',es:'Martillo Invertido',fr:'Marteau Inversé',zh:'倒锤子线',hi:'उल्टा हैमर',ar:'مقلوب المطرقة',bn:'উল্টানো হাতুড়ি',ru:'Перевёрнутый Молот',ja:'逆ハンマー',de:'Invertiert Hammer',ko:'역망치형',vi:'Ngược Búa',tr:'Ters Çekiç',it:'Invertito Martello',th:'กลับด้าน ค้อน',pl:'Odwrócony Młot',nl:'Omgekeerde Hamer',uk:'Перевернутий Молот',id:'Terbalik Palu',ur:'الٹا ہتھوڑا'},
-  bull_marubozu: {en:'Bullish Marubozu',es:'Marubozu Alcista',fr:'Marubozu Haussier',zh:'上涨光头光脚',hi:'तेजी मारुबोज़ु',ar:'صاعد ماروبوزو',bn:'ঊর্ধ্বমুখী মারুবোজু',ru:'Бычий Марубозу',ja:'陽線丸坊主',de:'Bullisch Marubozu',ko:'상승마루보즈',vi:'Tăng Marubozu',tr:'Yükseliş Marubozu',it:'Rialzista Marubozu',th:'ขาขึ้น มารุโบซุ',pl:'Wzrostowy Marubozu',nl:'Bullish Marubozu',uk:'Бичачий Марубозу',id:'Bullish Marubozu',ur:'تیزی ماروبوزو'},
-  dragonfly: {en:'Dragonfly Doji',es:'Doji Libélula',fr:'Doji Libellule',zh:'蜻蜓十字十字星',hi:'ड्रैगनफ्लाई दोजी',ar:'Dragonfly دوجي',bn:'Dragonfly দোজি',ru:'Dragonfly Додж',ja:'Dragonfly同事線',de:'Dragonfly Doji',ko:'Dragonfly도지',vi:'Dragonfly Doji',tr:'Dragonfly Doji',it:'Dragonfly Doji',th:'Dragonfly โดจิ',pl:'Dragonfly Doji',nl:'Dragonfly Doji',uk:'Dragonfly Додж',id:'Dragonfly Doji',ur:'Dragonfly دوجی'},
-  spin_bull: {en:'Bullish Spinning Top',es:'Peón Alcista',fr:'Toupie Haussière',zh:'上涨纺锤线',hi:'तेजी स्पिनिंग टॉप',ar:'صاعد Spinning قمة',bn:'ঊর্ধ্বমুখী Spinning শীর্ষ',ru:'Бычий Spinning Вершина',ja:'陽線Spinning天井',de:'Bullisch Spinning Spitze',ko:'상승Spinning천장',vi:'Tăng Spinning Đỉnh',tr:'Yükseliş Spinning Tepe',it:'Rialzista Spinning Cima',th:'ขาขึ้น Spinning ยอด',pl:'Wzrostowy Spinning Szczyt',nl:'Bullish Spinning Top',uk:'Бичачий Spinning Вершина',id:'Bullish Spinning Puncak',ur:'تیزی Spinning اوپر'},
-  long_bull: {en:'Long Bullish Candle',es:'Vela Larga Alcista',fr:'Longue Bougie Haussière',zh:'长上涨蜡烛线',hi:'लंबी तेजी कैंडल',ar:'طويل صاعد الشمعة',bn:'দীর্ঘ ঊর্ধ্বমুখী মোমবাতি',ru:'Длинная Бычий Свеча',ja:'大陽線ローソク足',de:'Lang Bullisch Kerze',ko:'긴상승캔들',vi:'Dài Tăng Nến',tr:'Uzun Yükseliş Mum',it:'Lungo Rialzista Candela',th:'ยาว ขาขึ้น แท่งเทียน',pl:'Długa Wzrostowy Świeca',nl:'Lange Bullish Kaars',uk:'Довга Бичачий Свічка',id:'Panjang Bullish Lilin',ur:'لمبا تیزی موم بتی'},
-  belt_hold_bull: {en:'Bullish Belt Hold',es:'Belt Hold Alcista',fr:'Belt Hold Haussier',zh:'上涨捉腰带线',hi:'तेजी बेल्ट होल्ड',ar:'صاعد Belt Hold',bn:'ঊর্ধ্বমুখী Belt Hold',ru:'Бычий Belt Hold',ja:'陽線BeltHold',de:'Bullisch Belt Hold',ko:'상승BeltHold',vi:'Tăng Belt Hold',tr:'Yükseliş Belt Hold',it:'Rialzista Belt Hold',th:'ขาขึ้น Belt Hold',pl:'Wzrostowy Belt Hold',nl:'Bullish Belt Hold',uk:'Бичачий Belt Hold',id:'Bullish Belt Hold',ur:'تیزی Belt Hold'},
-  closing_marubozu_bull: {en:'Bullish Closing Marubozu',es:'Marubozu de Cierre Alcista',fr:'Marubozu de Clôture Haussier',zh:'上涨收盘光头光脚',hi:'तेजी समापन मारुबोज़ु',ar:'صاعد إغلاق ماروبوزو',bn:'ঊর্ধ্বমুখী Closing মারুবোজু',ru:'Бычий Закрытия Марубозу',ja:'陽線引け丸坊主',de:'Bullisch Schluss Marubozu',ko:'상승종가마루보즈',vi:'Tăng Đóng Cửa Marubozu',tr:'Yükseliş Kapanış Marubozu',it:'Rialzista Chiusura Marubozu',th:'ขาขึ้น ปิด มารุโบซุ',pl:'Wzrostowy Zamknięcia Marubozu',nl:'Bullish Slot Marubozu',uk:'Бичачий Закриття Марубозу',id:'Bullish Penutupan Marubozu',ur:'تیزی اختتامی ماروبوزو'},
-  shooting_star: {en:'Shooting Star',es:'Estrella Fugaz',fr:'Étoile Filante',zh:'流星线',hi:'शूटिंग स्टार',ar:'النجم الساقط',bn:'শুটিং স্টার',ru:'Падающая звезда',ja:'流れ星',de:'Sternschnuppe',ko:'유성형',vi:'Sao Băng',tr:'Kayan Yıldız',it:'Stella Cadente',th:'ดาวตก',pl:'Spadająca Gwiazda',nl:'Vallende Ster',uk:'Падаюча зірка',id:'Bintang Jatuh',ur:'شوٹنگ اسٹار'},
-  hang_man: {en:'Hanging Man',es:'Hombre Colgado',fr:'Pendu',zh:'上吊线',hi:'हैंगिंग मैन',ar:'الرجل المعلق',bn:'হ্যাংগিং ম্যান',ru:'Повешенный',ja:'首吊り線',de:'Gehängter',ko:'교수형',vi:'Người Treo Cổ',tr:'Asılan Adam',it:'Impiccato',th:'แขวนคอ',pl:'Wisielec',nl:'Gehangene',uk:'Повішений',id:'Orang Tergantung',ur:'لٹکا آدمی'},
-  bear_marubozu: {en:'Bearish Marubozu',es:'Marubozu Bajista',fr:'Marubozu Baissier',zh:'下跌光头光脚',hi:'मंदी मारुबोज़ु',ar:'هابط ماروبوزو',bn:'নিম্নমুখী মারুবোজু',ru:'Медвежий Марубозу',ja:'陰線丸坊主',de:'Bärisch Marubozu',ko:'하락마루보즈',vi:'Giảm Marubozu',tr:'Düşüş Marubozu',it:'Ribassista Marubozu',th:'ขาลง มารุโบซุ',pl:'Spadkowy Marubozu',nl:'Bearish Marubozu',uk:'Ведмежий Марубозу',id:'Bearish Marubozu',ur:'مندی ماروبوزو'},
-  gravestone: {en:'Gravestone Doji',es:'Doji Lápida',fr:'Doji Pierre Tombale',zh:'墓碑十字十字星',hi:'ग्रेवस्टोन दोजी',ar:'Gravestone دوجي',bn:'Gravestone দোজি',ru:'Gravestone Додж',ja:'Gravestone同事線',de:'Gravestone Doji',ko:'Gravestone도지',vi:'Gravestone Doji',tr:'Gravestone Doji',it:'Gravestone Doji',th:'Gravestone โดจิ',pl:'Gravestone Doji',nl:'Gravestone Doji',uk:'Gravestone Додж',id:'Gravestone Doji',ur:'Gravestone دوجی'},
-  spin_bear: {en:'Bearish Spinning Top',es:'Peón Bajista',fr:'Toupie Baissière',zh:'下跌纺锤线',hi:'मंदी स्पिनिंग टॉप',ar:'هابط Spinning قمة',bn:'নিম্নমুখী Spinning শীর্ষ',ru:'Медвежий Spinning Вершина',ja:'陰線Spinning天井',de:'Bärisch Spinning Spitze',ko:'하락Spinning천장',vi:'Giảm Spinning Đỉnh',tr:'Düşüş Spinning Tepe',it:'Ribassista Spinning Cima',th:'ขาลง Spinning ยอด',pl:'Spadkowy Spinning Szczyt',nl:'Bearish Spinning Top',uk:'Ведмежий Spinning Вершина',id:'Bearish Spinning Puncak',ur:'مندی Spinning اوپر'},
-  long_bear: {en:'Long Bearish Candle',es:'Vela Larga Bajista',fr:'Longue Bougie Baissière',zh:'长下跌蜡烛线',hi:'लंबी मंदी कैंडल',ar:'طويل هابط الشمعة',bn:'দীর্ঘ নিম্নমুখী মোমবাতি',ru:'Длинная Медвежий Свеча',ja:'大陰線ローソク足',de:'Lang Bärisch Kerze',ko:'긴하락캔들',vi:'Dài Giảm Nến',tr:'Uzun Düşüş Mum',it:'Lungo Ribassista Candela',th:'ยาว ขาลง แท่งเทียน',pl:'Długa Spadkowy Świeca',nl:'Lange Bearish Kaars',uk:'Довга Ведмежий Свічка',id:'Panjang Bearish Lilin',ur:'لمبا مندی موم بتی'},
-  belt_hold_bear: {en:'Bearish Belt Hold',es:'Belt Hold Bajista',fr:'Belt Hold Baissier',zh:'下跌捉腰带线',hi:'मंदी बेल्ट होल्ड',ar:'هابط Belt Hold',bn:'নিম্নমুখী Belt Hold',ru:'Медвежий Belt Hold',ja:'陰線BeltHold',de:'Bärisch Belt Hold',ko:'하락BeltHold',vi:'Giảm Belt Hold',tr:'Düşüş Belt Hold',it:'Ribassista Belt Hold',th:'ขาลง Belt Hold',pl:'Spadkowy Belt Hold',nl:'Bearish Belt Hold',uk:'Ведмежий Belt Hold',id:'Bearish Belt Hold',ur:'مندی Belt Hold'},
-  closing_marubozu_bear: {en:'Bearish Closing Marubozu',es:'Marubozu de Cierre Bajista',fr:'Marubozu de Clôture Baissier',zh:'下跌收盘光头光脚',hi:'मंदी समापन मारुबोज़ु',ar:'هابط إغلاق ماروبوزو',bn:'নিম্নমুখী Closing মারুবোজু',ru:'Медвежий Закрытия Марубозу',ja:'陰線引け丸坊主',de:'Bärisch Schluss Marubozu',ko:'하락종가마루보즈',vi:'Giảm Đóng Cửa Marubozu',tr:'Düşüş Kapanış Marubozu',it:'Ribassista Chiusura Marubozu',th:'ขาลง ปิด มารุโบซุ',pl:'Spadkowy Zamknięcia Marubozu',nl:'Bearish Slot Marubozu',uk:'Ведмежий Закриття Марубозу',id:'Bearish Penutupan Marubozu',ur:'مندی اختتامی ماروبوزو'},
-  doji: {en:'Doji',es:'Doji',fr:'Doji',zh:'十字星',hi:'दोजी',ar:'دوجي',bn:'দোজি',ru:'Додж',ja:'同事線',de:'Doji',ko:'도지',vi:'Doji',tr:'Doji',it:'Doji',th:'โดจิ',pl:'Doji',nl:'Doji',uk:'Додж',id:'Doji',ur:'دوجی'},
-  long_legged_doji: {en:'Long-Legged Doji',es:'Doji de Piernas Largas',fr:'Doji à Longues Jambes',zh:'长腿十字星',hi:'लंबी टांगों वाला दोजी',ar:'طويل-Legged دوجي',bn:'দীর্ঘ-Legged দোজি',ru:'Длинная-Legged Додж',ja:'大-Legged同事線',de:'Lang-Legged Doji',ko:'긴-Legged도지',vi:'Dài-Legged Doji',tr:'Uzun-Legged Doji',it:'Lungo-Legged Doji',th:'ยาว-Legged โดจิ',pl:'Długa-Legged Doji',nl:'Lange-Legged Doji',uk:'Довга-Legged Додж',id:'Panjang-Legged Doji',ur:'لمبا-Legged دوجی'},
-  four_price_doji: {en:'Four-Price Doji',es:'Doji de Cuatro Precios',fr:'Doji à Quatre Prix',zh:'四价十字星',hi:'चार-मूल्य दोजी',ar:'Four-Price دوجي',bn:'Four-Price দোজি',ru:'Four-Price Додж',ja:'Four-Price同事線',de:'Four-Price Doji',ko:'Four-Price도지',vi:'Four-Price Doji',tr:'Four-Price Doji',it:'Four-Price Doji',th:'Four-Price โดจิ',pl:'Four-Price Doji',nl:'Four-Price Doji',uk:'Four-Price Додж',id:'Four-Price Doji',ur:'Four-Price دوجی'},
-  rickshaw: {en:'Rickshaw Man',es:'Hombre Rickshaw',fr:'Homme Rickshaw',zh:'黄包车夫',hi:'रिक्शा मैन',ar:'Rickshaw Man',bn:'Rickshaw Man',ru:'Rickshaw Man',ja:'RickshawMan',de:'Rickshaw Man',ko:'RickshawMan',vi:'Rickshaw Man',tr:'Rickshaw Man',it:'Rickshaw Man',th:'Rickshaw Man',pl:'Rickshaw Man',nl:'Rickshaw Man',uk:'Rickshaw Man',id:'Rickshaw Man',ur:'Rickshaw Man'},
-  bull_engulfing: {en:'Bullish Engulfing',es:'Envolvente Alcista',fr:'Avalant Haussier',zh:'上涨吞没',hi:'तेजी एनगल्फिंग',ar:'صاعد الابتلاع',bn:'ঊর্ধ্বমুখী এনগালফিং',ru:'Бычий Поглощение',ja:'陽線包み線',de:'Bullisch Umarmung',ko:'상승장악형',vi:'Tăng Nhấn Chìm',tr:'Yükseliş Yutan',it:'Rialzista Inglobante',th:'ขาขึ้น กลืนกิน',pl:'Wzrostowy Pochłonięcie',nl:'Bullish Omsingeling',uk:'Бичачий Поглинання',id:'Bullish Penelanan',ur:'تیزی نگلنے والا'},
-  piercing: {en:'Piercing Line',es:'Línea Penetrante',fr:'Ligne Pénétrante',zh:'刺透线',hi:'पियर्सिंग लाइन',ar:'Piercing Line',bn:'Piercing Line',ru:'Piercing Line',ja:'PiercingLine',de:'Piercing Line',ko:'PiercingLine',vi:'Piercing Line',tr:'Piercing Line',it:'Piercing Line',th:'Piercing Line',pl:'Piercing Line',nl:'Piercing Line',uk:'Piercing Line',id:'Piercing Line',ur:'Piercing Line'},
-  bull_harami: {en:'Bullish Harami',es:'Harami Alcista',fr:'Harami Haussier',zh:'上涨孕线',hi:'तेजी हरामी',ar:'صاعد هارامي',bn:'ঊর্ধ্বমুখী হারামি',ru:'Бычий Харами',ja:'陽線はらみ線',de:'Bullisch Harami',ko:'상승하라미',vi:'Tăng Harami',tr:'Yükseliş Harami',it:'Rialzista Harami',th:'ขาขึ้น ฮารามิ',pl:'Wzrostowy Harami',nl:'Bullish Harami',uk:'Бичачий Харамі',id:'Bullish Harami',ur:'تیزی ہارامی'},
-  tweezer_bottom: {en:'Tweezer Bottom',es:'Pinza de Fondo',fr:'Pince Inférieure',zh:'平头底',hi:'ट्वीज़र बॉटम',ar:'الملقط قاع',bn:'Tweezer তলদেশ',ru:'Пинцет Дно',ja:'毛抜き底',de:'Pinzette Boden',ko:'집게형바닥',vi:'Nhíp Đáy',tr:'Cımbız Dip',it:'Pinzetta Fondo',th:'แหนบ ฐาน',pl:'Pęseta Dołek',nl:'Pincet Bodem',uk:'Пінцет Дно',id:'Penjepit Dasar',ur:'چمٹا نیچے'},
-  bull_kicker: {en:'Bullish Kicker',es:'Kicker Alcista',fr:'Kicker Haussier',zh:'上涨反冲线',hi:'तेजी किकर',ar:'صاعد Kicker',bn:'ঊর্ধ্বমুখী Kicker',ru:'Бычий Kicker',ja:'陽線Kicker',de:'Bullisch Kicker',ko:'상승Kicker',vi:'Tăng Kicker',tr:'Yükseliş Kicker',it:'Rialzista Kicker',th:'ขาขึ้น Kicker',pl:'Wzrostowy Kicker',nl:'Bullish Kicker',uk:'Бичачий Kicker',id:'Bullish Kicker',ur:'تیزی Kicker'},
-  bull_meeting: {en:'Bullish Meeting Lines',es:'Líneas de Encuentro Alcista',fr:'Lignes de Rencontre Haussières',zh:'上涨相遇线',hi:'तेजी मीटिंग लाइन्स',ar:'صاعد Meeting Lines',bn:'ঊর্ধ্বমুখী Meeting Lines',ru:'Бычий Meeting Lines',ja:'陽線MeetingLines',de:'Bullisch Meeting Lines',ko:'상승MeetingLines',vi:'Tăng Meeting Lines',tr:'Yükseliş Meeting Lines',it:'Rialzista Meeting Lines',th:'ขาขึ้น Meeting Lines',pl:'Wzrostowy Meeting Lines',nl:'Bullish Meeting Lines',uk:'Бичачий Meeting Lines',id:'Bullish Meeting Lines',ur:'تیزی Meeting Lines'},
-  on_neck_bull: {en:'On Neck (Bullish)',es:'On Neck Alcista',fr:'On Neck Haussier',zh:'颈上线(上涨)',hi:'ऑन नेक (तेजी)',ar:'On Neck (صاعد)',bn:'On Neck (ঊর্ধ্বমুখী)',ru:'On Neck (Бычий)',ja:'OnNeck(陽線)',de:'On Neck (Bullisch)',ko:'OnNeck(상승)',vi:'On Neck (Tăng)',tr:'On Neck (Yükseliş)',it:'On Neck (Rialzista)',th:'On Neck (ขาขึ้น)',pl:'On Neck (Wzrostowy)',nl:'On Neck (Bullish)',uk:'On Neck (Бичачий)',id:'On Neck (Bullish)',ur:'On Neck (تیزی)'},
-  mat_hold_bull: {en:'Bullish Mat Hold',es:'Mat Hold Alcista',fr:'Mat Hold Haussier',zh:'上涨铺垫线',hi:'तेजी मैट होल्ड',ar:'صاعد Mat Hold',bn:'ঊর্ধ্বমুখী Mat Hold',ru:'Бычий Mat Hold',ja:'陽線MatHold',de:'Bullisch Mat Hold',ko:'상승MatHold',vi:'Tăng Mat Hold',tr:'Yükseliş Mat Hold',it:'Rialzista Mat Hold',th:'ขาขึ้น Mat Hold',pl:'Wzrostowy Mat Hold',nl:'Bullish Mat Hold',uk:'Бичачий Mat Hold',id:'Bullish Mat Hold',ur:'تیزی Mat Hold'},
-  bear_engulfing: {en:'Bearish Engulfing',es:'Envolvente Bajista',fr:'Avalant Baissier',zh:'下跌吞没',hi:'मंदी एनगल्फिंग',ar:'هابط الابتلاع',bn:'নিম্নমুখী এনগালফিং',ru:'Медвежий Поглощение',ja:'陰線包み線',de:'Bärisch Umarmung',ko:'하락장악형',vi:'Giảm Nhấn Chìm',tr:'Düşüş Yutan',it:'Ribassista Inglobante',th:'ขาลง กลืนกิน',pl:'Spadkowy Pochłonięcie',nl:'Bearish Omsingeling',uk:'Ведмежий Поглинання',id:'Bearish Penelanan',ur:'مندی نگلنے والا'},
-  dark_cloud: {en:'Dark Cloud Cover',es:'Nube Negra',fr:'Nuage Noir',zh:'乌云盖顶',hi:'डार्क क्लाउड कवर',ar:'Dark Cloud Cover',bn:'Dark Cloud Cover',ru:'Dark Cloud Cover',ja:'DarkCloudCover',de:'Dark Cloud Cover',ko:'DarkCloudCover',vi:'Dark Cloud Cover',tr:'Dark Cloud Cover',it:'Dark Cloud Cover',th:'Dark Cloud Cover',pl:'Dark Cloud Cover',nl:'Dark Cloud Cover',uk:'Dark Cloud Cover',id:'Dark Cloud Cover',ur:'Dark Cloud Cover'},
-  bear_harami: {en:'Bearish Harami',es:'Harami Bajista',fr:'Harami Baissier',zh:'下跌孕线',hi:'मंदी हरामी',ar:'هابط هارامي',bn:'নিম্নমুখী হারামি',ru:'Медвежий Харами',ja:'陰線はらみ線',de:'Bärisch Harami',ko:'하락하라미',vi:'Giảm Harami',tr:'Düşüş Harami',it:'Ribassista Harami',th:'ขาลง ฮารามิ',pl:'Spadkowy Harami',nl:'Bearish Harami',uk:'Ведмежий Харамі',id:'Bearish Harami',ur:'مندی ہارامی'},
-  tweezer_top: {en:'Tweezer Top',es:'Pinza de Techo',fr:'Pince Supérieure',zh:'平头顶',hi:'ट्वीज़र टॉप',ar:'الملقط قمة',bn:'Tweezer শীর্ষ',ru:'Пинцет Вершина',ja:'毛抜き天井',de:'Pinzette Spitze',ko:'집게형천장',vi:'Nhíp Đỉnh',tr:'Cımbız Tepe',it:'Pinzetta Cima',th:'แหนบ ยอด',pl:'Pęseta Szczyt',nl:'Pincet Top',uk:'Пінцет Вершина',id:'Penjepit Puncak',ur:'چمٹا اوپر'},
-  bear_kicker: {en:'Bearish Kicker',es:'Kicker Bajista',fr:'Kicker Baissier',zh:'下跌反冲线',hi:'मंदी किकर',ar:'هابط Kicker',bn:'নিম্নমুখী Kicker',ru:'Медвежий Kicker',ja:'陰線Kicker',de:'Bärisch Kicker',ko:'하락Kicker',vi:'Giảm Kicker',tr:'Düşüş Kicker',it:'Ribassista Kicker',th:'ขาลง Kicker',pl:'Spadkowy Kicker',nl:'Bearish Kicker',uk:'Ведмежий Kicker',id:'Bearish Kicker',ur:'مندی Kicker'},
-  bear_meeting: {en:'Bearish Meeting Lines',es:'Líneas de Encuentro Bajista',fr:'Lignes de Rencontre Baissières',zh:'下跌相遇线',hi:'मंदी मीटिंग लाइन्स',ar:'هابط Meeting Lines',bn:'নিম্নমুখী Meeting Lines',ru:'Медвежий Meeting Lines',ja:'陰線MeetingLines',de:'Bärisch Meeting Lines',ko:'하락MeetingLines',vi:'Giảm Meeting Lines',tr:'Düşüş Meeting Lines',it:'Ribassista Meeting Lines',th:'ขาลง Meeting Lines',pl:'Spadkowy Meeting Lines',nl:'Bearish Meeting Lines',uk:'Ведмежий Meeting Lines',id:'Bearish Meeting Lines',ur:'مندی Meeting Lines'},
-  morning_star: {en:'Morning Star',es:'Estrella de la Mañana',fr:'Étoile du Matin',zh:'晨星',hi:'मॉर्निंग स्टार',ar:'نجمة الصباح',bn:'মর্নিং স্টার',ru:'Утренняя звезда',ja:'明けの明星',de:'Morgenstern',ko:'샛별형',vi:'Sao Mai',tr:'Sabah Yıldızı',it:'Stella del Mattino',th:'ดาวรุ่ง',pl:'Gwiazda Poranna',nl:'Morgenster',uk:'Ранкова зірка',id:'Bintang Pagi',ur:'صبح کا ستارہ'},
-  morning_doji_star: {en:'Morning Doji Star',es:'Estrella Doji Matutina',fr:'Étoile Doji du Matin',zh:'Morning十字星线',hi:'Morning दोजी स्टार',ar:'Morning دوجي Star',bn:'Morning দোজি Star',ru:'Morning Додж Star',ja:'Morning同事線Star',de:'Morning Doji Star',ko:'Morning도지Star',vi:'Morning Doji Star',tr:'Morning Doji Star',it:'Morning Doji Star',th:'Morning โดจิ Star',pl:'Morning Doji Star',nl:'Morning Doji Star',uk:'Morning Додж Star',id:'Morning Doji Star',ur:'Morning دوجی Star'},
-  three_white_soldiers: {en:'Three White Soldiers',es:'Tres Soldados Blancos',fr:'Trois Soldats Blancs',zh:'红三兵',hi:'तीन सफेद सैनिक',ar:'الجنود البيض الثلاثة',bn:'Three White Soldiers',ru:'Три белых солдата',ja:'赤三兵',de:'Drei weiße Soldaten',ko:'적삼병',vi:'Ba Chàng Lính Trắng',tr:'Üç Beyaz Asker',it:'Tre Soldati Bianchi',th:'ทหารขาวสามคน',pl:'Trzej Biali Żołnierze',nl:'Drie Witte Soldaten',uk:'Три білих солдати',id:'Tiga Prajurit Putih',ur:'تین سفید سپاہی'},
-  three_inside_up: {en:'Three Inside Up',es:'Tres Dentro Arriba',fr:'Trois à l\'Intérieur Haussier',zh:'内部三上涨',hi:'थ्री इनसाइड अप',ar:'Three Inside Up',bn:'Three Inside Up',ru:'Three Inside Up',ja:'ThreeInsideUp',de:'Three Inside Up',ko:'ThreeInsideUp',vi:'Three Inside Up',tr:'Three Inside Up',it:'Three Inside Up',th:'Three Inside Up',pl:'Three Inside Up',nl:'Three Inside Up',uk:'Three Inside Up',id:'Three Inside Up',ur:'Three Inside Up'},
-  three_outside_up: {en:'Three Outside Up',es:'Tres Fuera Arriba',fr:'Trois à l\'Extérieur Haussier',zh:'外部三上涨',hi:'थ्री आउटसाइड अप',ar:'Three Outside Up',bn:'Three Outside Up',ru:'Three Outside Up',ja:'ThreeOutsideUp',de:'Three Outside Up',ko:'ThreeOutsideUp',vi:'Three Outside Up',tr:'Three Outside Up',it:'Three Outside Up',th:'Three Outside Up',pl:'Three Outside Up',nl:'Three Outside Up',uk:'Three Outside Up',id:'Three Outside Up',ur:'Three Outside Up'},
-  abandoned_baby_bull: {en:'Bullish Abandoned Baby',es:'Bebé Abandonado Alcista',fr:'Bébé Abandonné Haussier',zh:'上涨弃婴线',hi:'तेजी अबैंडंड बेबी',ar:'صاعد Abandoned Baby',bn:'ঊর্ধ্বমুখী Abandoned Baby',ru:'Бычий Abandoned Baby',ja:'陽線AbandonedBaby',de:'Bullisch Abandoned Baby',ko:'상승AbandonedBaby',vi:'Tăng Abandoned Baby',tr:'Yükseliş Abandoned Baby',it:'Rialzista Abandoned Baby',th:'ขาขึ้น Abandoned Baby',pl:'Wzrostowy Abandoned Baby',nl:'Bullish Abandoned Baby',uk:'Бичачий Abandoned Baby',id:'Bullish Abandoned Baby',ur:'تیزی Abandoned Baby'},
-  tri_star_bull: {en:'Bullish Tri-Star',es:'Tri-Star Alcista',fr:'Tri-Star Haussier',zh:'上涨三星',hi:'तेजी ट्राई-स्टार',ar:'صاعد Tri-Star',bn:'ঊর্ধ্বমুখী Tri-Star',ru:'Бычий Tri-Star',ja:'陽線Tri-Star',de:'Bullisch Tri-Star',ko:'상승Tri-Star',vi:'Tăng Tri-Star',tr:'Yükseliş Tri-Star',it:'Rialzista Tri-Star',th:'ขาขึ้น Tri-Star',pl:'Wzrostowy Tri-Star',nl:'Bullish Tri-Star',uk:'Бичачий Tri-Star',id:'Bullish Tri-Star',ur:'تیزی Tri-Star'},
-  upside_gap_two_crows: {en:'Upside Gap Two Crows',es:'Dos Cuervos del Gap',fr:'Deux Corbeaux avec Gap',zh:'向上跳空两只乌鸦',hi:'अपसाइड गैप टू क्रोज़',ar:'Upside الفجوة Two Crows',bn:'Upside গ্যাপ Two Crows',ru:'Upside Разрыв Two Crows',ja:'Upside窓TwoCrows',de:'Upside Kurslücke Two Crows',ko:'Upside갭TwoCrows',vi:'Upside Khoảng Trống Two Crows',tr:'Upside Boşluk Two Crows',it:'Upside Gap Two Crows',th:'Upside ช่องว่าง Two Crows',pl:'Upside Luka Two Crows',nl:'Upside Gat Two Crows',uk:'Upside Розрив Two Crows',id:'Upside Celah Two Crows',ur:'Upside گیپ Two Crows'},
-  three_line_strike_bull: {en:'Bullish Three-Line Strike',es:'Golpe de Tres Líneas Alcista',fr:'Frappe à Trois Lignes Haussière',zh:'上涨三线打击',hi:'तेजी थ्री-लाइन स्ट्राइक',ar:'صاعد Three-Line Strike',bn:'ঊর্ধ্বমুখী Three-Line Strike',ru:'Бычий Three-Line Strike',ja:'陽線Three-LineStrike',de:'Bullisch Three-Line Strike',ko:'상승Three-LineStrike',vi:'Tăng Three-Line Strike',tr:'Yükseliş Three-Line Strike',it:'Rialzista Three-Line Strike',th:'ขาขึ้น Three-Line Strike',pl:'Wzrostowy Three-Line Strike',nl:'Bullish Three-Line Strike',uk:'Бичачий Three-Line Strike',id:'Bullish Three-Line Strike',ur:'تیزی Three-Line Strike'},
-  evening_star: {en:'Evening Star',es:'Estrella de la Tarde',fr:'Étoile du Soir',zh:'暮星',hi:'इवनिंग स्टार',ar:'نجمة المساء',bn:'ইভনিং স্টার',ru:'Вечерняя звезда',ja:'宵の明星',de:'Abendstern',ko:'저녁별형',vi:'Sao Hôm',tr:'Akşam Yıldızı',it:'Stella della Sera',th:'ดาวค่ำ',pl:'Gwiazda Wieczorna',nl:'Avondster',uk:'Вечірня зірка',id:'Bintang Senja',ur:'شام کا ستارہ'},
-  evening_doji_star: {en:'Evening Doji Star',es:'Estrella Doji Vespertina',fr:'Étoile Doji du Soir',zh:'Evening十字星线',hi:'Evening दोजी स्टार',ar:'Evening دوجي Star',bn:'Evening দোজি Star',ru:'Evening Додж Star',ja:'Evening同事線Star',de:'Evening Doji Star',ko:'Evening도지Star',vi:'Evening Doji Star',tr:'Evening Doji Star',it:'Evening Doji Star',th:'Evening โดจิ Star',pl:'Evening Doji Star',nl:'Evening Doji Star',uk:'Evening Додж Star',id:'Evening Doji Star',ur:'Evening دوجی Star'},
-  three_black_crows: {en:'Three Black Crows',es:'Tres Cuervos Negros',fr:'Trois Corbeaux Noirs',zh:'黑三鸦',hi:'तीन काले कौवे',ar:'الغربان السوداء الثلاثة',bn:'Three Black Crows',ru:'Три чёрные вороны',ja:'黒三兵',de:'Drei schwarze Krähen',ko:'흑삼병',vi:'Ba Con Quạ Đen',tr:'Üç Kara Karga',it:'Tre Corvi Neri',th:'อีกาดำสามตัว',pl:'Trzy Czarne Wrony',nl:'Drie Zwarte Kraaien',uk:'Три чорні ворони',id:'Tiga Gagak Hitam',ur:'تین کالے کوے'},
-  three_inside_down: {en:'Three Inside Down',es:'Tres Dentro Abajo',fr:'Trois à l\'Intérieur Baissier',zh:'内部三下跌',hi:'थ्री इनसाइड डाउन',ar:'Three Inside Down',bn:'Three Inside Down',ru:'Three Inside Down',ja:'ThreeInsideDown',de:'Three Inside Down',ko:'ThreeInsideDown',vi:'Three Inside Down',tr:'Three Inside Down',it:'Three Inside Down',th:'Three Inside Down',pl:'Three Inside Down',nl:'Three Inside Down',uk:'Three Inside Down',id:'Three Inside Down',ur:'Three Inside Down'},
-  three_outside_down: {en:'Three Outside Down',es:'Tres Fuera Abajo',fr:'Trois à l\'Extérieur Baissier',zh:'外部三下跌',hi:'थ्री आउटसाइड डाउन',ar:'Three Outside Down',bn:'Three Outside Down',ru:'Three Outside Down',ja:'ThreeOutsideDown',de:'Three Outside Down',ko:'ThreeOutsideDown',vi:'Three Outside Down',tr:'Three Outside Down',it:'Three Outside Down',th:'Three Outside Down',pl:'Three Outside Down',nl:'Three Outside Down',uk:'Three Outside Down',id:'Three Outside Down',ur:'Three Outside Down'},
-  abandoned_baby_bear: {en:'Bearish Abandoned Baby',es:'Bebé Abandonado Bajista',fr:'Bébé Abandonné Baissier',zh:'下跌弃婴线',hi:'मंदी अबैंडंड बेबी',ar:'هابط Abandoned Baby',bn:'নিম্নমুখী Abandoned Baby',ru:'Медвежий Abandoned Baby',ja:'陰線AbandonedBaby',de:'Bärisch Abandoned Baby',ko:'하락AbandonedBaby',vi:'Giảm Abandoned Baby',tr:'Düşüş Abandoned Baby',it:'Ribassista Abandoned Baby',th:'ขาลง Abandoned Baby',pl:'Spadkowy Abandoned Baby',nl:'Bearish Abandoned Baby',uk:'Ведмежий Abandoned Baby',id:'Bearish Abandoned Baby',ur:'مندی Abandoned Baby'},
-  three_line_strike_bear: {en:'Bearish Three-Line Strike',es:'Golpe de Tres Líneas Bajista',fr:'Frappe à Trois Lignes Baissière',zh:'下跌三线打击',hi:'मंदी थ्री-लाइन स्ट्राइक',ar:'هابط Three-Line Strike',bn:'নিম্নমুখী Three-Line Strike',ru:'Медвежий Three-Line Strike',ja:'陰線Three-LineStrike',de:'Bärisch Three-Line Strike',ko:'하락Three-LineStrike',vi:'Giảm Three-Line Strike',tr:'Düşüş Three-Line Strike',it:'Ribassista Three-Line Strike',th:'ขาลง Three-Line Strike',pl:'Spadkowy Three-Line Strike',nl:'Bearish Three-Line Strike',uk:'Ведмежий Three-Line Strike',id:'Bearish Three-Line Strike',ur:'مندی Three-Line Strike'},
-  bull_flag: {en:'Bull Flag',es:'Bandera Alcista',fr:'Drapeau Haussier',zh:'Bull旗形',hi:'Bull फ्लैग',ar:'Bull العلم',bn:'Bull পতাকা',ru:'Bull Флаг',ja:'Bullフラッグ',de:'Bull Flagge',ko:'Bull깃발형',vi:'Bull Lá Cờ',tr:'Bull Bayrak',it:'Bull Bandiera',th:'Bull ธง',pl:'Bull Flaga',nl:'Bull Vlag',uk:'Bull Прапор',id:'Bull Bendera',ur:'Bull پرچم'},
-  bear_flag: {en:'Bear Flag',es:'Bandera Bajista',fr:'Drapeau Baissier',zh:'Bear旗形',hi:'Bear फ्लैग',ar:'Bear العلم',bn:'Bear পতাকা',ru:'Bear Флаг',ja:'Bearフラッグ',de:'Bear Flagge',ko:'Bear깃발형',vi:'Bear Lá Cờ',tr:'Bear Bayrak',it:'Bear Bandiera',th:'Bear ธง',pl:'Bear Flaga',nl:'Bear Vlag',uk:'Bear Прапор',id:'Bear Bendera',ur:'Bear پرچم'},
-  rising_window: {en:'Rising Window',es:'Ventana Alcista',fr:'Fenêtre Montante',zh:'上升窗口',hi:'बढ़ता विंडो',ar:'صاعد النافذة',bn:'ঊর্ধ্বমুখী উইন্ডো',ru:'Растущий Окно',ja:'上昇窓',de:'Steigend Fenster',ko:'상승갭',vi:'Tăng Khoảng Trống',tr:'Yükselen Boşluk',it:'Crescente Finestra',th:'ขาขึ้น ช่องว่าง',pl:'Rosnący Luka',nl:'Stijgend Gat',uk:'Зростаючий Вікно',id:'Naik Celah',ur:'بڑھتا گیپ'},
-  falling_window: {en:'Falling Window',es:'Ventana Bajista',fr:'Fenêtre Descendante',zh:'下降窗口',hi:'गिरता विंडो',ar:'هابط النافذة',bn:'নিম্নমুখী উইন্ডো',ru:'Падающий Окно',ja:'下降窓',de:'Fallend Fenster',ko:'하락갭',vi:'Giảm Khoảng Trống',tr:'Düşen Boşluk',it:'Decrescente Finestra',th:'ขาลง ช่องว่าง',pl:'Malejący Luka',nl:'Dalend Gat',uk:'Спадаючий Вікно',id:'Turun Celah',ur:'گرتا گیپ'},
-  tasuki_bull: {en:'Upward Tasuki Gap',es:'Tasuki Alcista',fr:'Tasuki Haussier',zh:'Upward跳空并列阴阳线',hi:'Upward तासुकी गैप',ar:'Upward Tasuki الفجوة',bn:'Upward Tasuki গ্যাপ',ru:'Upward Tasuki Разрыв',ja:'UpwardTasuki窓',de:'Upward Tasuki Kurslücke',ko:'UpwardTasuki갭',vi:'Upward Tasuki Khoảng Trống',tr:'Upward Tasuki Boşluk',it:'Upward Tasuki Gap',th:'Upward Tasuki ช่องว่าง',pl:'Upward Tasuki Luka',nl:'Upward Tasuki Gat',uk:'Upward Tasuki Розрив',id:'Upward Tasuki Celah',ur:'Upward Tasuki گیپ'},
-  tasuki_bear: {en:'Downward Tasuki Gap',es:'Tasuki Bajista',fr:'Tasuki Baissier',zh:'Downward跳空并列阴阳线',hi:'Downward तासुकी गैप',ar:'Downward Tasuki الفجوة',bn:'Downward Tasuki গ্যাপ',ru:'Downward Tasuki Разрыв',ja:'DownwardTasuki窓',de:'Downward Tasuki Kurslücke',ko:'DownwardTasuki갭',vi:'Downward Tasuki Khoảng Trống',tr:'Downward Tasuki Boşluk',it:'Downward Tasuki Gap',th:'Downward Tasuki ช่องว่าง',pl:'Downward Tasuki Luka',nl:'Downward Tasuki Gat',uk:'Downward Tasuki Розрив',id:'Downward Tasuki Celah',ur:'Downward Tasuki گیپ'},
-  side_by_side_bull: {en:'Side-by-Side White Lines',es:'Velas Lado a Lado Alcista',fr:'Lignes Côte à Côte Haussières',zh:'并列阳线',hi:'साइड-बाय-साइड व्हाइट लाइन्स',ar:'Side-by-Side White Lines',bn:'Side-by-Side White Lines',ru:'Side-by-Side White Lines',ja:'Side-by-SideWhiteLines',de:'Side-by-Side White Lines',ko:'Side-by-SideWhiteLines',vi:'Side-by-Side White Lines',tr:'Side-by-Side White Lines',it:'Side-by-Side White Lines',th:'Side-by-Side White Lines',pl:'Side-by-Side White Lines',nl:'Side-by-Side White Lines',uk:'Side-by-Side White Lines',id:'Side-by-Side White Lines',ur:'Side-by-Side White Lines'},
-  rising_three: {en:'Rising Three Methods',es:'Tres Métodos Alcistas',fr:'Trois Méthodes Ascendantes',zh:'上升三法',hi:'बढ़ता थ्री मेथड्स',ar:'صاعد Three Methods',bn:'ঊর্ধ্বমুখী Three Methods',ru:'Растущий Three Methods',ja:'上昇ThreeMethods',de:'Steigend Three Methods',ko:'상승ThreeMethods',vi:'Tăng Three Methods',tr:'Yükselen Three Methods',it:'Crescente Three Methods',th:'ขาขึ้น Three Methods',pl:'Rosnący Three Methods',nl:'Stijgend Three Methods',uk:'Зростаючий Three Methods',id:'Naik Three Methods',ur:'بڑھتا Three Methods'},
-  falling_three: {en:'Falling Three Methods',es:'Tres Métodos Bajistas',fr:'Trois Méthodes Descendantes',zh:'下降三法',hi:'गिरता थ्री मेथड्स',ar:'هابط Three Methods',bn:'নিম্নমুখী Three Methods',ru:'Падающий Three Methods',ja:'下降ThreeMethods',de:'Fallend Three Methods',ko:'하락ThreeMethods',vi:'Giảm Three Methods',tr:'Düşen Three Methods',it:'Decrescente Three Methods',th:'ขาลง Three Methods',pl:'Malejący Three Methods',nl:'Dalend Three Methods',uk:'Спадаючий Three Methods',id:'Turun Three Methods',ur:'گرتا Three Methods'},
-  unique_river_bottom: {en:'Unique Three River Bottom',es:'Fondo de Río Único',fr:'Fond de Rivière Unique',zh:'UniqueThree河流底部',hi:'Unique Three रिवर बॉटम',ar:'Unique Three River قاع',bn:'Unique Three River তলদেশ',ru:'Unique Three River Дно',ja:'UniqueThreeRiver底',de:'Unique Three River Boden',ko:'UniqueThreeRiver바닥',vi:'Unique Three River Đáy',tr:'Unique Three River Dip',it:'Unique Three River Fondo',th:'Unique Three River ฐาน',pl:'Unique Three River Dołek',nl:'Unique Three River Bodem',uk:'Unique Three River Дно',id:'Unique Three River Dasar',ur:'Unique Three River نیچے'},
-  concealing_baby_swallow: {en:'Concealing Baby Swallow',es:'Bebé Camuflado',fr:'Bébé Hirondelle Caché',zh:'藏婴吞没',hi:'कन्सीलिंग बेबी स्वैलो',ar:'Concealing Baby Swallow',bn:'Concealing Baby Swallow',ru:'Concealing Baby Swallow',ja:'ConcealingBabySwallow',de:'Concealing Baby Swallow',ko:'ConcealingBabySwallow',vi:'Concealing Baby Swallow',tr:'Concealing Baby Swallow',it:'Concealing Baby Swallow',th:'Concealing Baby Swallow',pl:'Concealing Baby Swallow',nl:'Concealing Baby Swallow',uk:'Concealing Baby Swallow',id:'Concealing Baby Swallow',ur:'Concealing Baby Swallow'},
-  kicking_bull: {en:'Bullish Kicking',es:'Patada Alcista',fr:'Coup de Pied Haussier',zh:'上涨反冲',hi:'तेजी किकिंग',ar:'صاعد Kicking',bn:'ঊর্ধ্বমুখী Kicking',ru:'Бычий Kicking',ja:'陽線Kicking',de:'Bullisch Kicking',ko:'상승Kicking',vi:'Tăng Kicking',tr:'Yükseliş Kicking',it:'Rialzista Kicking',th:'ขาขึ้น Kicking',pl:'Wzrostowy Kicking',nl:'Bullish Kicking',uk:'Бичачий Kicking',id:'Bullish Kicking',ur:'تیزی Kicking'},
-  kicking_bear: {en:'Bearish Kicking',es:'Patada Bajista',fr:'Coup de Pied Baissier',zh:'下跌反冲',hi:'मंदी किकिंग',ar:'هابط Kicking',bn:'নিম্নমুখী Kicking',ru:'Медвежий Kicking',ja:'陰線Kicking',de:'Bärisch Kicking',ko:'하락Kicking',vi:'Giảm Kicking',tr:'Düşüş Kicking',it:'Ribassista Kicking',th:'ขาลง Kicking',pl:'Spadkowy Kicking',nl:'Bearish Kicking',uk:'Ведмежий Kicking',id:'Bearish Kicking',ur:'مندی Kicking'},
-  stick_sandwich: {en:'Stick Sandwich',es:'Sándwich de Velas',fr:'Sandwich de Bougies',zh:'条形三明治',hi:'स्टिक सैंडविच',ar:'Stick Sandwich',bn:'Stick Sandwich',ru:'Stick Sandwich',ja:'StickSandwich',de:'Stick Sandwich',ko:'StickSandwich',vi:'Stick Sandwich',tr:'Stick Sandwich',it:'Stick Sandwich',th:'Stick Sandwich',pl:'Stick Sandwich',nl:'Stick Sandwich',uk:'Stick Sandwich',id:'Stick Sandwich',ur:'Stick Sandwich'},
-  homing_pigeon: {en:'Homing Pigeon',es:'Paloma Mensajera',fr:'Pigeon Voyageur',zh:'家鸽线',hi:'होमिंग पिजन',ar:'Homing Pigeon',bn:'Homing Pigeon',ru:'Homing Pigeon',ja:'HomingPigeon',de:'Homing Pigeon',ko:'HomingPigeon',vi:'Homing Pigeon',tr:'Homing Pigeon',it:'Homing Pigeon',th:'Homing Pigeon',pl:'Homing Pigeon',nl:'Homing Pigeon',uk:'Homing Pigeon',id:'Homing Pigeon',ur:'Homing Pigeon'},
-  matching_low: {en:'Matching Low',es:'Fondo Equivalente',fr:'Fond Identique',zh:'相同低价',hi:'मैचिंग लो',ar:'Matching Low',bn:'Matching Low',ru:'Matching Low',ja:'MatchingLow',de:'Matching Low',ko:'MatchingLow',vi:'Matching Low',tr:'Matching Low',it:'Matching Low',th:'Matching Low',pl:'Matching Low',nl:'Matching Low',uk:'Matching Low',id:'Matching Low',ur:'Matching Low'},
-  separating_lines_bull: {en:'Bullish Separating Lines',es:'Líneas de Separación Alcista',fr:'Lignes de Séparation Haussières',zh:'上涨分离线',hi:'तेजी सेपरेटिंग लाइन्स',ar:'صاعد Separating Lines',bn:'ঊর্ধ্বমুখী Separating Lines',ru:'Бычий Separating Lines',ja:'陽線SeparatingLines',de:'Bullisch Separating Lines',ko:'상승SeparatingLines',vi:'Tăng Separating Lines',tr:'Yükseliş Separating Lines',it:'Rialzista Separating Lines',th:'ขาขึ้น Separating Lines',pl:'Wzrostowy Separating Lines',nl:'Bullish Separating Lines',uk:'Бичачий Separating Lines',id:'Bullish Separating Lines',ur:'تیزی Separating Lines'},
-  separating_lines_bear: {en:'Bearish Separating Lines',es:'Líneas de Separación Bajista',fr:'Lignes de Séparation Baissières',zh:'下跌分离线',hi:'मंदी सेपरेटिंग लाइन्स',ar:'هابط Separating Lines',bn:'নিম্নমুখী Separating Lines',ru:'Медвежий Separating Lines',ja:'陰線SeparatingLines',de:'Bärisch Separating Lines',ko:'하락SeparatingLines',vi:'Giảm Separating Lines',tr:'Düşüş Separating Lines',it:'Ribassista Separating Lines',th:'ขาลง Separating Lines',pl:'Spadkowy Separating Lines',nl:'Bearish Separating Lines',uk:'Ведмежий Separating Lines',id:'Bearish Separating Lines',ur:'مندی Separating Lines'},
-  in_neck: {en:'In Neck',es:'En el Cuello',fr:'Dans le Cou',zh:'颈内线',hi:'इन नेक',ar:'In Neck',bn:'In Neck',ru:'In Neck',ja:'InNeck',de:'In Neck',ko:'InNeck',vi:'In Neck',tr:'In Neck',it:'In Neck',th:'In Neck',pl:'In Neck',nl:'In Neck',uk:'In Neck',id:'In Neck',ur:'In Neck'},
-  thrusting: {en:'Thrusting Pattern',es:'Patrón de Empuje',fr:'Motif de Poussée',zh:'插入线',hi:'थ्रस्टिंग पैटर्न',ar:'Thrusting Pattern',bn:'Thrusting Pattern',ru:'Thrusting Pattern',ja:'ThrustingPattern',de:'Thrusting Pattern',ko:'ThrustingPattern',vi:'Thrusting Pattern',tr:'Thrusting Pattern',it:'Thrusting Pattern',th:'Thrusting Pattern',pl:'Thrusting Pattern',nl:'Thrusting Pattern',uk:'Thrusting Pattern',id:'Thrusting Pattern',ur:'Thrusting Pattern'},
-  ladder_bottom: {en:'Ladder Bottom',es:'Fondo Escalera',fr:'Fond en Échelle',zh:'梯底',hi:'लैडर बॉटम',ar:'Ladder قاع',bn:'Ladder তলদেশ',ru:'Ladder Дно',ja:'Ladder底',de:'Ladder Boden',ko:'Ladder바닥',vi:'Ladder Đáy',tr:'Ladder Dip',it:'Ladder Fondo',th:'Ladder ฐาน',pl:'Ladder Dołek',nl:'Ladder Bodem',uk:'Ladder Дно',id:'Ladder Dasar',ur:'Ladder نیچے'},
-  advance_block: {en:'Advance Block',es:'Bloque de Avance',fr:'Bloc d\'Avancée',zh:'大敌当前',hi:'एडवांस ब्लॉक',ar:'Advance Block',bn:'Advance Block',ru:'Advance Block',ja:'AdvanceBlock',de:'Advance Block',ko:'AdvanceBlock',vi:'Advance Block',tr:'Advance Block',it:'Advance Block',th:'Advance Block',pl:'Advance Block',nl:'Advance Block',uk:'Advance Block',id:'Advance Block',ur:'Advance Block'},
-  deliberation: {en:'Deliberation',es:'Deliberación',fr:'Délibération',zh:'三星价升',hi:'डेलिबरेशन',ar:'Deliberation',bn:'Deliberation',ru:'Deliberation',ja:'Deliberation',de:'Deliberation',ko:'Deliberation',vi:'Deliberation',tr:'Deliberation',it:'Deliberation',th:'Deliberation',pl:'Deliberation',nl:'Deliberation',uk:'Deliberation',id:'Deliberation',ur:'Deliberation'},
-  two_crows: {en:'Two Crows',es:'Dos Cuervos',fr:'Deux Corbeaux',zh:'两只乌鸦',hi:'दो कौवे',ar:'Two Crows',bn:'Two Crows',ru:'Two Crows',ja:'TwoCrows',de:'Two Crows',ko:'TwoCrows',vi:'Two Crows',tr:'Two Crows',it:'Two Crows',th:'Two Crows',pl:'Two Crows',nl:'Two Crows',uk:'Two Crows',id:'Two Crows',ur:'Two Crows'},
-  three_stars_south: {en:'Three Stars in the South',es:'Tres Estrellas del Sur',fr:'Trois Étoiles du Sud',zh:'南方三星',hi:'थ्री स्टार्स इन द साउथ',ar:'Three Stars in the South',bn:'Three Stars in the South',ru:'Three Stars in the South',ja:'ThreeStarsintheSouth',de:'Three Stars in the South',ko:'ThreeStarsintheSouth',vi:'Three Stars in the South',tr:'Three Stars in the South',it:'Three Stars in the South',th:'Three Stars in the South',pl:'Three Stars in the South',nl:'Three Stars in the South',uk:'Three Stars in the South',id:'Three Stars in the South',ur:'Three Stars in the South'},
-  bullish_doji_star: {en:'Bullish Doji Star',es:'Estrella Doji Alcista',fr:'Étoile Doji Haussière',zh:'上涨十字星线',hi:'तेजी दोजी स्टार',ar:'صاعد دوجي Star',bn:'ঊর্ধ্বমুখী দোজি Star',ru:'Бычий Додж Star',ja:'陽線同事線Star',de:'Bullisch Doji Star',ko:'상승도지Star',vi:'Tăng Doji Star',tr:'Yükseliş Doji Star',it:'Rialzista Doji Star',th:'ขาขึ้น โดจิ Star',pl:'Wzrostowy Doji Star',nl:'Bullish Doji Star',uk:'Бичачий Додж Star',id:'Bullish Doji Star',ur:'تیزی دوجی Star'},
-  bearish_doji_star: {en:'Bearish Doji Star',es:'Estrella Doji Bajista',fr:'Étoile Doji Baissière',zh:'下跌十字星线',hi:'मंदी दोजी स्टार',ar:'هابط دوجي Star',bn:'নিম্নমুখী দোজি Star',ru:'Медвежий Додж Star',ja:'陰線同事線Star',de:'Bärisch Doji Star',ko:'하락도지Star',vi:'Giảm Doji Star',tr:'Düşüş Doji Star',it:'Ribassista Doji Star',th:'ขาลง โดจิ Star',pl:'Spadkowy Doji Star',nl:'Bearish Doji Star',uk:'Ведмежий Додж Star',id:'Bearish Doji Star',ur:'مندی دوجی Star'},
-  harami_cross_bull: {en:'Bullish Harami Cross',es:'Cruz Harami Alcista',fr:'Croix Harami Haussière',zh:'上涨十字孕线',hi:'तेजी हरामी क्रॉस',ar:'صاعد هارامي Cross',bn:'ঊর্ধ্বমুখী হারামি Cross',ru:'Бычий Харами Cross',ja:'陽線はらみ線Cross',de:'Bullisch Harami Cross',ko:'상승하라미Cross',vi:'Tăng Harami Cross',tr:'Yükseliş Harami Cross',it:'Rialzista Harami Cross',th:'ขาขึ้น ฮารามิ Cross',pl:'Wzrostowy Harami Cross',nl:'Bullish Harami Cross',uk:'Бичачий Харамі Cross',id:'Bullish Harami Cross',ur:'تیزی ہارامی Cross'},
-  harami_cross_bear: {en:'Bearish Harami Cross',es:'Cruz Harami Bajista',fr:'Croix Harami Baissière',zh:'下跌十字孕线',hi:'मंदी हरामी क्रॉस',ar:'هابط هارامي Cross',bn:'নিম্নমুখী হারামি Cross',ru:'Медвежий Харами Cross',ja:'陰線はらみ線Cross',de:'Bärisch Harami Cross',ko:'하락하라미Cross',vi:'Giảm Harami Cross',tr:'Düşüş Harami Cross',it:'Ribassista Harami Cross',th:'ขาลง ฮารามิ Cross',pl:'Spadkowy Harami Cross',nl:'Bearish Harami Cross',uk:'Ведмежий Харамі Cross',id:'Bearish Harami Cross',ur:'مندی ہارامی Cross'},
-  high_wave: {en:'High Wave Candle',es:'Vela de Onda Alta',fr:'Bougie Haute Vague',zh:'风高浪大线',hi:'हाई वेव कैंडल',ar:'High Wave الشمعة',bn:'High Wave মোমবাতি',ru:'High Wave Свеча',ja:'HighWaveローソク足',de:'High Wave Kerze',ko:'HighWave캔들',vi:'High Wave Nến',tr:'High Wave Mum',it:'High Wave Candela',th:'High Wave แท่งเทียน',pl:'High Wave Świeca',nl:'High Wave Kaars',uk:'High Wave Свічка',id:'High Wave Lilin',ur:'High Wave موم بتی'},
-  spinning_top: {en:'Spinning Top',es:'Peón',fr:'Toupie',zh:'纺锤线',hi:'स्पिनिंग टॉप',ar:'Spinning قمة',bn:'Spinning শীর্ষ',ru:'Spinning Вершина',ja:'Spinning天井',de:'Spinning Spitze',ko:'Spinning천장',vi:'Spinning Đỉnh',tr:'Spinning Tepe',it:'Spinning Cima',th:'Spinning ยอด',pl:'Spinning Szczyt',nl:'Spinning Top',uk:'Spinning Вершина',id:'Spinning Puncak',ur:'Spinning اوپر'},
-  bull_doji: {en:'Bullish Doji',es:'Doji Alcista',fr:'Doji Haussier',zh:'上涨十字星',hi:'तेजी दोजी',ar:'صاعد دوجي',bn:'ঊর্ধ্বমুখী দোজি',ru:'Бычий Додж',ja:'陽線同事線',de:'Bullisch Doji',ko:'상승도지',vi:'Tăng Doji',tr:'Yükseliş Doji',it:'Rialzista Doji',th:'ขาขึ้น โดจิ',pl:'Wzrostowy Doji',nl:'Bullish Doji',uk:'Бичачий Додж',id:'Bullish Doji',ur:'تیزی دوجی'},
-  bear_doji: {en:'Bearish Doji',es:'Doji Bajista',fr:'Doji Baissier',zh:'下跌十字星',hi:'मंदी दोजी',ar:'هابط دوجي',bn:'নিম্নমুখী দোজি',ru:'Медвежий Додж',ja:'陰線同事線',de:'Bärisch Doji',ko:'하락도지',vi:'Giảm Doji',tr:'Düşüş Doji',it:'Ribassista Doji',th:'ขาลง โดจิ',pl:'Spadkowy Doji',nl:'Bearish Doji',uk:'Ведмежий Додж',id:'Bearish Doji',ur:'مندی دوجی'},
-  inside_bar: {en:'Inside Bar',es:'Barra Interior',fr:'Barre Intérieure',zh:'内包线',hi:'इनसाइड बार',ar:'Inside Bar',bn:'Inside Bar',ru:'Inside Bar',ja:'InsideBar',de:'Inside Bar',ko:'InsideBar',vi:'Inside Bar',tr:'Inside Bar',it:'Inside Bar',th:'Inside Bar',pl:'Inside Bar',nl:'Inside Bar',uk:'Inside Bar',id:'Inside Bar',ur:'Inside Bar'},
-  outside_bar: {en:'Outside Bar',es:'Barra Exterior',fr:'Barre Extérieure',zh:'外包线',hi:'आउटसाइड बार',ar:'Outside Bar',bn:'Outside Bar',ru:'Outside Bar',ja:'OutsideBar',de:'Outside Bar',ko:'OutsideBar',vi:'Outside Bar',tr:'Outside Bar',it:'Outside Bar',th:'Outside Bar',pl:'Outside Bar',nl:'Outside Bar',uk:'Outside Bar',id:'Outside Bar',ur:'Outside Bar'},
-  pin_bar_bull: {en:'Bullish Pin Bar',es:'Pin Bar Alcista',fr:'Pin Bar Haussier',zh:'上涨针线',hi:'तेजी पिन बार',ar:'صاعد Pin Bar',bn:'ঊর্ধ্বমুখী Pin Bar',ru:'Бычий Pin Bar',ja:'陽線PinBar',de:'Bullisch Pin Bar',ko:'상승PinBar',vi:'Tăng Pin Bar',tr:'Yükseliş Pin Bar',it:'Rialzista Pin Bar',th:'ขาขึ้น Pin Bar',pl:'Wzrostowy Pin Bar',nl:'Bullish Pin Bar',uk:'Бичачий Pin Bar',id:'Bullish Pin Bar',ur:'تیزی Pin Bar'},
-  pin_bar_bear: {en:'Bearish Pin Bar',es:'Pin Bar Bajista',fr:'Pin Bar Baissier',zh:'下跌针线',hi:'मंदी पिन बार',ar:'هابط Pin Bar',bn:'নিম্নমুখী Pin Bar',ru:'Медвежий Pin Bar',ja:'陰線PinBar',de:'Bärisch Pin Bar',ko:'하락PinBar',vi:'Giảm Pin Bar',tr:'Düşüş Pin Bar',it:'Ribassista Pin Bar',th:'ขาลง Pin Bar',pl:'Spadkowy Pin Bar',nl:'Bearish Pin Bar',uk:'Ведмежий Pin Bar',id:'Bearish Pin Bar',ur:'مندی Pin Bar'},
-  fakey_bull: {en:'Bullish Fakey',es:'Fakey Alcista',fr:'Fakey Haussier',zh:'上涨假突破线',hi:'तेजी फेकी',ar:'صاعد Fakey',bn:'ঊর্ধ্বমুখী Fakey',ru:'Бычий Fakey',ja:'陽線Fakey',de:'Bullisch Fakey',ko:'상승Fakey',vi:'Tăng Fakey',tr:'Yükseliş Fakey',it:'Rialzista Fakey',th:'ขาขึ้น Fakey',pl:'Wzrostowy Fakey',nl:'Bullish Fakey',uk:'Бичачий Fakey',id:'Bullish Fakey',ur:'تیزی Fakey'},
-  fakey_bear: {en:'Bearish Fakey',es:'Fakey Bajista',fr:'Fakey Baissier',zh:'下跌假突破线',hi:'मंदी फेकी',ar:'هابط Fakey',bn:'নিম্নমুখী Fakey',ru:'Медвежий Fakey',ja:'陰線Fakey',de:'Bärisch Fakey',ko:'하락Fakey',vi:'Giảm Fakey',tr:'Düşüş Fakey',it:'Ribassista Fakey',th:'ขาลง Fakey',pl:'Spadkowy Fakey',nl:'Bearish Fakey',uk:'Ведмежий Fakey',id:'Bearish Fakey',ur:'مندی Fakey'},
-  gap_up: {en:'Gap Up',es:'Gap Alcista',fr:'Gap Haussier',zh:'跳空Up',hi:'गैप Up',ar:'الفجوة Up',bn:'গ্যাপ Up',ru:'Разрыв Up',ja:'窓Up',de:'Kurslücke Up',ko:'갭Up',vi:'Khoảng Trống Up',tr:'Boşluk Up',it:'Gap Up',th:'ช่องว่าง Up',pl:'Luka Up',nl:'Gat Up',uk:'Розрив Up',id:'Celah Up',ur:'گیپ Up'},
-  gap_down: {en:'Gap Down',es:'Gap Bajista',fr:'Gap Baissier',zh:'跳空Down',hi:'गैप Down',ar:'الفجوة Down',bn:'গ্যাপ Down',ru:'Разрыв Down',ja:'窓Down',de:'Kurslücke Down',ko:'갭Down',vi:'Khoảng Trống Down',tr:'Boşluk Down',it:'Gap Down',th:'ช่องว่าง Down',pl:'Luka Down',nl:'Gat Down',uk:'Розрив Down',id:'Celah Down',ur:'گیپ Down'},
-  island_reversal_bull: {en:'Bullish Island Reversal',es:'Isla de Reversión Alcista',fr:'Île de Renversement Haussière',zh:'上涨岛形反转',hi:'तेजी आइलैंड रिवर्सल',ar:'صاعد Island Reversal',bn:'ঊর্ধ্বমুখী Island Reversal',ru:'Бычий Island Reversal',ja:'陽線IslandReversal',de:'Bullisch Island Reversal',ko:'상승IslandReversal',vi:'Tăng Island Reversal',tr:'Yükseliş Island Reversal',it:'Rialzista Island Reversal',th:'ขาขึ้น Island Reversal',pl:'Wzrostowy Island Reversal',nl:'Bullish Island Reversal',uk:'Бичачий Island Reversal',id:'Bullish Island Reversal',ur:'تیزی Island Reversal'},
-  island_reversal_bear: {en:'Bearish Island Reversal',es:'Isla de Reversión Bajista',fr:'Île de Renversement Baissière',zh:'下跌岛形反转',hi:'मंदी आइलैंड रिवर्सल',ar:'هابط Island Reversal',bn:'নিম্নমুখী Island Reversal',ru:'Медвежий Island Reversal',ja:'陰線IslandReversal',de:'Bärisch Island Reversal',ko:'하락IslandReversal',vi:'Giảm Island Reversal',tr:'Düşüş Island Reversal',it:'Ribassista Island Reversal',th:'ขาลง Island Reversal',pl:'Spadkowy Island Reversal',nl:'Bearish Island Reversal',uk:'Ведмежий Island Reversal',id:'Bearish Island Reversal',ur:'مندی Island Reversal'},
-  dark_cloud_v2: {en:'Deep Dark Cloud Cover',es:'Nube Oscura Amplia',fr:'Nuage Sombre Profond',zh:'深乌云盖顶',hi:'डीप डार्क क्लाउड कवर',ar:'Deep Dark Cloud Cover',bn:'Deep Dark Cloud Cover',ru:'Deep Dark Cloud Cover',ja:'DeepDarkCloudCover',de:'Deep Dark Cloud Cover',ko:'DeepDarkCloudCover',vi:'Deep Dark Cloud Cover',tr:'Deep Dark Cloud Cover',it:'Deep Dark Cloud Cover',th:'Deep Dark Cloud Cover',pl:'Deep Dark Cloud Cover',nl:'Deep Dark Cloud Cover',uk:'Deep Dark Cloud Cover',id:'Deep Dark Cloud Cover',ur:'Deep Dark Cloud Cover'},
-  piercing_v2: {en:'Deep Piercing Line',es:'Línea Penetrante Profunda',fr:'Ligne Pénétrante Profonde',zh:'深刺透线',hi:'डीप पियर्सिंग लाइन',ar:'Deep Piercing Line',bn:'Deep Piercing Line',ru:'Deep Piercing Line',ja:'DeepPiercingLine',de:'Deep Piercing Line',ko:'DeepPiercingLine',vi:'Deep Piercing Line',tr:'Deep Piercing Line',it:'Deep Piercing Line',th:'Deep Piercing Line',pl:'Deep Piercing Line',nl:'Deep Piercing Line',uk:'Deep Piercing Line',id:'Deep Piercing Line',ur:'Deep Piercing Line'},
-  counterattack_bull: {en:'Bullish Counterattack',es:'Contraataque Alcista',fr:'Contre-Attaque Haussière',zh:'上涨反击线',hi:'तेजी काउंटरअटैक',ar:'صاعد Counterattack',bn:'ঊর্ধ্বমুখী Counterattack',ru:'Бычий Counterattack',ja:'陽線Counterattack',de:'Bullisch Counterattack',ko:'상승Counterattack',vi:'Tăng Counterattack',tr:'Yükseliş Counterattack',it:'Rialzista Counterattack',th:'ขาขึ้น Counterattack',pl:'Wzrostowy Counterattack',nl:'Bullish Counterattack',uk:'Бичачий Counterattack',id:'Bullish Counterattack',ur:'تیزی Counterattack'},
-  counterattack_bear: {en:'Bearish Counterattack',es:'Contraataque Bajista',fr:'Contre-Attaque Baissière',zh:'下跌反击线',hi:'मंदी काउंटरअटैक',ar:'هابط Counterattack',bn:'নিম্নমুখী Counterattack',ru:'Медвежий Counterattack',ja:'陰線Counterattack',de:'Bärisch Counterattack',ko:'하락Counterattack',vi:'Giảm Counterattack',tr:'Düşüş Counterattack',it:'Ribassista Counterattack',th:'ขาลง Counterattack',pl:'Spadkowy Counterattack',nl:'Bearish Counterattack',uk:'Ведмежий Counterattack',id:'Bearish Counterattack',ur:'مندی Counterattack'},
-  neck_line_bull: {en:'Bullish Neck Line',es:'Línea de Cuello Alcista',fr:'Ligne de Cou Haussière',zh:'上涨颈线',hi:'तेजी नेक लाइन',ar:'صاعد Neck Line',bn:'ঊর্ধ্বমুখী Neck Line',ru:'Бычий Neck Line',ja:'陽線NeckLine',de:'Bullisch Neck Line',ko:'상승NeckLine',vi:'Tăng Neck Line',tr:'Yükseliş Neck Line',it:'Rialzista Neck Line',th:'ขาขึ้น Neck Line',pl:'Wzrostowy Neck Line',nl:'Bullish Neck Line',uk:'Бичачий Neck Line',id:'Bullish Neck Line',ur:'تیزی Neck Line'},
-  three_gap_bull: {en:'Three Rising Gaps',es:'Tres Brechas Alcistas',fr:'Trois Gaps Haussiers',zh:'Three上升跳空',hi:'Three राइज़िंग गैप्स',ar:'Three صاعد الفجوةs',bn:'Three ঊর্ধ্বমুখী গ্যাপs',ru:'Three Растущий Разрывs',ja:'Three上昇窓s',de:'Three Steigend Kurslückes',ko:'Three상승갭s',vi:'Three Tăng Khoảng Trốngs',tr:'Three Yükselen Boşluks',it:'Three Crescente Gaps',th:'Three ขาขึ้น ช่องว่างs',pl:'Three Rosnący Lukas',nl:'Three Stijgend Gats',uk:'Three Зростаючий Розривs',id:'Three Naik Celahs',ur:'Three بڑھتا گیپs'},
-  three_gap_bear: {en:'Three Falling Gaps',es:'Tres Brechas Bajistas',fr:'Trois Gaps Baissiers',zh:'Three下降跳空',hi:'Three फॉलिंग गैप्स',ar:'Three هابط الفجوةs',bn:'Three নিম্নমুখী গ্যাপs',ru:'Three Падающий Разрывs',ja:'Three下降窓s',de:'Three Fallend Kurslückes',ko:'Three하락갭s',vi:'Three Giảm Khoảng Trốngs',tr:'Three Düşen Boşluks',it:'Three Decrescente Gaps',th:'Three ขาลง ช่องว่างs',pl:'Three Malejący Lukas',nl:'Three Dalend Gats',uk:'Three Спадаючий Розривs',id:'Three Turun Celahs',ur:'Three گرتا گیپs'},
-  long_lower_shadow: {en:'Long Lower Shadow',es:'Sombra Inferior Larga',fr:'Longue Mèche Inférieure',zh:'长下影线',hi:'लंबी लोअर शैडो',ar:'طويل Lower Shadow',bn:'দীর্ঘ Lower Shadow',ru:'Длинная Lower Shadow',ja:'大LowerShadow',de:'Lang Lower Shadow',ko:'긴LowerShadow',vi:'Dài Lower Shadow',tr:'Uzun Lower Shadow',it:'Lungo Lower Shadow',th:'ยาว Lower Shadow',pl:'Długa Lower Shadow',nl:'Lange Lower Shadow',uk:'Довга Lower Shadow',id:'Panjang Lower Shadow',ur:'لمبا Lower Shadow'},
-  long_upper_shadow: {en:'Long Upper Shadow',es:'Sombra Superior Larga',fr:'Longue Mèche Supérieure',zh:'长上影线',hi:'लंबी अपर शैडो',ar:'طويل Upper Shadow',bn:'দীর্ঘ Upper Shadow',ru:'Длинная Upper Shadow',ja:'大UpperShadow',de:'Lang Upper Shadow',ko:'긴UpperShadow',vi:'Dài Upper Shadow',tr:'Uzun Upper Shadow',it:'Lungo Upper Shadow',th:'ยาว Upper Shadow',pl:'Długa Upper Shadow',nl:'Lange Upper Shadow',uk:'Довга Upper Shadow',id:'Panjang Upper Shadow',ur:'لمبا Upper Shadow'},
-  short_candle: {en:'Short Candle',es:'Vela Corta',fr:'Bougie Courte',zh:'短蜡烛线',hi:'छोटी कैंडल',ar:'قصير الشمعة',bn:'সংক্ষিপ্ত মোমবাতি',ru:'Короткая Свеча',ja:'小ローソク足',de:'Kurz Kerze',ko:'짧은캔들',vi:'Ngắn Nến',tr:'Kısa Mum',it:'Corto Candela',th:'สั้น แท่งเทียน',pl:'Krótka Świeca',nl:'Korte Kaars',uk:'Коротка Свічка',id:'Pendek Lilin',ur:'چھوٹا موم بتی'},
-  opening_marubozu_bull: {en:'Bullish Opening Marubozu',es:'Marubozu de Apertura Alcista',fr:'Marubozu d\'Ouverture Haussier',zh:'上涨开盘光头光脚',hi:'तेजी शुरुआती मारुबोज़ु',ar:'صاعد افتتاح ماروبوزو',bn:'ঊর্ধ্বমুখী Opening মারুবোজু',ru:'Бычий Открытия Марубозу',ja:'陽線寄り付き丸坊主',de:'Bullisch Eröffnungs Marubozu',ko:'상승시가마루보즈',vi:'Tăng Mở Cửa Marubozu',tr:'Yükseliş Açılış Marubozu',it:'Rialzista Apertura Marubozu',th:'ขาขึ้น เปิด มารุโบซุ',pl:'Wzrostowy Otwarcia Marubozu',nl:'Bullish Opening Marubozu',uk:'Бичачий Відкриття Марубозу',id:'Bullish Pembukaan Marubozu',ur:'تیزی ابتدائی ماروبوزو'},
-  opening_marubozu_bear: {en:'Bearish Opening Marubozu',es:'Marubozu de Apertura Bajista',fr:'Marubozu d\'Ouverture Baissier',zh:'下跌开盘光头光脚',hi:'मंदी शुरुआती मारुबोज़ु',ar:'هابط افتتاح ماروبوزو',bn:'নিম্নমুখী Opening মারুবোজু',ru:'Медвежий Открытия Марубозу',ja:'陰線寄り付き丸坊主',de:'Bärisch Eröffnungs Marubozu',ko:'하락시가마루보즈',vi:'Giảm Mở Cửa Marubozu',tr:'Düşüş Açılış Marubozu',it:'Ribassista Apertura Marubozu',th:'ขาลง เปิด มารุโบซุ',pl:'Spadkowy Otwarcia Marubozu',nl:'Bearish Opening Marubozu',uk:'Ведмежий Відкриття Марубозу',id:'Bearish Pembukaan Marubozu',ur:'مندی ابتدائی ماروبوزو'},
-  bull_reversal_gap: {en:'Bullish Reversal Gap',es:'Gap de Reversión Alcista',fr:'Gap de Renversement Haussier',zh:'上涨反转跳空',hi:'तेजी रिवर्सल गैप',ar:'صاعد Reversal الفجوة',bn:'ঊর্ধ্বমুখী Reversal গ্যাপ',ru:'Бычий Reversal Разрыв',ja:'陽線Reversal窓',de:'Bullisch Reversal Kurslücke',ko:'상승Reversal갭',vi:'Tăng Reversal Khoảng Trống',tr:'Yükseliş Reversal Boşluk',it:'Rialzista Reversal Gap',th:'ขาขึ้น Reversal ช่องว่าง',pl:'Wzrostowy Reversal Luka',nl:'Bullish Reversal Gat',uk:'Бичачий Reversal Розрив',id:'Bullish Reversal Celah',ur:'تیزی Reversal گیپ'},
-  bear_reversal_gap: {en:'Bearish Reversal Gap',es:'Gap de Reversión Bajista',fr:'Gap de Renversement Baissier',zh:'下跌反转跳空',hi:'मंदी रिवर्सल गैप',ar:'هابط Reversal الفجوة',bn:'নিম্নমুখী Reversal গ্যাপ',ru:'Медвежий Reversal Разрыв',ja:'陰線Reversal窓',de:'Bärisch Reversal Kurslücke',ko:'하락Reversal갭',vi:'Giảm Reversal Khoảng Trống',tr:'Düşüş Reversal Boşluk',it:'Ribassista Reversal Gap',th:'ขาลง Reversal ช่องว่าง',pl:'Spadkowy Reversal Luka',nl:'Bearish Reversal Gat',uk:'Ведмежий Reversal Розрив',id:'Bearish Reversal Celah',ur:'مندی Reversal گیپ'},
-  on_neck: {en:'On Neck',es:'En el Cuello',fr:'Sur le Cou',zh:'颈上线',hi:'ऑन नेक',ar:'On Neck',bn:'On Neck',ru:'On Neck',ja:'OnNeck',de:'On Neck',ko:'OnNeck',vi:'On Neck',tr:'On Neck',it:'On Neck',th:'On Neck',pl:'On Neck',nl:'On Neck',uk:'On Neck',id:'On Neck',ur:'On Neck'},
-  bull_belt_hold_2: {en:'Confirmed Bullish Belt Hold',es:'Cinturón Alcista Confirmado',fr:'Belt Hold Haussier Confirmé',zh:'确认上涨捉腰带线',hi:'पुष्टि की गई तेजी बेल्ट होल्ड',ar:'Confirmed صاعد Belt Hold',bn:'Confirmed ঊর্ধ্বমুখী Belt Hold',ru:'Confirmed Бычий Belt Hold',ja:'Confirmed陽線BeltHold',de:'Confirmed Bullisch Belt Hold',ko:'Confirmed상승BeltHold',vi:'Confirmed Tăng Belt Hold',tr:'Confirmed Yükseliş Belt Hold',it:'Confirmed Rialzista Belt Hold',th:'Confirmed ขาขึ้น Belt Hold',pl:'Confirmed Wzrostowy Belt Hold',nl:'Confirmed Bullish Belt Hold',uk:'Confirmed Бичачий Belt Hold',id:'Confirmed Bullish Belt Hold',ur:'Confirmed تیزی Belt Hold'},
-  bull_pennant: {en:'Bull Pennant',es:'Banderín Alcista',fr:'Fanion Haussier',zh:'Bull三角旗',hi:'Bull पेनेंट',ar:'Bull الراية',bn:'Bull Pennant',ru:'Bull Вымпел',ja:'Bullペナント',de:'Bull Wimpel',ko:'Bull페넌트형',vi:'Bull Cờ Đuôi Nheo',tr:'Bull Flama',it:'Bull Bandierina',th:'Bull ธงสามเหลี่ยม',pl:'Bull Proporzec',nl:'Bull Wimpel',uk:'Bull Вимпел',id:'Bull Panji',ur:'Bull Pennant'},
-  bear_pennant: {en:'Bear Pennant',es:'Banderín Bajista',fr:'Fanion Baissier',zh:'Bear三角旗',hi:'Bear पेनेंट',ar:'Bear الراية',bn:'Bear Pennant',ru:'Bear Вымпел',ja:'Bearペナント',de:'Bear Wimpel',ko:'Bear페넌트형',vi:'Bear Cờ Đuôi Nheo',tr:'Bear Flama',it:'Bear Bandierina',th:'Bear ธงสามเหลี่ยม',pl:'Bear Proporzec',nl:'Bear Wimpel',uk:'Bear Вимпел',id:'Bear Panji',ur:'Bear Pennant'},
-  ascending_triangle: {en:'Ascending Triangle',es:'Triángulo Ascendente',fr:'Triangle Ascendant',zh:'上升三角形',hi:'आरोही त्रिकोण',ar:'Ascending المثلث',bn:'Ascending ত্রিভুজ',ru:'Ascending Треугольник',ja:'Ascending三角形',de:'Ascending Dreieck',ko:'Ascending삼각형',vi:'Ascending Tam Giác',tr:'Ascending Üçgen',it:'Ascending Triangolo',th:'Ascending สามเหลี่ยม',pl:'Ascending Trójkąt',nl:'Ascending Driehoek',uk:'Ascending Трикутник',id:'Ascending Segitiga',ur:'Ascending مثلث'},
-  descending_triangle: {en:'Descending Triangle',es:'Triángulo Descendente',fr:'Triangle Descendant',zh:'下降三角形',hi:'अवरोही त्रिकोण',ar:'Descending المثلث',bn:'Descending ত্রিভুজ',ru:'Descending Треугольник',ja:'Descending三角形',de:'Descending Dreieck',ko:'Descending삼각형',vi:'Descending Tam Giác',tr:'Descending Üçgen',it:'Descending Triangolo',th:'Descending สามเหลี่ยม',pl:'Descending Trójkąt',nl:'Descending Driehoek',uk:'Descending Трикутник',id:'Descending Segitiga',ur:'Descending مثلث'},
-  symmetrical_triangle: {en:'Symmetrical Triangle',es:'Triángulo Simétrico',fr:'Triangle Symétrique',zh:'对称三角形',hi:'सममित त्रिकोण',ar:'Symmetrical المثلث',bn:'Symmetrical ত্রিভুজ',ru:'Symmetrical Треугольник',ja:'Symmetrical三角形',de:'Symmetrical Dreieck',ko:'Symmetrical삼각형',vi:'Symmetrical Tam Giác',tr:'Symmetrical Üçgen',it:'Symmetrical Triangolo',th:'Symmetrical สามเหลี่ยม',pl:'Symmetrical Trójkąt',nl:'Symmetrical Driehoek',uk:'Symmetrical Трикутник',id:'Symmetrical Segitiga',ur:'Symmetrical مثلث'},
-  wedge_rising: {en:'Rising Wedge',es:'Cuña Ascendente',fr:'Biseau Ascendant',zh:'上升楔形',hi:'बढ़ता वेज',ar:'صاعد الإسفين',bn:'ঊর্ধ্বমুখী Wedge',ru:'Растущий Клин',ja:'上昇ウェッジ',de:'Steigend Keil',ko:'상승쐐기형',vi:'Tăng Cái Nêm',tr:'Yükselen Kama',it:'Crescente Cuneo',th:'ขาขึ้น ลิ่ม',pl:'Rosnący Klin',nl:'Stijgend Wig',uk:'Зростаючий Клин',id:'Naik Baji',ur:'بڑھتا پچر'},
-  wedge_falling: {en:'Falling Wedge',es:'Cuña Descendente',fr:'Biseau Descendant',zh:'下降楔形',hi:'गिरता वेज',ar:'هابط الإسفين',bn:'নিম্নমুখী Wedge',ru:'Падающий Клин',ja:'下降ウェッジ',de:'Fallend Keil',ko:'하락쐐기형',vi:'Giảm Cái Nêm',tr:'Düşen Kama',it:'Decrescente Cuneo',th:'ขาลง ลิ่ม',pl:'Malejący Klin',nl:'Dalend Wig',uk:'Спадаючий Клин',id:'Turun Baji',ur:'گرتا پچر'},
-  head_shoulders: {en:'Head and Shoulders',es:'Hombro-Cabeza-Hombro',fr:'Tête-Épaules',zh:'头肩形',hi:'हेड एंड शोल्डर्स',ar:'الرأس والكتفين',bn:'Head and Shoulders',ru:'Голова и плечи',ja:'ヘッドアンドショルダー',de:'Kopf-Schulter',ko:'헤드앤숄더',vi:'Đầu Vai',tr:'Omuz Baş Omuz',it:'Testa e Spalle',th:'หัวไหล่',pl:'Głowa i Ramiona',nl:'Hoofd-Schouders',uk:'Голова і плечі',id:'Kepala dan Bahu',ur:'سر اور کندھے'},
-  inv_head_shoulders: {en:'Inverse Head and Shoulders',es:'Hombro-Cabeza-Hombro Invertido',fr:'Tête-Épaules Inversée',zh:'倒头肩形',hi:'उल्टा हेड एंड शोल्डर्स',ar:'Inverse الرأس والكتفين',bn:'Inverse Head and Shoulders',ru:'Inverse Голова и плечи',ja:'Inverseヘッドアンドショルダー',de:'Inverse Kopf-Schulter',ko:'Inverse헤드앤숄더',vi:'Inverse Đầu Vai',tr:'Inverse Omuz Baş Omuz',it:'Inverse Testa e Spalle',th:'Inverse หัวไหล่',pl:'Inverse Głowa i Ramiona',nl:'Inverse Hoofd-Schouders',uk:'Inverse Голова і плечі',id:'Inverse Kepala dan Bahu',ur:'Inverse سر اور کندھے'},
-  double_top: {en:'Double Top',es:'Techo Doble',fr:'Double Sommet',zh:'双重顶',hi:'डबल टॉप',ar:'القمة المزدوجة',bn:'ডাবল টপ',ru:'Двойная вершина',ja:'ダブルトップ',de:'Doppeltop',ko:'이중천장',vi:'Hai Đỉnh',tr:'Çift Tepe',it:'Doppio Massimo',th:'ยอดคู่',pl:'Podwójny Szczyt',nl:'Dubbele Top',uk:'Подвійна вершина',id:'Puncak Ganda',ur:'دوہری چوٹی'},
-  double_bottom: {en:'Double Bottom',es:'Fondo Doble',fr:'Double Creux',zh:'双重底',hi:'डबल बॉटम',ar:'القاع المزدوج',bn:'ডাবল বটম',ru:'Двойное дно',ja:'ダブルボトム',de:'Doppelboden',ko:'이중바닥',vi:'Hai Đáy',tr:'Çift Dip',it:'Doppio Minimo',th:'ฐานคู่',pl:'Podwójny Dołek',nl:'Dubbele Bodem',uk:'Подвійне дно',id:'Dasar Ganda',ur:'دوہرا نچلا حصہ'},
-  triple_top: {en:'Triple Top',es:'Techo Triple',fr:'Triple Sommet',zh:'三重顶',hi:'ट्रिपल टॉप',ar:'القمة الثلاثية',bn:'Triple শীর্ষ',ru:'Тройная вершина',ja:'トリプルトップ',de:'Dreifachtop',ko:'삼중천장',vi:'Ba Đỉnh',tr:'Üçlü Tepe',it:'Triplo Massimo',th:'ยอดสาม',pl:'Potrójny Szczyt',nl:'Drievoudige Top',uk:'Потрійна вершина',id:'Puncak Tiga',ur:'تہری چوٹی'},
-  triple_bottom: {en:'Triple Bottom',es:'Fondo Triple',fr:'Triple Creux',zh:'三重底',hi:'ट्रिपल बॉटम',ar:'القاع الثلاثي',bn:'Triple তলদেশ',ru:'Тройное дно',ja:'トリプルボトム',de:'Dreifachboden',ko:'삼중바닥',vi:'Ba Đáy',tr:'Üçlü Dip',it:'Triplo Minimo',th:'ฐานสาม',pl:'Potrójny Dołek',nl:'Drievoudige Bodem',uk:'Потрійне дно',id:'Dasar Tiga',ur:'تہرا نچلا حصہ'},
-  rounding_bottom: {en:'Rounding Bottom',es:'Fondo Redondeado',fr:'Fond Arrondi',zh:'圆弧底',hi:'राउंडिंग बॉटम',ar:'Rounding قاع',bn:'Rounding তলদেশ',ru:'Rounding Дно',ja:'Rounding底',de:'Rounding Boden',ko:'Rounding바닥',vi:'Rounding Đáy',tr:'Rounding Dip',it:'Rounding Fondo',th:'Rounding ฐาน',pl:'Rounding Dołek',nl:'Rounding Bodem',uk:'Rounding Дно',id:'Rounding Dasar',ur:'Rounding نیچے'},
-  cup_handle: {en:'Cup and Handle',es:'Taza con Asa',fr:'Tasse avec Anse',zh:'茶杯柄',hi:'कप एंड हैंडल',ar:'Cup and Handle',bn:'Cup and Handle',ru:'Cup and Handle',ja:'CupandHandle',de:'Cup and Handle',ko:'CupandHandle',vi:'Cup and Handle',tr:'Cup and Handle',it:'Cup and Handle',th:'Cup and Handle',pl:'Cup and Handle',nl:'Cup and Handle',uk:'Cup and Handle',id:'Cup and Handle',ur:'Cup and Handle'},
-  bull_trap: {en:'Bull Trap',es:'Trampa Alcista',fr:'Piège Haussier',zh:'Bull陷阱',hi:'Bull ट्रैप',ar:'Bull الفخ',bn:'Bull Trap',ru:'Bull Ловушка',ja:'Bullトラップ',de:'Bull Falle',ko:'Bull함정',vi:'Bull Bẫy',tr:'Bull Tuzak',it:'Bull Trappola',th:'Bull กับดัก',pl:'Bull Pułapka',nl:'Bull Val',uk:'Bull Пастка',id:'Bull Jebakan',ur:'Bull جال'},
-  bear_trap: {en:'Bear Trap',es:'Trampa Bajista',fr:'Piège Baissier',zh:'Bear陷阱',hi:'Bear ट्रैप',ar:'Bear الفخ',bn:'Bear Trap',ru:'Bear Ловушка',ja:'Bearトラップ',de:'Bear Falle',ko:'Bear함정',vi:'Bear Bẫy',tr:'Bear Tuzak',it:'Bear Trappola',th:'Bear กับดัก',pl:'Bear Pułapka',nl:'Bear Val',uk:'Bear Пастка',id:'Bear Jebakan',ur:'Bear جال'},
-  momentum_candle_bull: {en:'Bullish Momentum Candle',es:'Vela de Impulso Alcista',fr:'Bougie de Momentum Haussière',zh:'上涨动量蜡烛线',hi:'तेजी मोमेंटम कैंडल',ar:'صاعد Momentum الشمعة',bn:'ঊর্ধ্বমুখী Momentum মোমবাতি',ru:'Бычий Momentum Свеча',ja:'陽線Momentumローソク足',de:'Bullisch Momentum Kerze',ko:'상승Momentum캔들',vi:'Tăng Momentum Nến',tr:'Yükseliş Momentum Mum',it:'Rialzista Momentum Candela',th:'ขาขึ้น Momentum แท่งเทียน',pl:'Wzrostowy Momentum Świeca',nl:'Bullish Momentum Kaars',uk:'Бичачий Momentum Свічка',id:'Bullish Momentum Lilin',ur:'تیزی Momentum موم بتی'},
-  momentum_candle_bear: {en:'Bearish Momentum Candle',es:'Vela de Impulso Bajista',fr:'Bougie de Momentum Baissière',zh:'下跌动量蜡烛线',hi:'मंदी मोमेंटम कैंडल',ar:'هابط Momentum الشمعة',bn:'নিম্নমুখী Momentum মোমবাতি',ru:'Медвежий Momentum Свеча',ja:'陰線Momentumローソク足',de:'Bärisch Momentum Kerze',ko:'하락Momentum캔들',vi:'Giảm Momentum Nến',tr:'Düşüş Momentum Mum',it:'Ribassista Momentum Candela',th:'ขาลง Momentum แท่งเทียน',pl:'Spadkowy Momentum Świeca',nl:'Bearish Momentum Kaars',uk:'Ведмежий Momentum Свічка',id:'Bearish Momentum Lilin',ur:'مندی Momentum موم بتی'},
-  exhaustion_bull: {en:'Bullish Exhaustion Candle',es:'Vela de Agotamiento Alcista',fr:'Bougie d\'Épuisement Haussière',zh:'上涨衰竭蜡烛线',hi:'तेजी थकावट कैंडल',ar:'صاعد Exhaustion الشمعة',bn:'ঊর্ধ্বমুখী Exhaustion মোমবাতি',ru:'Бычий Exhaustion Свеча',ja:'陽線Exhaustionローソク足',de:'Bullisch Exhaustion Kerze',ko:'상승Exhaustion캔들',vi:'Tăng Exhaustion Nến',tr:'Yükseliş Exhaustion Mum',it:'Rialzista Exhaustion Candela',th:'ขาขึ้น Exhaustion แท่งเทียน',pl:'Wzrostowy Exhaustion Świeca',nl:'Bullish Exhaustion Kaars',uk:'Бичачий Exhaustion Свічка',id:'Bullish Exhaustion Lilin',ur:'تیزی Exhaustion موم بتی'},
-  exhaustion_bear: {en:'Bearish Exhaustion Candle',es:'Vela de Agotamiento Bajista',fr:'Bougie d\'Épuisement Baissière',zh:'下跌衰竭蜡烛线',hi:'मंदी थकावट कैंडल',ar:'هابط Exhaustion الشمعة',bn:'নিম্নমুখী Exhaustion মোমবাতি',ru:'Медвежий Exhaustion Свеча',ja:'陰線Exhaustionローソク足',de:'Bärisch Exhaustion Kerze',ko:'하락Exhaustion캔들',vi:'Giảm Exhaustion Nến',tr:'Düşüş Exhaustion Mum',it:'Ribassista Exhaustion Candela',th:'ขาลง Exhaustion แท่งเทียน',pl:'Spadkowy Exhaustion Świeca',nl:'Bearish Exhaustion Kaars',uk:'Ведмежий Exhaustion Свічка',id:'Bearish Exhaustion Lilin',ur:'مندی Exhaustion موم بتی'},
-  tower_top: {en:'Tower Top',es:'Torre Superior',fr:'Tour Sommet',zh:'塔形顶',hi:'टावर टॉप',ar:'البرج قمة',bn:'টাওয়ার শীর্ষ',ru:'Башня Вершина',ja:'タワー天井',de:'Turm Spitze',ko:'타워형천장',vi:'Tháp Đỉnh',tr:'Kule Tepe',it:'Torre Cima',th:'หอคอย ยอด',pl:'Wieża Szczyt',nl:'Toren Top',uk:'Вежа Вершина',id:'Menara Puncak',ur:'مینار اوپر'},
-  tower_bottom: {en:'Tower Bottom',es:'Torre Inferior',fr:'Tour Creux',zh:'塔形底',hi:'टावर बॉटम',ar:'البرج قاع',bn:'টাওয়ার তলদেশ',ru:'Башня Дно',ja:'タワー底',de:'Turm Boden',ko:'타워형바닥',vi:'Tháp Đáy',tr:'Kule Dip',it:'Torre Fondo',th:'หอคอย ฐาน',pl:'Wieża Dołek',nl:'Toren Bodem',uk:'Вежа Дно',id:'Menara Dasar',ur:'مینار نیچے'},
-};
-// ==================== I18N - INTERFACE ====================
-const UI_I18N = {
-  nav_home: {en:'Home',es:'Inicio',fr:'Accueil',zh:'首页',hi:'होम',ar:'الرئيسية',bn:'হোম',ru:'Главная',ja:'ホーム',de:'Start',ko:'홈',vi:'Trang chủ',tr:'Ana Sayfa',it:'Home',th:'หน้าแรก',pl:'Start',nl:'Start',uk:'Головна',id:'Beranda',ur:'ہوم'},
-  nav_quiz: {en:'Quiz',es:'Quiz',fr:'Quiz',zh:'测验',hi:'क्विज़',ar:'اختبار',bn:'কুইজ',ru:'Тест',ja:'クイズ',de:'Quiz',ko:'퀴즈',vi:'Trắc nghiệm',tr:'Sınav',it:'Quiz',th:'แบบทดสอบ',pl:'Quiz',nl:'Quiz',uk:'Тест',id:'Kuis',ur:'کوئز'},
-  nav_sim: {en:'Simulator',es:'Simulador',fr:'Simulateur',zh:'模拟器',hi:'सिम्युलेटर',ar:'محاكي',bn:'সিমুলেটর',ru:'Симулятор',ja:'シミュレーター',de:'Simulator',ko:'시뮬레이터',vi:'Mô phỏng',tr:'Simülatör',it:'Simulatore',th:'จำลอง',pl:'Symulator',nl:'Simulator',uk:'Симулятор',id:'Simulator',ur:'سمیولیٹر'},
-  nav_lib: {en:'Library',es:'Biblioteca',fr:'Bibliothèque',zh:'图书馆',hi:'लाइब्रेरी',ar:'مكتبة',bn:'লাইব্রেরি',ru:'Библиотека',ja:'ライブラリ',de:'Bibliothek',ko:'라이브러리',vi:'Thư viện',tr:'Kütüphane',it:'Libreria',th:'คลังข้อมูล',pl:'Biblioteka',nl:'Bibliotheek',uk:'Бібліотека',id:'Perpustakaan',ur:'لائبریری'},
-  nav_ach: {en:'Achievements',es:'Logros',fr:'Succès',zh:'成就',hi:'उपलब्धियां',ar:'إنجازات',bn:'অর্জন',ru:'Достижения',ja:'実績',de:'Erfolge',ko:'업적',vi:'Thành tích',tr:'Başarımlar',it:'Obiettivi',th:'ความสำเร็จ',pl:'Osiągnięcia',nl:'Prestaties',uk:'Досягнення',id:'Pencapaian',ur:'کامیابیاں'},
-  app_title: {en:'Candle Master',es:'Maestro de las Velas',fr:'Maître des Chandeliers',zh:'蜡烛大师',hi:'कैंडल मास्टर',ar:'سيد الشموع',bn:'ক্যান্ডেল মাস্টার',ru:'Мастер Свечей',ja:'キャンドルマスター',de:'Kerzenmeister',ko:'캔들 마스터',vi:'Bậc Thầy Nến',tr:'Mum Ustası',it:'Maestro delle Candele',th:'ปรมาจารย์แท่งเทียน',pl:'Mistrz Świec',nl:'Kaarsenmeester',uk:'Майстер Свічок',id:'Master Candlestick',ur:'کینڈل ماسٹر'},
-  app_subtitle: {en:'Master candlestick patterns',es:'Domina los patrones de velas',fr:'Maîtrisez les motifs de chandeliers',zh:'掌握蜡烛图形态',hi:'कैंडलस्टिक पैटर्न में महारत हासिल करें',ar:'أتقن أنماط الشموع اليابانية',bn:'ক্যান্ডেলস্টিক প্যাটার্নে দক্ষতা অর্জন করুন',ru:'Освойте свечные модели',ja:'ローソク足パターンをマスターしよう',de:'Meistere Candlestick-Muster',ko:'캔들스틱 패턴 마스터하기',vi:'Làm chủ các mẫu hình nến',tr:'Mum grafiği formasyonlarında uzmanlaş',it:'Padroneggia i pattern delle candele',th:'เชี่ยวชาญรูปแบบแท่งเทียน',pl:'Opanuj formacje świecowe',nl:'Beheers candlestick-patronen',uk:'Опануй свічкові моделі',id:'Kuasai pola candlestick',ur:'کینڈل سٹک پیٹرنز میں مہارت حاصل کریں'},
-  days_streak: {en:'day streak',es:'días seguidos',fr:'jours de suite',zh:'连续天数',hi:'दिन की स्ट्रीक',ar:'أيام متتالية',bn:'দিনের ধারা',ru:'дней подряд',ja:'日連続',de:'Tage in Folge',ko:'일 연속',vi:'ngày liên tiếp',tr:'gün seri',it:'giorni di fila',th:'วันติดต่อกัน',pl:'dni z rzędu',nl:'dagen op rij',uk:'днів поспіль',id:'hari berturut-turut',ur:'دن مسلسل'},
-  streak_sub_active: {en:'Keep it up!',es:'¡Sigue así!',fr:'Continuez comme ça!',zh:'继续保持！',hi:'ऐसे ही जारी रखें!',ar:'استمر!',bn:'এভাবেই চালিয়ে যান!',ru:'Продолжайте в том же духе!',ja:'その調子！',de:'Weiter so!',ko:'계속 이어가세요!',vi:'Tiếp tục phát huy!',tr:'Böyle devam et!',it:'Continua così!',th:'ทำต่อไปแบบนี้!',pl:'Tak trzymaj!',nl:'Ga zo door!',uk:'Так тримати!',id:'Pertahankan!',ur:'اسی طرح جاری رکھیں!'},
-  stat_questions: {en:'Questions',es:'Preguntas',fr:'Questions',zh:'问题数',hi:'प्रश्न',ar:'الأسئلة',bn:'প্রশ্ন',ru:'Вопросы',ja:'質問数',de:'Fragen',ko:'질문',vi:'Câu hỏi',tr:'Sorular',it:'Domande',th:'คำถาม',pl:'Pytania',nl:'Vragen',uk:'Питання',id:'Pertanyaan',ur:'سوالات'},
-  stat_accuracy: {en:'Accuracy',es:'Precisión',fr:'Précision',zh:'准确率',hi:'सटीकता',ar:'الدقة',bn:'নির্ভুলতা',ru:'Точность',ja:'正確率',de:'Genauigkeit',ko:'정확도',vi:'Độ chính xác',tr:'Doğruluk',it:'Precisione',th:'ความแม่นยำ',pl:'Dokładność',nl:'Nauwkeurigheid',uk:'Точність',id:'Akurasi',ur:'درستگی'},
-  stat_patterns: {en:'Patterns',es:'Patrones',fr:'Motifs',zh:'形态数',hi:'पैटर्न',ar:'الأنماط',bn:'প্যাটার্ন',ru:'Модели',ja:'パターン数',de:'Muster',ko:'패턴',vi:'Mẫu hình',tr:'Formasyonlar',it:'Pattern',th:'รูปแบบ',pl:'Formacje',nl:'Patronen',uk:'Моделі',id:'Pola',ur:'پیٹرنز'},
-  game_modes: {en:'Game Modes',es:'Modos de Juego',fr:'Modes de Jeu',zh:'游戏模式',hi:'गेम मोड',ar:'أوضاع اللعب',bn:'গেম মোড',ru:'Режимы игры',ja:'ゲームモード',de:'Spielmodi',ko:'게임 모드',vi:'Chế độ chơi',tr:'Oyun Modları',it:'Modalità di Gioco',th:'โหมดเกม',pl:'Tryby Gry',nl:'Spelmodi',uk:'Режими гри',id:'Mode Permainan',ur:'گیم موڈز'},
-  badge_free: {en:'Free',es:'Libre',fr:'Libre',zh:'自由',hi:'मुफ़्त',ar:'حر',bn:'মুক্ত',ru:'Свободно',ja:'自由',de:'Frei',ko:'자유',vi:'Tự do',tr:'Serbest',it:'Libero',th:'อิสระ',pl:'Wolny',nl:'Vrij',uk:'Вільно',id:'Bebas',ur:'آزاد'},
-  badge_hard: {en:'Hard',es:'Difícil',fr:'Difficile',zh:'困难',hi:'कठिन',ar:'صعب',bn:'কঠিন',ru:'Сложно',ja:'難しい',de:'Schwer',ko:'어려움',vi:'Khó',tr:'Zor',it:'Difficile',th:'ยาก',pl:'Trudny',nl:'Moeilijk',uk:'Складно',id:'Sulit',ur:'مشکل'},
-  badge_fast: {en:'Fast',es:'Rápido',fr:'Rapide',zh:'快速',hi:'तेज़',ar:'سريع',bn:'দ্রুত',ru:'Быстро',ja:'速い',de:'Schnell',ko:'빠름',vi:'Nhanh',tr:'Hızlı',it:'Veloce',th:'เร็ว',pl:'Szybki',nl:'Snel',uk:'Швидко',id:'Cepat',ur:'تیز'},
-  mode_identify_title: {en:'Identify Pattern',es:'Identificar Patrón',fr:'Identifier le Motif',zh:'识别形态',hi:'पैटर्न पहचानें',ar:'تحديد النمط',bn:'প্যাটার্ন চিহ্নিত করুন',ru:'Определить модель',ja:'パターン識別',de:'Muster Erkennen',ko:'패턴 식별',vi:'Nhận Diện Mẫu Hình',tr:'Formasyon Tanımla',it:'Identifica il Pattern',th:'ระบุรูปแบบ',pl:'Zidentyfikuj Formację',nl:'Patroon Identificeren',uk:'Визначити Модель',id:'Identifikasi Pola',ur:'پیٹرن کی شناخت'},
-  mode_identify_desc: {en:'Unlimited questions, no pressure',es:'Preguntas ilimitadas, sin presión',fr:'Questions illimitées, sans pression',zh:'无限问题，无压力',hi:'असीमित प्रश्न, कोई दबाव नहीं',ar:'أسئلة غير محدودة، بدون ضغط',bn:'সীমাহীন প্রশ্ন, কোনো চাপ নেই',ru:'Неограниченные вопросы, без давления',ja:'無制限の質問、プレッシャーなし',de:'Unbegrenzte Fragen, kein Druck',ko:'무제한 질문, 부담 없음',vi:'Câu hỏi không giới hạn, không áp lực',tr:'Sınırsız soru, baskı yok',it:'Domande illimitate, senza pressione',th:'คำถามไม่จำกัด ไม่มีความกดดัน',pl:'Nieograniczone pytania, bez presji',nl:'Onbeperkte vragen, geen druk',uk:'Необмежені питання, без тиску',id:'Pertanyaan tak terbatas, tanpa tekanan',ur:'لامحدود سوالات، کوئی دباؤ نہیں'},
-  mode_survival_title: {en:'Survival',es:'Supervivencia',fr:'Survie',zh:'生存模式',hi:'सर्वाइवल',ar:'البقاء',bn:'সারভাইভাল',ru:'Выживание',ja:'サバイバル',de:'Überleben',ko:'서바이벌',vi:'Sinh Tồn',tr:'Hayatta Kalma',it:'Sopravvivenza',th:'เอาชีวิตรอด',pl:'Przetrwanie',nl:'Overleven',uk:'Виживання',id:'Bertahan Hidup',ur:'بقا'},
-  mode_survival_desc: {en:'3 lives — lose all if you miss 3×',es:'3 vidas — pierdes todo si fallas 3×',fr:'3 vies — tout perdu si vous ratez 3×',zh:'3条命 — 错3次全部清零',hi:'3 जीवन — 3 बार गलत होने पर सब खो दें',ar:'3 أرواح — تخسر كل شيء عند 3 أخطاء',bn:'৩টি জীবন — ৩ বার ভুল করলে সব হারাবেন',ru:'3 жизни — теряете всё при 3 ошибках',ja:'3つのライフ — 3回間違えると全て失う',de:'3 Leben — bei 3 Fehlern alles verloren',ko:'3개의 생명 — 3번 틀리면 모두 잃음',vi:'3 mạng — mất hết nếu sai 3 lần',tr:'3 can — 3 hata yaparsan her şeyi kaybedersin',it:'3 vite — perdi tutto se sbagli 3 volte',th:'3 ชีวิต — เสียทั้งหมดถ้าผิด 3 ครั้ง',pl:'3 życia — tracisz wszystko po 3 błędach',nl:'3 levens — verlies alles bij 3 fouten',uk:'3 життя — втрачаєте все при 3 помилках',id:'3 nyawa — kehilangan semua jika salah 3x',ur:'3 جانیں — 3 غلطیوں پر سب کچھ کھو دیں'},
-  mode_signal_title: {en:'Guess the Signal',es:'Adivina la Señal',fr:'Devinez le Signal',zh:'猜测信号',hi:'सिग्नल का अनुमान लगाएं',ar:'خمن الإشارة',bn:'সিগন্যাল অনুমান করুন',ru:'Угадай сигнал',ja:'シグナルを当てる',de:'Signal Erraten',ko:'신호 맞추기',vi:'Đoán Tín Hiệu',tr:'Sinyali Tahmin Et',it:'Indovina il Segnale',th:'ทายสัญญาณ',pl:'Zgadnij Sygnał',nl:'Raad het Signaal',uk:'Вгадай Сигнал',id:'Tebak Sinyal',ur:'سگنل کا اندازہ لگائیں'},
-  mode_signal_desc: {en:'Up, Down or Indecision?',es:'¿Alza, Baja o Indecisión?',fr:'Hausse, Baisse ou Indécision?',zh:'上涨、下跌还是犹豫不决？',hi:'ऊपर, नीचे या अनिर्णय?',ar:'صعود، هبوط أم تردد؟',bn:'ঊর্ধ্বমুখী, নিম্নমুখী নাকি অনিশ্চিত?',ru:'Рост, падение или нерешительность?',ja:'上昇、下落、それとも迷い？',de:'Aufwärts, abwärts oder unentschlossen?',ko:'상승, 하락, 아니면 횡보?',vi:'Tăng, giảm hay do dự?',tr:'Yükseliş, düşüş yoksa kararsızlık mı?',it:'Rialzo, ribasso o indecisione?',th:'ขึ้น ลง หรือลังเล?',pl:'Wzrost, spadek czy niezdecydowanie?',nl:'Omhoog, omlaag of besluiteloos?',uk:'Зростання, падіння чи нерішучість?',id:'Naik, turun, atau ragu-ragu?',ur:'اوپر، نیچے یا غیر فیصلہ کن؟'},
-  tip_label: {en:'Tip of the day:',es:'Consejo del día:',fr:'Astuce du jour:',zh:'每日提示：',hi:'आज की सलाह:',ar:'نصيحة اليوم:',bn:'আজকের টিপ:',ru:'Совет дня:',ja:'今日のヒント：',de:'Tipp des Tages:',ko:'오늘의 팁:',vi:'Mẹo hôm nay:',tr:'Günün ipucu:',it:'Suggerimento del giorno:',th:'เคล็ดลับวันนี้:',pl:'Wskazówka dnia:',nl:'Tip van de dag:',uk:'Порада дня:',id:'Tip hari ini:',ur:'آج کی تجویز:'},
-  tip_text: {en:'The Hammer has a long lower shadow (≥2× body) and suggests a reversal from down to up. Always confirm with the next candle!',es:'El Martillo tiene una sombra inferior larga (≥2× cuerpo) y sugiere una reversión de baja a alza. ¡Confirma siempre con la siguiente vela!',fr:'Le Marteau a une longue mèche inférieure (≥2× corps) et suggère un renversement de baisse à hausse. Confirmez toujours avec la bougie suivante!',zh:'锤子线下影线长，暗示从下跌反转为上涨。',hi:'हैमर की लंबी निचली छाया नीचे से ऊपर की ओर उलटाव का सुझाव देती है।',ar:'المطرقة لها ظل سفلي طويل ويشير إلى انعكاس من الهبوط إلى الصعود.',bn:'হ্যামারের নিচের ছায়া লম্বা এবং নিম্নমুখী থেকে ঊর্ধ্বমুখী রিভার্সাল নির্দেশ করে।',ru:'У Молота длинная нижняя тень, что говорит о развороте вниз-вверх.',ja:'ハンマーは下ヒゲが長く、下落から上昇への反転を示唆します。',de:'Der Hammer hat einen langen unteren Schatten und deutet auf eine Umkehr von unten nach oben hin.',ko:'망치형은 아래꼬리가 길며 하락에서 상승으로의 반전을 암시합니다.',vi:'Nến Búa có bóng dưới dài, gợi ý đảo chiều từ giảm sang tăng.',tr:'Çekiç formasyonunun uzun alt gölgesi vardır ve aşağıdan yukarıya dönüşü işaret eder.',it:'Il Martello ha un\'ombra inferiore lunga e suggerisce un\'inversione da ribasso a rialzo.',th:'แท่งเทียนค้อนมีไส้ล่างยาวและบ่งบอกถึงการกลับตัวจากลงเป็นขึ้น',pl:'Młot ma długi dolny cień i sugeruje odwrócenie ze spadku na wzrost.',nl:'De Hamer heeft een lange onderste schaduw en suggereert een omkering van dalend naar stijgend.',uk:'Молот має довгу нижню тінь і вказує на розворот знизу вгору.',id:'Hammer memiliki bayangan bawah panjang dan menunjukkan pembalikan dari turun ke naik.',ur:'ہیمر کا نچلا سایہ لمبا ہوتا ہے اور نیچے سے اوپر کی طرف الٹ پھیر کی نشاندہی کرتا ہے۔'},
-  signal_alta: {en:'Up',es:'Alza',fr:'Hausse',zh:'上涨',hi:'ऊपर',ar:'صعود',bn:'ঊর্ধ্বমুখী',ru:'Рост',ja:'上昇',de:'Aufwärts',ko:'상승',vi:'Tăng',tr:'Yükseliş',it:'Rialzo',th:'ขึ้น',pl:'Wzrost',nl:'Omhoog',uk:'Зростання',id:'Naik',ur:'اوپر'},
-  signal_baixa: {en:'Down',es:'Baja',fr:'Baisse',zh:'下跌',hi:'नीचे',ar:'هبوط',bn:'নিম্নমুখী',ru:'Падение',ja:'下落',de:'Abwärts',ko:'하락',vi:'Giảm',tr:'Düşüş',it:'Ribasso',th:'ลง',pl:'Spadek',nl:'Omlaag',uk:'Падіння',id:'Turun',ur:'نیچے'},
-  signal_neutro: {en:'Neutral',es:'Neutral',fr:'Neutre',zh:'中性',hi:'तटस्थ',ar:'محايد',bn:'নিরপেক্ষ',ru:'Нейтрально',ja:'中立',de:'Neutral',ko:'중립',vi:'Trung lập',tr:'Nötr',it:'Neutro',th:'เป็นกลาง',pl:'Neutralny',nl:'Neutraal',uk:'Нейтрально',id:'Netral',ur:'غیر جانبدار'},
-
-  quiz_q_pattern: {en:'What pattern is this?',es:'¿Qué patrón es este?',fr:'Quel est ce motif?',zh:'这是什么形态？',hi:'यह कौन सा पैटर्न है?',ar:'ما هو هذا النمط؟',bn:'এটি কোন প্যাটার্ন?',ru:'Что это за модель?',ja:'これはどのパターンですか？',de:'Welches Muster ist das?',ko:'이것은 어떤 패턴인가요?',vi:'Đây là mẫu hình gì?',tr:'Bu hangi formasyon?',it:'Che pattern è questo?',th:'นี่คือรูปแบบอะไร?',pl:'Jaka to formacja?',nl:'Welk patroon is dit?',uk:'Яка це модель?',id:'Pola apa ini?',ur:'یہ کون سا پیٹرن ہے؟'},
-  btn_next: {en:'Next →',es:'Siguiente →',fr:'Suivant →',zh:'下一个 →',hi:'अगला →',ar:'التالي ←',bn:'পরবর্তী →',ru:'Далее →',ja:'次へ →',de:'Weiter →',ko:'다음 →',vi:'Tiếp theo →',tr:'İleri →',it:'Avanti →',th:'ถัดไป →',pl:'Dalej →',nl:'Volgende →',uk:'Далі →',id:'Berikutnya →',ur:'اگلا ←'},
-  sim_analyze: {en:'Analyze the chart and make your decision',es:'Analiza el gráfico y toma tu decisión',fr:'Analysez le graphique et prenez votre décision',zh:'分析图表并做出决定',hi:'चार्ट का विश्लेषण करें और अपना निर्णय लें',ar:'حلل الرسم البياني واتخذ قرارك',bn:'চার্ট বিশ্লেষণ করুন এবং আপনার সিদ্ধান্ত নিন',ru:'Проанализируйте график и примите решение',ja:'チャートを分析して決断してください',de:'Analysiere das Chart und triff deine Entscheidung',ko:'차트를 분석하고 결정을 내리세요',vi:'Phân tích biểu đồ và đưa ra quyết định',tr:'Grafiği analiz edin ve kararınızı verin',it:'Analizza il grafico e prendi la tua decisione',th:'วิเคราะห์กราฟและตัดสินใจ',pl:'Przeanalizuj wykres i podejmij decyzję',nl:'Analyseer de grafiek en neem je beslissing',uk:'Проаналізуйте графік і прийміть рішення',id:'Analisis grafik dan buat keputusan Anda',ur:'چارٹ کا تجزیہ کریں اور اپنا فیصلہ کریں'},
-  sim_new_scenario: {en:'New Scenario',es:'Nuevo Escenario',fr:'Nouveau Scénario',zh:'新场景',hi:'नया परिदृश्य',ar:'سيناريو جديد',bn:'নতুন দৃশ্য',ru:'Новый сценарий',ja:'新しいシナリオ',de:'Neues Szenario',ko:'새 시나리오',vi:'Kịch Bản Mới',tr:'Yeni Senaryo',it:'Nuovo Scenario',th:'สถานการณ์ใหม่',pl:'Nowy Scenariusz',nl:'Nieuw Scenario',uk:'Новий сценарій',id:'Skenario Baru',ur:'نیا منظر'},
-  sim_pattern_detected: {en:'Pattern detected:',es:'Patrón detectado:',fr:'Motif détecté:',zh:'检测到形态：',hi:'पैटर्न का पता चला:',ar:'تم اكتشاف النمط:',bn:'প্যাটার্ন সনাক্ত হয়েছে:',ru:'Обнаружена модель:',ja:'パターン検出：',de:'Muster erkannt:',ko:'패턴 감지됨:',vi:'Đã phát hiện mẫu hình:',tr:'Formasyon tespit edildi:',it:'Pattern rilevato:',th:'ตรวจพบรูปแบบ:',pl:'Wykryto formację:',nl:'Patroon gedetecteerd:',uk:'Виявлено модель:',id:'Pola terdeteksi:',ur:'پیٹرن کا پتہ چلا:'},
-  sim_operation: {en:'Operation',es:'Operación',fr:'Opération',zh:'操作',hi:'ऑपरेशन',ar:'العملية',bn:'অপারেশন',ru:'Операция',ja:'操作',de:'Operation',ko:'운영',vi:'Giao Dịch',tr:'İşlem',it:'Operazione',th:'การดำเนินการ',pl:'Operacja',nl:'Operatie',uk:'Операція',id:'Operasi',ur:'آپریشن'},
-  sim_buy: {en:'BUY',es:'COMPRAR',fr:'ACHETER',zh:'买入',hi:'खरीदें',ar:'شراء',bn:'কিনুন',ru:'КУПИТЬ',ja:'買う',de:'KAUFEN',ko:'매수',vi:'MUA',tr:'AL',it:'COMPRA',th:'ซื้อ',pl:'KUP',nl:'KOPEN',uk:'КУПИТИ',id:'BELI',ur:'خریدیں'},
-  sim_wait: {en:'WAIT',es:'ESPERAR',fr:'ATTENDRE',zh:'等待',hi:'प्रतीक्षा करें',ar:'انتظار',bn:'অপেক্ষা করুন',ru:'ЖДАТЬ',ja:'待機',de:'WARTEN',ko:'대기',vi:'CHỜ',tr:'BEKLE',it:'ATTENDI',th:'รอ',pl:'CZEKAJ',nl:'WACHTEN',uk:'ЧЕКАТИ',id:'TUNGGU',ur:'انتظار کریں'},
-  sim_sell: {en:'SELL',es:'VENDER',fr:'VENDRE',zh:'卖出',hi:'बेचें',ar:'بيع',bn:'বিক্রয়',ru:'ПРОДАТЬ',ja:'売る',de:'VERKAUFEN',ko:'매도',vi:'BÁN',tr:'SAT',it:'VENDI',th:'ขาย',pl:'SPRZEDAJ',nl:'VERKOPEN',uk:'ПРОДАТИ',id:'JUAL',ur:'بیچیں'},
-  sim_wins: {en:'Wins',es:'Aciertos',fr:'Réussites',zh:'正确',hi:'सही',ar:'إجابات صحيحة',bn:'সঠিক',ru:'Верно',ja:'正解',de:'Treffer',ko:'성공',vi:'Đúng',tr:'Doğru',it:'Vittorie',th:'ถูกต้อง',pl:'Trafienia',nl:'Juist',uk:'Влучно',id:'Benar',ur:'درست'},
-  sim_losses: {en:'Losses',es:'Errores',fr:'Échecs',zh:'错误',hi:'गलत',ar:'إجابات خاطئة',bn:'ভুল',ru:'Неверно',ja:'不正解',de:'Fehler',ko:'실패',vi:'Sai',tr:'Yanlış',it:'Sconfitte',th:'ผิด',pl:'Błędy',nl:'Fout',uk:'Помилки',id:'Salah',ur:'غلط'},
-  sim_performance: {en:'Performance',es:'Rendimiento',fr:'Performance',zh:'表现',hi:'प्रदर्शन',ar:'الأداء',bn:'কর্মক্ষমতা',ru:'Результат',ja:'パフォーマンス',de:'Leistung',ko:'성과',vi:'Hiệu Suất',tr:'Performans',it:'Rendimento',th:'ประสิทธิภาพ',pl:'Wydajność',nl:'Prestatie',uk:'Ефективність',id:'Performa',ur:'کارکردگی'},
-  sim_streak: {en:'Streak',es:'Racha',fr:'Série',zh:'连续',hi:'लगातार',ar:'تتابع',bn:'ধারাবাহিক',ru:'Серия',ja:'連続',de:'Serie',ko:'연속',vi:'Chuỗi',tr:'Seri',it:'Serie',th:'ติดต่อกัน',pl:'Seria',nl:'Reeks',uk:'Серія',id:'Beruntun',ur:'تسلسل'},
-  lib_search_ph: {en:'🔍 Search pattern...',es:'🔍 Buscar patrón...',fr:'🔍 Rechercher un motif...',zh:'🔍 搜索形态...',hi:'🔍 पैटर्न खोजें...',ar:'🔍 البحث عن نمط...',bn:'🔍 প্যাটার্ন খুঁজুন...',ru:'🔍 Поиск модели...',ja:'🔍 パターンを検索...',de:'🔍 Muster suchen...',ko:'🔍 패턴 검색...',vi:'🔍 Tìm mẫu hình...',tr:'🔍 Formasyon ara...',it:'🔍 Cerca pattern...',th:'🔍 ค้นหารูปแบบ...',pl:'🔍 Szukaj formacji...',nl:'🔍 Patroon zoeken...',uk:'🔍 Пошук моделі...',id:'🔍 Cari pola...',ur:'🔍 پیٹرن تلاش کریں...'},
-  modal_signal: {en:'Signal',es:'Señal',fr:'Signal',zh:'信号',hi:'संकेत',ar:'الإشارة',bn:'সংকেত',ru:'Сигнал',ja:'シグナル',de:'Signal',ko:'신호',vi:'Tín Hiệu',tr:'Sinyal',it:'Segnale',th:'สัญญาณ',pl:'Sygnał',nl:'Signaal',uk:'Сигнал',id:'Sinyal',ur:'اشارہ'},
-  modal_difficulty: {en:'Difficulty',es:'Dificultad',fr:'Difficulté',zh:'难度',hi:'कठिनाई',ar:'الصعوبة',bn:'কঠিনতা',ru:'Сложность',ja:'難易度',de:'Schwierigkeit',ko:'난이도',vi:'Độ Khó',tr:'Zorluk',it:'Difficoltà',th:'ความยาก',pl:'Trudność',nl:'Moeilijkheid',uk:'Складність',id:'Kesulitan',ur:'مشکل'},
-  modal_target: {en:'Target',es:'Objetivo',fr:'Cible',zh:'目标',hi:'लक्ष्य',ar:'الهدف',bn:'লক্ষ্য',ru:'Цель',ja:'目標',de:'Ziel',ko:'목표',vi:'Mục Tiêu',tr:'Hedef',it:'Obiettivo',th:'เป้าหมาย',pl:'Cel',nl:'Doel',uk:'Ціль',id:'Target',ur:'ہدف'},
-  modal_stop: {en:'Stop',es:'Stop',fr:'Stop',zh:'止损',hi:'स्टॉप',ar:'وقف الخسارة',bn:'স্টপ',ru:'Стоп',ja:'ストップ',de:'Stop',ko:'손절',vi:'Dừng Lỗ',tr:'Stop',it:'Stop',th:'จุดตัดขาดทุน',pl:'Stop',nl:'Stop',uk:'Стоп',id:'Stop',ur:'اسٹاپ'},
-  btn_close: {en:'Close',es:'Cerrar',fr:'Fermer',zh:'关闭',hi:'बंद करें',ar:'إغلاق',bn:'বন্ধ করুন',ru:'Закрыть',ja:'閉じる',de:'Schließen',ko:'닫기',vi:'Đóng',tr:'Kapat',it:'Chiudi',th:'ปิด',pl:'Zamknij',nl:'Sluiten',uk:'Закрити',id:'Tutup',ur:'بند کریں'},
-  go_title: {en:'Game Over',es:'Fin del Juego',fr:'Partie Terminée',zh:'游戏结束',hi:'गेम ओवर',ar:'انتهت اللعبة',bn:'গেম ওভার',ru:'Игра окончена',ja:'ゲームオーバー',de:'Spiel Vorbei',ko:'게임 오버',vi:'Kết Thúc',tr:'Oyun Bitti',it:'Game Over',th:'จบเกม',pl:'Koniec Gry',nl:'Game Over',uk:'Гру закінчено',id:'Permainan Berakhir',ur:'گیم ختم'},
-  go_subtitle: {en:'Your 3 lives ran out!',es:'¡Tus 3 vidas se acabaron!',fr:'Vos 3 vies sont épuisées!',zh:'你的3条命用完了！',hi:'आपकी 3 जिंदगियां खत्म हो गईं!',ar:'انتهت أرواحك الثلاث!',bn:'আপনার ৩টি জীবন শেষ হয়ে গেছে!',ru:'Ваши 3 жизни закончились!',ja:'3つのライフが尽きました！',de:'Deine 3 Leben sind aufgebraucht!',ko:'3개의 생명을 모두 잃었습니다!',vi:'3 mạng của bạn đã hết!',tr:'3 canınız tükendi!',it:'Le tue 3 vite sono finite!',th:'3 ชีวิตของคุณหมดแล้ว!',pl:'Twoje 3 życia się skończyły!',nl:'Je 3 levens zijn op!',uk:'Ваші 3 життя закінчились!',id:'3 nyawa Anda habis!',ur:'آپ کی 3 زندگیاں ختم ہو گئیں!'},
-  go_wins: {en:'Wins',es:'Aciertos',fr:'Réussites',zh:'正确',hi:'सही',ar:'صحيح',bn:'সঠিক',ru:'Верно',ja:'正解',de:'Treffer',ko:'성공',vi:'Đúng',tr:'Doğru',it:'Vittorie',th:'ถูกต้อง',pl:'Trafienia',nl:'Juist',uk:'Влучно',id:'Benar',ur:'درست'},
-  go_losses: {en:'Losses',es:'Errores',fr:'Échecs',zh:'错误',hi:'गलत',ar:'خطأ',bn:'ভুল',ru:'Неверно',ja:'不正解',de:'Fehler',ko:'실패',vi:'Sai',tr:'Yanlış',it:'Sconfitte',th:'ผิด',pl:'Błędy',nl:'Fout',uk:'Помилки',id:'Salah',ur:'غلط'},
-  go_best_streak: {en:'Best Streak',es:'Mejor Racha',fr:'Meilleure Série',zh:'最佳连续',hi:'सर्वश्रेष्ठ स्ट्रीक',ar:'أفضل سلسلة',bn:'সেরা ধারাবাহিকতা',ru:'Лучшая серия',ja:'最高連続記録',de:'Beste Serie',ko:'최고 연속 기록',vi:'Chuỗi Tốt Nhất',tr:'En İyi Seri',it:'Miglior Serie',th:'ติดต่อกันสูงสุด',pl:'Najlepsza Seria',nl:'Beste Reeks',uk:'Найкраща серія',id:'Beruntun Terbaik',ur:'بہترین تسلسل'},
-  go_retry: {en:'Try Again',es:'Intentar de Nuevo',fr:'Réessayer',zh:'重试',hi:'फिर से कोशिश करें',ar:'حاول مرة أخرى',bn:'আবার চেষ্টা করুন',ru:'Попробовать снова',ja:'再挑戦',de:'Erneut Versuchen',ko:'다시 시도',vi:'Thử Lại',tr:'Tekrar Dene',it:'Riprova',th:'ลองอีกครั้ง',pl:'Spróbuj Ponownie',nl:'Opnieuw Proberen',uk:'Спробувати знову',id:'Coba Lagi',ur:'دوبارہ کوشش کریں'},
-
-  sim_correct: {pt:'ACERTOU!',en:'CORRECT!',es:'¡CORRECTO!',fr:'CORRECT!',zh:'答对了！',hi:'सही!',ar:'صحيح!',bn:'সঠিক!',ru:'ВЕРНО!',ja:'正解！',de:'RICHTIG!',ko:'정답!',vi:'ĐÚNG RỒI!',tr:'DOĞRU!',it:'CORRETTO!',th:'ถูกต้อง!',pl:'DOBRZE!',nl:'GOED!',uk:'ВІРНО!',id:'BENAR!',ur:'درست!'},
-  sim_wrong: {pt:'ERROU!',en:'WRONG!',es:'¡INCORRECTO!',fr:'INCORRECT!',zh:'答错了！',hi:'गलत!',ar:'خطأ!',bn:'ভুল!',ru:'НЕВЕРНО!',ja:'不正解！',de:'FALSCH!',ko:'오답!',vi:'SAI RỒI!',tr:'YANLIŞ!',it:'SBAGLIATO!',th:'ผิด!',pl:'ŹLE!',nl:'FOUT!',uk:'НЕВІРНО!',id:'SALAH!',ur:'غلط!'},
-  sim_waited_title: {pt:'AGUARDOU',en:'WAITED',es:'ESPERÓ',fr:'ATTENTE',zh:'已等待',hi:'प्रतीक्षा की',ar:'انتظر',bn:'অপেক্ষা করেছে',ru:'ОЖИДАНИЕ',ja:'待機しました',de:'GEWARTET',ko:'대기함',vi:'ĐÃ CHỜ',tr:'BEKLEDİ',it:'ATTESO',th:'รอแล้ว',pl:'CZEKAŁ',nl:'GEWACHT',uk:'ОЧІКУВАВ',id:'MENUNGGU',ur:'انتظار کیا'},
-  sim_dir_buy: {pt:'COMPRA',en:'BUY',es:'COMPRA',fr:'ACHAT',zh:'买入',hi:'खरीद',ar:'شراء',bn:'ক্রয়',ru:'ПОКУПКА',ja:'買い',de:'KAUF',ko:'매수',vi:'MUA',tr:'ALIŞ',it:'ACQUISTO',th:'ซื้อ',pl:'KUPNO',nl:'KOOP',uk:'КУПІВЛЯ',id:'BELI',ur:'خریداری'},
-  sim_dir_sell: {pt:'VENDA',en:'SELL',es:'VENTA',fr:'VENTE',zh:'卖出',hi:'बिक्री',ar:'بيع',bn:'বিক্রয়',ru:'ПРОДАЖА',ja:'売り',de:'VERKAUF',ko:'매도',vi:'BÁN',tr:'SATIŞ',it:'VENDITA',th:'ขาย',pl:'SPRZEDAŻ',nl:'VERKOOP',uk:'ПРОДАЖ',id:'JUAL',ur:'فروخت'},
-  sim_market_up: {pt:'subiu ▲',en:'went up ▲',es:'subió ▲',fr:'a monté ▲',zh:'上涨了 ▲',hi:'ऊपर गया ▲',ar:'ارتفع ▲',bn:'বেড়েছে ▲',ru:'вырос ▲',ja:'上昇しました ▲',de:'stieg ▲',ko:'상승함 ▲',vi:'đã tăng ▲',tr:'yükseldi ▲',it:'è salito ▲',th:'ขึ้น ▲',pl:'wzrósł ▲',nl:'steeg ▲',uk:'зріс ▲',id:'naik ▲',ur:'اوپر گیا ▲'},
-  sim_market_down: {pt:'caiu ▼',en:'went down ▼',es:'bajó ▼',fr:'a baissé ▼',zh:'下跌了 ▼',hi:'नीचे गया ▼',ar:'انخفض ▼',bn:'কমেছে ▼',ru:'упал ▼',ja:'下落しました ▼',de:'fiel ▼',ko:'하락함 ▼',vi:'đã giảm ▼',tr:'düştü ▼',it:'è sceso ▼',th:'ลง ▼',pl:'spadł ▼',nl:'daalde ▼',uk:'впав ▼',id:'turun ▼',ur:'نیچے گیا ▼'},
-  sim_next_in: {pt:'próximo cenário em 2s',en:'next scenario in 2s',es:'próximo escenario en 2s',fr:'prochain scénario dans 2s',zh:'2秒后下一个场景',hi:'2 सेकंड में अगला परिदृश्य',ar:'السيناريو التالي خلال ثانيتين',bn:'২ সেকেন্ডে পরবর্তী দৃশ্য',ru:'следующий сценарий через 2с',ja:'2秒後に次のシナリオ',de:'nächstes Szenario in 2s',ko:'2초 후 다음 시나리오',vi:'kịch bản tiếp theo sau 2s',tr:'2sn sonra sonraki senaryo',it:'prossimo scenario tra 2s',th:'สถานการณ์ถัดไปใน 2วิ',pl:'następny scenariusz za 2s',nl:'volgend scenario in 2s',uk:'наступний сценарій через 2с',id:'skenario berikutnya dalam 2d',ur:'اگلا منظر 2 سیکنڈ میں'},
-  but_market: {pt:'mas o mercado',en:'but the market',es:'pero el mercado',fr:'mais le marché',zh:'但市场',hi:'लेकिन बाजार',ar:'لكن السوق',bn:'কিন্তু বাজার',ru:'но рынок',ja:'しかし市場は',de:'aber der Markt',ko:'하지만 시장은',vi:'nhưng thị trường',tr:'ama piyasa',it:'ma il mercato',th:'แต่ตลาด',pl:'ale rynek',nl:'maar de markt',uk:'але ринок',id:'tapi pasar',ur:'لیکن مارکیٹ'},
-  the_market: {pt:'mercado',en:'market',es:'mercado',fr:'marché',zh:'市场',hi:'बाजार',ar:'السوق',bn:'বাজার',ru:'рынок',ja:'市場',de:'Markt',ko:'시장',vi:'thị trường',tr:'piyasa',it:'mercato',th:'ตลาด',pl:'rynek',nl:'markt',uk:'ринок',id:'pasar',ur:'مارکیٹ'},
-  was_label: {pt:'Era:',en:'Was:',es:'Era:',fr:'C\'était:',zh:'答案是：',hi:'था:',ar:'كان:',bn:'ছিল:',ru:'Было:',ja:'正解は：',de:'War:',ko:'정답:',vi:'Là:',tr:'Cevap:',it:'Era:',th:'คือ:',pl:'Było:',nl:'Was:',uk:'Було:',id:'Adalah:',ur:'تھا:'},
-  signal_label_short: {pt:'Sinal:',en:'Signal:',es:'Señal:',fr:'Signal:',zh:'信号：',hi:'संकेत:',ar:'الإشارة:',bn:'সংকেত:',ru:'Сигнал:',ja:'シグナル：',de:'Signal:',ko:'신호:',vi:'Tín Hiệu:',tr:'Sinyal:',it:'Segnale:',th:'สัญญาณ:',pl:'Sygnał:',nl:'Signaal:',uk:'Сигнал:',id:'Sinyal:',ur:'اشارہ:'},
-
-  lib_all: {pt:'Todos',en:'All',es:'Todos',fr:'Tous',zh:'全部',hi:'सभी',ar:'الكل',bn:'সব',ru:'Все',ja:'すべて',de:'Alle',ko:'전체',vi:'Tất Cả',tr:'Tümü',it:'Tutti',th:'ทั้งหมด',pl:'Wszystkie',nl:'Alle',uk:'Усі',id:'Semua',ur:'تمام'},
-  lib_up: {pt:'Alta',en:'Up',es:'Alza',fr:'Hausse',zh:'上涨',hi:'ऊपर',ar:'صعود',bn:'ঊর্ধ্বমুখী',ru:'Рост',ja:'上昇',de:'Aufwärts',ko:'상승',vi:'Tăng',tr:'Yükseliş',it:'Rialzo',th:'ขึ้น',pl:'Wzrost',nl:'Omhoog',uk:'Зростання',id:'Naik',ur:'اوپر'},
-  lib_down: {pt:'Baixa',en:'Down',es:'Baja',fr:'Baisse',zh:'下跌',hi:'नीचे',ar:'هبوط',bn:'নিম্নমুখী',ru:'Падение',ja:'下落',de:'Abwärts',ko:'하락',vi:'Giảm',tr:'Düşüş',it:'Ribasso',th:'ลง',pl:'Spadek',nl:'Omlaag',uk:'Падіння',id:'Turun',ur:'نیچے'},
-  lib_neutral: {pt:'Neutro',en:'Neutral',es:'Neutral',fr:'Neutre',zh:'中性',hi:'तटस्थ',ar:'محايد',bn:'নিরপেক্ষ',ru:'Нейтрально',ja:'中立',de:'Neutral',ko:'중립',vi:'Trung Lập',tr:'Nötr',it:'Neutro',th:'เป็นกลาง',pl:'Neutralny',nl:'Neutraal',uk:'Нейтрально',id:'Netral',ur:'غیر جانبدار'},
-  lib_easy: {pt:'Fácil',en:'Easy',es:'Fácil',fr:'Facile',zh:'简单',hi:'आसान',ar:'سهل',bn:'সহজ',ru:'Легко',ja:'簡単',de:'Einfach',ko:'쉬움',vi:'Dễ',tr:'Kolay',it:'Facile',th:'ง่าย',pl:'Łatwy',nl:'Makkelijk',uk:'Легко',id:'Mudah',ur:'آسان'},
-  lib_medium: {pt:'Médio',en:'Medium',es:'Medio',fr:'Moyen',zh:'中等',hi:'मध्यम',ar:'متوسط',bn:'মাঝারি',ru:'Средне',ja:'普通',de:'Mittel',ko:'보통',vi:'Trung Bình',tr:'Orta',it:'Medio',th:'ปานกลาง',pl:'Średni',nl:'Gemiddeld',uk:'Середньо',id:'Sedang',ur:'درمیانہ'},
-  lib_hard: {pt:'Difícil',en:'Hard',es:'Difícil',fr:'Difficile',zh:'困难',hi:'कठिन',ar:'صعب',bn:'কঠিন',ru:'Сложно',ja:'難しい',de:'Schwer',ko:'어려움',vi:'Khó',tr:'Zor',it:'Difficile',th:'ยาก',pl:'Trudny',nl:'Moeilijk',uk:'Складно',id:'Sulit',ur:'مشکل'},
-  lib_expert: {pt:'Expert',en:'Expert',es:'Experto',fr:'Expert',zh:'专家',hi:'विशेषज्ञ',ar:'خبير',bn:'বিশেষজ্ঞ',ru:'Эксперт',ja:'エキスパート',de:'Experte',ko:'전문가',vi:'Chuyên Gia',tr:'Uzman',it:'Esperto',th:'ผู้เชี่ยวชาญ',pl:'Ekspert',nl:'Expert',uk:'Експерт',id:'Ahli',ur:'ماہر'},
-  section_your_achievements: {pt:'Suas Conquistas',en:'Your Achievements',es:'Tus Logros',fr:'Vos Succès',zh:'你的成就',hi:'आपकी उपलब्धियां',ar:'إنجازاتك',bn:'আপনার অর্জন',ru:'Ваши достижения',ja:'あなたの実績',de:'Deine Erfolge',ko:'당신의 업적',vi:'Thành Tích Của Bạn',tr:'Başarımlarınız',it:'I Tuoi Obiettivi',th:'ความสำเร็จของคุณ',pl:'Twoje Osiągnięcia',nl:'Jouw Prestaties',uk:'Ваші досягнення',id:'Pencapaian Anda',ur:'آپ کی کامیابیاں'},
-  quiz_q_signal: {pt:'O que este padrão indica?',en:'What does this pattern indicate?',es:'¿Qué indica este patrón?',fr:'Que indique ce motif?',zh:'这个形态表明什么？',hi:'यह पैटर्न क्या दर्शाता है?',ar:'ماذا يشير هذا النمط؟',bn:'এই প্যাটার্নটি কী নির্দেশ করে?',ru:'Что указывает эта модель?',ja:'このパターンは何を示していますか？',de:'Was zeigt dieses Muster an?',ko:'이 패턴은 무엇을 나타내나요?',vi:'Mẫu hình này chỉ ra điều gì?',tr:'Bu formasyon neyi gösteriyor?',it:'Cosa indica questo pattern?',th:'รูปแบบนี้บ่งบอกอะไร?',pl:'Co wskazuje ta formacja?',nl:'Wat geeft dit patroon aan?',uk:'Що вказує ця модель?',id:'Apa yang ditunjukkan pola ini?',ur:'یہ پیٹرن کیا ظاہر کرتا ہے؟'},
-
-  extra_heart: {pt:'Vida Extra!',en:'Extra Life!',es:'¡Vida Extra!',fr:'Vie Bonus!',zh:'额外生命！',hi:'अतिरिक्त जीवन!',ar:'حياة إضافية!',bn:'অতিরিক্ত জীবন!',ru:'Доп. жизнь!',ja:'ライフ追加！',de:'Extra-Leben!',ko:'추가 생명!',vi:'Mạng Thêm!',tr:'Ekstra Can!',it:'Vita Extra!',th:'ชีวิตพิเศษ!',pl:'Dodatkowe Życie!',nl:'Extra Leven!',uk:'Додаткове життя!',id:'Nyawa Ekstra!',ur:'اضافی زندگی!'},
-
-  onb_skip: {pt:'Pular',en:'Skip',es:'Omitir',fr:'Passer',zh:'跳过',hi:'छोड़ें',ar:'تخطي',bn:'এড়িয়ে যান',ru:'Пропустить',ja:'スキップ',de:'Überspringen',ko:'건너뛰기',vi:'Bỏ Qua',tr:'Atla',it:'Salta',th:'ข้าม',pl:'Pomiń',nl:'Overslaan',uk:'Пропустити',id:'Lewati',ur:'چھوڑیں'},
-  onb_next: {pt:'Próximo →',en:'Next →',es:'Siguiente →',fr:'Suivant →',zh:'下一步 →',hi:'अगला →',ar:'التالي ←',bn:'পরবর্তী →',ru:'Далее →',ja:'次へ →',de:'Weiter →',ko:'다음 →',vi:'Tiếp Theo →',tr:'İleri →',it:'Avanti →',th:'ถัดไป →',pl:'Dalej →',nl:'Volgende →',uk:'Далі →',id:'Lanjut →',ur:'اگلا ←'},
-  onb_start: {pt:'Começar a Aprender',en:'Start Learning',es:'Empezar a Aprender',fr:'Commencer à Apprendre',zh:'开始学习',hi:'सीखना शुरू करें',ar:'ابدأ التعلم',bn:'শেখা শুরু করুন',ru:'Начать обучение',ja:'学習を始める',de:'Mit dem Lernen Beginnen',ko:'학습 시작하기',vi:'Bắt Đầu Học',tr:'Öğrenmeye Başla',it:'Inizia a Imparare',th:'เริ่มเรียนรู้',pl:'Zacznij Się Uczyć',nl:'Begin met Leren',uk:'Почати навчання',id:'Mulai Belajar',ur:'سیکھنا شروع کریں'},
-  onb_s1_title: {pt:'Aprenda a ler o mercado',en:'Learn to read the market',es:'Aprende a leer el mercado',fr:'Apprenez à lire le marché',zh:'学会读懂市场',hi:'बाजार पढ़ना सीखें',ar:'تعلم قراءة السوق',bn:'বাজার পড়তে শিখুন',ru:'Научитесь читать рынок',ja:'市場の読み方を学ぼう',de:'Lerne, den Markt zu lesen',ko:'시장을 읽는 법을 배우세요',vi:'Học cách đọc thị trường',tr:'Piyasayı okumayı öğrenin',it:'Impara a leggere il mercato',th:'เรียนรู้การอ่านตลาด',pl:'Naucz się czytać rynek',nl:'Leer de markt te lezen',uk:'Навчіться читати ринок',id:'Belajar membaca pasar',ur:'مارکیٹ پڑھنا سیکھیں'},
-  onb_s1_text: {pt:'Domine os padrões de candlestick usados por traders profissionais — de forma visual, prática e no seu ritmo.',en:'Master the candlestick patterns used by professional traders — visually, practically, at your own pace.',es:'Domina los patrones de velas japonesas usados por traders profesionales, de forma visual, práctica y a tu ritmo.',fr:'Maîtrisez les motifs de chandeliers utilisés par les traders professionnels — de façon visuelle, pratique et à votre rythme.',zh:'掌握专业交易者使用的蜡烛图形态——直观、实用、按自己的节奏学习。',hi:'पेशेवर ट्रेडर्स द्वारा उपयोग किए जाने वाले कैंडलस्टिक पैटर्न में महारत हासिल करें — दृश्य, व्यावहारिक और अपनी गति से।',ar:'أتقن أنماط الشموع اليابانية التي يستخدمها المتداولون المحترفون — بطريقة بصرية وعملية وبالسرعة التي تناسبك.',bn:'পেশাদার ট্রেডারদের ব্যবহৃত ক্যান্ডেলস্টিক প্যাটার্নে দক্ষতা অর্জন করুন — দৃশ্যমান, ব্যবহারিক এবং নিজের গতিতে।',ru:'Освойте свечные модели, которые используют профессиональные трейдеры — наглядно, практично, в своём темпе.',ja:'プロのトレーダーが使うローソク足パターンをマスターしよう — 視覚的に、実践的に、自分のペースで。',de:'Meistere die Candlestick-Muster, die professionelle Trader verwenden — visuell, praktisch und in deinem eigenen Tempo.',ko:'전문 트레이더가 사용하는 캔들스틱 패턴을 마스터하세요 — 시각적으로, 실용적으로, 자신의 속도로.',vi:'Làm chủ các mẫu hình nến mà các nhà giao dịch chuyên nghiệp sử dụng — trực quan, thực tế và theo nhịp độ của bạn.',tr:'Profesyonel yatırımcıların kullandığı mum formasyonlarında ustalaşın — görsel, pratik ve kendi hızınızda.',it:'Padroneggia i pattern delle candele usati dai trader professionisti — in modo visivo, pratico e al tuo ritmo.',th:'เชี่ยวชาญรูปแบบแท่งเทียนที่นักเทรดมืออาชีพใช้ — แบบเห็นภาพ ใช้งานได้จริง และตามจังหวะของคุณเอง',pl:'Opanuj formacje świecowe używane przez profesjonalnych traderów — wizualnie, praktycznie, w swoim tempie.',nl:'Beheers de candlestick-patronen die professionele traders gebruiken — visueel, praktisch en in je eigen tempo.',uk:'Опануйте свічкові моделі, які використовують професійні трейдери — наочно, практично, у своєму темпі.',id:'Kuasai pola candlestick yang digunakan trader profesional — secara visual, praktis, sesuai kecepatan Anda.',ur:'پیشہ ور ٹریڈرز کے استعمال کردہ کینڈل سٹک پیٹرنز میں مہارت حاصل کریں — بصری، عملی، اور اپنی رفتار سے۔'},
-  onb_s2_title: {pt:'Aprenda jogando',en:'Learn by playing',es:'Aprende jugando',fr:'Apprenez en jouant',zh:'在游戏中学习',hi:'खेल-खेल में सीखें',ar:'تعلم باللعب',bn:'খেলে খেলে শিখুন',ru:'Учитесь играя',ja:'遊びながら学ぼう',de:'Lerne durch Spielen',ko:'놀면서 배우세요',vi:'Học qua trò chơi',tr:'Oynayarak Öğren',it:'Impara giocando',th:'เรียนรู้ผ่านการเล่น',pl:'Ucz się grając',nl:'Leer door te spelen',uk:'Навчайтеся граючи',id:'Belajar sambil bermain',ur:'کھیل کر سیکھیں'},
-  onb_s2_text: {pt:'Identifique padrões em quizzes rápidos, ganhe sequências de acertos e desbloqueie conquistas. Sem decoreba, sem pressão.',en:'Identify patterns in quick quizzes, build winning streaks and unlock achievements. No memorization, no pressure.',es:'Identifica patrones en quizzes rápidos, consigue rachas de aciertos y desbloquea logros. Sin memorizar, sin presión.',fr:'Identifiez des motifs dans des quiz rapides, enchaînez les bonnes réponses et débloquez des succès. Sans bachotage, sans pression.',zh:'在快速测验中识别形态，连续答对解锁成就。无需死记硬背，没有压力。',hi:'त्वरित क्विज़ में पैटर्न पहचानें, सही उत्तरों की लड़ी बनाएं और उपलब्धियां अनलॉक करें। बिना रटे, बिना दबाव के।',ar:'حدد الأنماط في اختبارات سريعة، واكسب سلاسل من الإجابات الصحيحة وافتح الإنجازات. بدون حفظ، بدون ضغط.',bn:'দ্রুত কুইজে প্যাটার্ন চিহ্নিত করুন, সঠিক উত্তরের ধারা তৈরি করুন এবং অর্জন আনলক করুন। মুখস্থ নয়, চাপ নয়।',ru:'Распознавайте модели в быстрых тестах, набирайте серии правильных ответов и открывайте достижения. Без зубрёжки, без давления.',ja:'クイズでパターンを識別し、連続正解で実績を解除しよう。暗記不要、プレッシャーなし。',de:'Erkenne Muster in kurzen Quiz, baue Erfolgsserien auf und schalte Erfolge frei. Kein Auswendiglernen, kein Druck.',ko:'빠른 퀴즈로 패턴을 식별하고, 연속 정답을 쌓아 업적을 해제하세요. 암기 없이, 부담 없이.',vi:'Nhận diện mẫu hình qua các bài quiz nhanh, tạo chuỗi đúng liên tiếp và mở khóa thành tích. Không học vẹt, không áp lực.',tr:'Hızlı testlerle formasyonları tanı, doğru cevap serileri oluştur ve başarımların kilidini aç. Ezbersiz, baskısız.',it:'Identifica i pattern in quiz veloci, costruisci serie di risposte corrette e sblocca obiettivi. Senza memorizzare, senza pressione.',th:'ระบุรูปแบบในแบบทดสอบรวดเร็ว สร้างสถิติตอบถูกต่อเนื่องและปลดล็อกความสำเร็จ ไม่ต้องท่องจำ ไม่มีความกดดัน',pl:'Identyfikuj formacje w szybkich quizach, buduj serie poprawnych odpowiedzi i odblokowuj osiągnięcia. Bez wkuwania, bez presji.',nl:'Identificeer patronen in snelle quizzen, bouw winstreeks op en ontgrendel prestaties. Geen uit het hoofd leren, geen druk.',uk:'Розпізнавайте моделі у швидких тестах, накопичуйте серії правильних відповідей і відкривайте досягнення. Без зубріння, без тиску.',id:'Identifikasi pola dalam kuis cepat, bangun rangkaian jawaban benar, dan buka pencapaian. Tanpa hafalan, tanpa tekanan.',ur:'تیز کوئز میں پیٹرنز کی شناخت کریں، درست جوابات کا تسلسل بنائیں اور کامیابیاں حاصل کریں۔ رٹے بغیر، دباؤ کے بغیر۔'},
-  onb_s3_title: {pt:'Pratique sem arriscar nada',en:'Practice with zero risk',es:'Practica sin arriesgar nada',fr:'Entraînez-vous sans rien risquer',zh:'零风险练习',hi:'बिना जोखिम के अभ्यास करें',ar:'تدرب دون أي مخاطرة',bn:'কোনো ঝুঁকি ছাড়াই অনুশীলন করুন',ru:'Тренируйтесь без риска',ja:'リスクゼロで練習',de:'Übe ohne jedes Risiko',ko:'위험 부담 없이 연습하세요',vi:'Luyện tập không rủi ro',tr:'Hiç Risk Almadan Pratik Yap',it:'Esercitati senza alcun rischio',th:'ฝึกฝนโดยไม่มีความเสี่ยง',pl:'Ćwicz bez żadnego ryzyka',nl:'Oefen zonder enig risico',uk:'Тренуйтеся без жодного ризику',id:'Berlatih tanpa risiko',ur:'بغیر کسی خطرے کے مشق کریں'},
-  onb_s3_text: {pt:'Use o simulador para treinar decisões de compra e venda em cenários reais — tudo de graça, sem dinheiro de verdade.',en:'Use the simulator to practice buy and sell decisions in realistic scenarios — all free, with no real money.',es:'Usa el simulador para practicar decisiones de compra y venta en escenarios reales, todo gratis, sin dinero real.',fr:'Utilisez le simulateur pour vous entraîner aux décisions d\'achat et de vente dans des scénarios réalistes — gratuitement, sans argent réel.',zh:'使用模拟器在真实场景中练习买卖决策——完全免费，无需真钱。',hi:'वास्तविक परिदृश्यों में खरीद और बिक्री के निर्णयों का अभ्यास करने के लिए सिम्युलेटर का उपयोग करें — सब मुफ़्त, बिना असली पैसे के।',ar:'استخدم المحاكي لتدريب قرارات الشراء والبيع في سيناريوهات واقعية — كل ذلك مجانًا، دون أموال حقيقية.',bn:'বাস্তব দৃশ্যে কেনা-বেচার সিদ্ধান্ত অনুশীলন করতে সিমুলেটর ব্যবহার করুন — সবই বিনামূল্যে, আসল টাকা ছাড়াই।',ru:'Используйте симулятор для тренировки решений о покупке и продаже в реалистичных сценариях — бесплатно, без реальных денег.',ja:'シミュレーターでリアルなシナリオの売買判断を練習しよう — 無料、本物のお金は不要。',de:'Nutze den Simulator, um Kauf- und Verkaufsentscheidungen in realistischen Szenarien zu üben — alles kostenlos, ohne echtes Geld.',ko:'시뮬레이터로 실제와 같은 시나리오에서 매수/매도 결정을 연습하세요 — 모두 무료, 실제 돈 없이.',vi:'Sử dụng trình mô phỏng để luyện tập quyết định mua bán trong các kịch bản thực tế — hoàn toàn miễn phí, không cần tiền thật.',tr:'Gerçekçi senaryolarda alım satım kararlarını pratik etmek için simülatörü kullanın — tamamen ücretsiz, gerçek para olmadan.',it:'Usa il simulatore per esercitarti con decisioni di acquisto e vendita in scenari realistici — tutto gratis, senza soldi veri.',th:'ใช้ตัวจำลองเพื่อฝึกตัดสินใจซื้อขายในสถานการณ์จริง — ฟรีทั้งหมด ไม่ใช้เงินจริง',pl:'Użyj symulatora, aby ćwiczyć decyzje kupna i sprzedaży w realistycznych scenariuszach — wszystko za darmo, bez prawdziwych pieniędzy.',nl:'Gebruik de simulator om koop- en verkoopbeslissingen te oefenen in realistische scenario\'s — allemaal gratis, zonder echt geld.',uk:'Використовуйте симулятор для тренування рішень про купівлю та продаж у реалістичних сценаріях — все безкоштовно, без реальних грошей.',id:'Gunakan simulator untuk berlatih keputusan beli dan jual dalam skenario nyata — semua gratis, tanpa uang sungguhan.',ur:'حقیقی منظرناموں میں خرید و فروخت کے فیصلوں کی مشق کے لیے سمیولیٹر استعمال کریں — سب مفت، اصلی پیسوں کے بغیر۔'},
-  onb_s4_title: {pt:'Pronto para começar?',en:'Ready to start?',es:'¿Listo para empezar?',fr:'Prêt à commencer?',zh:'准备好了吗？',hi:'शुरू करने के लिए तैयार?',ar:'هل أنت مستعد للبدء؟',bn:'শুরু করতে প্রস্তুত?',ru:'Готовы начать?',ja:'準備はいい？',de:'Bereit anzufangen?',ko:'시작할 준비 되셨나요?',vi:'Sẵn sàng bắt đầu?',tr:'Başlamaya Hazır mısın?',it:'Pronto per iniziare?',th:'พร้อมเริ่มหรือยัง?',pl:'Gotowy zacząć?',nl:'Klaar om te beginnen?',uk:'Готові почати?',id:'Siap memulai?',ur:'شروع کرنے کے لیے تیار؟'},
-  onb_s4_text: {pt:'120+ padrões te esperam. Vamos identificar o primeiro agora?',en:'120+ patterns are waiting for you. Let\'s identify the first one now?',es:'Más de 120 patrones te esperan. ¿Identificamos el primero ahora?',fr:'Plus de 120 motifs vous attendent. On identifie le premier maintenant?',zh:'120多种形态等着你。现在就来识别第一个吧？',hi:'120+ पैटर्न आपका इंतज़ार कर रहे हैं। चलिए अभी पहला पहचानते हैं?',ar:'أكثر من 120 نمطًا في انتظارك. هل نحدد الأول الآن؟',bn:'১২০+ প্যাটার্ন আপনার জন্য অপেক্ষা করছে। চলুন এখনই প্রথমটি চিহ্নিত করি?',ru:'Вас ждут более 120 моделей. Определим первую прямо сейчас?',ja:'120以上のパターンがあなたを待っています。今すぐ最初のパターンを識別しよう？',de:'Über 120 Muster warten auf dich. Lass uns jetzt das erste identifizieren?',ko:'120개 이상의 패턴이 기다리고 있습니다. 지금 첫 번째를 식별해볼까요?',vi:'Hơn 120 mẫu hình đang chờ bạn. Cùng nhận diện mẫu đầu tiên ngay nhé?',tr:'120\'den fazla formasyon seni bekliyor. Şimdi ilkini tanımlayalım mı?',it:'Più di 120 pattern ti aspettano. Identifichiamo il primo adesso?',th:'รูปแบบมากกว่า 120 แบบรอคุณอยู่ มาระบุรูปแบบแรกกันเลยไหม?',pl:'Ponad 120 formacji na ciebie czeka. Zidentyfikujmy pierwszą już teraz?',nl:'120+ patronen wachten op je. Laten we de eerste nu identificeren?',uk:'На вас чекає понад 120 моделей. Визначимо першу прямо зараз?',id:'120+ pola menanti Anda. Mari identifikasi yang pertama sekarang?',ur:'120+ پیٹرنز آپ کا انتظار کر رہے ہیں۔ آئیے ابھی پہلے کی شناخت کریں؟'},
-};
-
-let currentLang = 'pt';
-try {
-  const s = JSON.parse(localStorage.getItem('mdv4') || '{}');
-  if (s.lang) currentLang = s.lang;
-} catch(e) {}
-
-const LANG_META = {
-  pt:{flag:'🇧🇷',name:'Português'}, en:{flag:'🇺🇸',name:'English'}, es:{flag:'🇪🇸',name:'Español'},
-  zh:{flag:'🇨🇳',name:'中文'}, hi:{flag:'🇮🇳',name:'हिन्दी'}, ar:{flag:'🇸🇦',name:'العربية'},
-  bn:{flag:'🇧🇩',name:'বাংলা'}, ru:{flag:'🇷🇺',name:'Русский'}, ja:{flag:'🇯🇵',name:'日本語'},
-  fr:{flag:'🇫🇷',name:'Français'}, de:{flag:'🇩🇪',name:'Deutsch'}, ko:{flag:'🇰🇷',name:'한국어'},
-  vi:{flag:'🇻🇳',name:'Tiếng Việt'}, tr:{flag:'🇹🇷',name:'Türkçe'}, it:{flag:'🇮🇹',name:'Italiano'},
-  th:{flag:'🇹🇭',name:'ไทย'}, pl:{flag:'🇵🇱',name:'Polski'}, nl:{flag:'🇳🇱',name:'Nederlands'},
-  uk:{flag:'🇺🇦',name:'Українська'}, id:{flag:'🇮🇩',name:'Indonesia'}, ur:{flag:'🇵🇰',name:'اردو'},
-};
-
-function toggleLangMenu() {
-  document.getElementById('langMenu').classList.toggle('open');
-}
-document.addEventListener('click', (e) => {
-  const sw = document.querySelector('.lang-switcher');
-  const menu = document.getElementById('langMenu');
-  if (sw && menu && !sw.contains(e.target)) menu.classList.remove('open');
-});
-
-function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (!el.dataset.ptOriginal) el.dataset.ptOriginal = el.textContent;
-    if (currentLang === 'pt') {
-      el.textContent = el.dataset.ptOriginal;
-      return;
-    }
-    const t = UI_I18N[key];
-    if (t && t[currentLang]) el.textContent = t[currentLang];
-    else el.textContent = el.dataset.ptOriginal;
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (!el.dataset.ptOriginalPh) el.dataset.ptOriginalPh = el.placeholder;
-    if (currentLang === 'pt') {
-      el.placeholder = el.dataset.ptOriginalPh;
-      return;
-    }
-    const t = UI_I18N[key];
-    if (t && t[currentLang]) el.placeholder = t[currentLang];
-    else el.placeholder = el.dataset.ptOriginalPh;
-  });
-  document.querySelectorAll('.lang-opt').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === currentLang);
-  });
-  const meta = LANG_META[currentLang] || LANG_META.pt;
-  const flagEl = document.getElementById('langCurrentFlag');
-  const nameEl = document.getElementById('langCurrentName');
-  if (flagEl) flagEl.textContent = meta.flag;
-  if (nameEl) nameEl.textContent = meta.name;
-  document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : currentLang;
-  document.documentElement.dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
-}
-
-function translatePatternName(pattern) {
-  if (currentLang === 'pt' || !pattern) return pattern.name;
-  const t = PATTERN_I18N[pattern.id];
-  return (t && t[currentLang]) ? t[currentLang] : pattern.name;
-}
-
-function translatePatternDesc(pattern) {
-  if (currentLang === 'pt' || !pattern) return pattern.desc;
-  const t = PATTERN_DESC_I18N[pattern.id];
-  return (t && t.desc && t.desc[currentLang]) ? t.desc[currentLang] : pattern.desc;
-}
-
-function translatePatternTip(pattern) {
-  if (currentLang === 'pt' || !pattern) return pattern.tip;
-  const t = PATTERN_DESC_I18N[pattern.id];
-  return (t && t.tip && t.tip[currentLang]) ? t.tip[currentLang] : pattern.tip;
-}
-
-function translateSignal(signal) {
-  if (currentLang === 'pt') return signal === 'alta' ? 'Alta' : signal === 'baixa' ? 'Baixa' : 'Neutro';
-  const key = 'signal_' + signal;
-  const t = UI_I18N[key];
-  return (t && t[currentLang]) ? t[currentLang] : signal;
-}
-
-// Generic UI translation lookup helper
-function t(key, fallback) {
-  const entry = UI_I18N[key];
-  if (!entry) return fallback || key;
-  if (currentLang === 'pt') return entry.pt || fallback || key;
-  return entry[currentLang] || entry.pt || fallback || key;
-}
-
-function capitalize(s) {
-  if (!s) return s;
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
-function setLang(lang) {
-  currentLang = lang;
-  storage.lang = lang;
-  save();
-  applyTranslations();
-  document.getElementById('langMenu').classList.remove('open');
-  if (typeof updateHome === 'function') updateHome();
-  try {
-    const quizPage = document.getElementById('page-quiz');
-    if (state && state.currentPattern && quizPage && quizPage.classList.contains('active') && !state.answered) {
-      const p = state.currentPattern;
-      if (state.quizType === 'name') {
-        document.getElementById('quizSubQ').textContent = t('signal_label_short','Sinal:') + ' ' + signalLabelTranslated(p.signal);
-        const wrong = getWrongOptions(p, 'name');
-        renderOptions([p.name, ...wrong], p.name, 'name');
-      } else {
-        document.getElementById('quizSubQ').textContent = '';
-        const opts = ['📈 Alta', '📉 Baixa', '➡️ Neutro'];
-        renderOptions(opts, signalEmoji(p.signal), 'signal');
-      }
-    }
-  } catch(e) {}
-  try {
-    const libPage = document.getElementById('page-library');
-    if (libPage && libPage.classList.contains('active') && typeof renderLibrary === 'function') renderLibrary();
-  } catch(e) {}
-  try {
-    const achPage = document.getElementById('page-achievements');
-    if (achPage && achPage.classList.contains('active') && typeof renderAchievements === 'function') renderAchievements();
-  } catch(e) {}
-}
-
 
 // ==================== DATA ====================
 const PATTERNS = [
@@ -1305,6 +691,10 @@ const PATTERNS = [
   {id:'counterattack_bear',name:'Contraataque de Baixa',signal:'baixa',diff:3,desc:'Bullish e bearish com mesmo fechamento. Vendedor absorveu toda a compra.',tip:'Contraataque em topo = reversão.',target:'-2R',stop:'Máxima',candles:[{o:32,h:68,l:30,c:65},{o:70,h:72,l:28,c:65}]},
   {id:'neck_line_bull',name:'Linha de Pescoço Alta',signal:'alta',diff:4,desc:'Bearish, pequena bullish com fechamento na mínima da anterior. Possível reversão se romper.',tip:'Aguarde rompimento acima da bearish.',target:'+2R',stop:'Mínima',candles:[{o:68,h:70,l:30,c:33},{o:28,h:35,l:25,c:33}]},
   {id:'three_gap_bull',name:'Três Lacunas de Alta',signal:'baixa',diff:4,desc:'Três gaps de alta consecutivos. Sobrecomprado — possível reversão.',tip:'Três gaps = sobrecompra extrema.',target:'-2R',stop:'Acima do último gap',candles:[{o:20,h:32,l:18,c:30},{o:35,h:48,l:33,c:46},{o:50,h:63,l:48,c:61},{o:65,h:78,l:63,c:76}]},
+  {id:'counterattack_bull',name:'Contraataque de Alta',signal:'alta',diff:3,desc:'Bearish e bullish com mesmo fechamento. Comprador absorveu toda a venda.',tip:'Fechamento igual é essencial.',target:'+2R',stop:'Mínima',candles:[{o:68,h:70,l:32,c:35},{o:30,h:72,l:28,c:35}]},
+  {id:'counterattack_bear',name:'Contraataque de Baixa',signal:'baixa',diff:3,desc:'Bullish e bearish com mesmo fechamento. Vendedor absorveu toda a compra.',tip:'Contraataque em topo = reversão.',target:'-2R',stop:'Máxima',candles:[{o:32,h:68,l:30,c:65},{o:70,h:72,l:28,c:65}]},
+  {id:'neck_line_bull',name:'Linha de Pescoço Alta',signal:'alta',diff:4,desc:'Bearish, pequena bullish com fechamento na mínima da anterior. Possível reversão se romper.',tip:'Aguarde rompimento acima da bearish.',target:'+2R',stop:'Mínima',candles:[{o:68,h:70,l:30,c:33},{o:28,h:35,l:25,c:33}]},
+  {id:'three_gap_bull',name:'Três Lacunas de Alta',signal:'baixa',diff:4,desc:'Três gaps de alta consecutivos. Sobrecomprado — possível reversão.',tip:'Três gaps = sobrecompra extrema.',target:'-2R',stop:'Acima do último gap',candles:[{o:20,h:32,l:18,c:30},{o:35,h:48,l:33,c:46},{o:50,h:63,l:48,c:61},{o:65,h:78,l:63,c:76}]},
   {id:'three_gap_bear',name:'Três Lacunas de Baixa',signal:'alta',diff:4,desc:'Três gaps de baixa consecutivos. Sobrevendido — possível reversão.',tip:'Sobrevendido extremo.',target:'+2R',stop:'Abaixo do último gap',candles:[{o:80,h:82,l:68,c:70},{o:65,h:67,l:53,c:55},{o:50,h:52,l:38,c:40},{o:35,h:37,l:23,c:25}]},
 
   // NOVOS PADRÕES - SINGLE CANDLE
@@ -1396,7 +786,6 @@ function startMode(mode) {
   state.errors = 0;
   state.streak = 0;
   state.lives = 3;
-  state.maxLives = 3;
   // Corações só na sobrevivência
   document.getElementById('livesDisplay').style.visibility = mode === 'survival' ? 'visible' : 'hidden';
   if (mode === 'survival') updateLives();
@@ -1409,11 +798,8 @@ function updateHome() {
   document.getElementById('homeTotal').textContent = state.totalAnswered;
   document.getElementById('homeAcc').textContent = acc + '%';
   document.getElementById('homePats').textContent = state.studiedPatterns.length;
-  const daysLabel = currentLang === 'pt' ? 'dias seguidos' : (UI_I18N.days_streak[currentLang] || 'dias seguidos');
-  document.getElementById('streakText').textContent = state.streakDays + ' ' + daysLabel;
-  const subKey = state.streakDays > 0 ? 'streak_sub_active' : 'streak_sub_start';
-  const subDefault = state.streakDays > 0 ? 'Continue assim! 💪' : 'Faça seu primeiro quiz hoje!';
-  document.getElementById('streakSub').textContent = currentLang === 'pt' ? subDefault : (UI_I18N[subKey][currentLang] || subDefault);
+  document.getElementById('streakText').textContent = state.streakDays + ' dias seguidos';
+  document.getElementById('streakSub').textContent = state.streakDays > 0 ? 'Continue assim! 💪' : 'Faça seu primeiro quiz hoje!';
 }
 
 // ==================== QUIZ ====================
@@ -1443,7 +829,7 @@ function nextQuestion() {
   state.quizType = qType;
 
   if (qType === 'name') {
-    document.getElementById('quizSubQ').textContent = t('signal_label_short','Sinal:') + ' ' + signalLabelTranslated(p.signal);
+    document.getElementById('quizSubQ').textContent = `Sinal: ${signalLabel(p.signal)}`;
     const wrong = getWrongOptions(p, 'name');
     renderOptions([p.name, ...wrong], p.name, 'name');
   } else {
@@ -1456,10 +842,6 @@ function nextQuestion() {
 }
 
 function signalLabel(s) { return {alta:'📈 Alta', baixa:'📉 Baixa', neutro:'➡️ Neutro'}[s]; }
-function signalLabelTranslated(s) {
-  const emoji = {alta:'📈', baixa:'📉', neutro:'➡️'}[s];
-  return emoji + ' ' + translateSignal(s);
-}
 function signalEmoji(s) { return {alta:'📈 Alta', baixa:'📉 Baixa', neutro:'➡️ Neutro'}[s]; }
 
 function getWrongOptions(p, type) {
@@ -1474,15 +856,6 @@ function getSignalForOption(optName) {
   return pat ? pat.signal : null;
 }
 
-// Translate a PT pattern name to display in the current language (for buttons/labels)
-function displayPatternName(ptName) {
-  if (currentLang === 'pt') return ptName;
-  const pat = PATTERNS.find(p => p.name === ptName);
-  if (!pat) return ptName;
-  const t = PATTERN_I18N[pat.id];
-  return (t && t[currentLang]) ? t[currentLang] : ptName;
-}
-
 function renderOptions(opts, correct, type) {
   const grid = document.getElementById('optionsGrid');
   const shuffled = [...opts].sort(() => Math.random() - .5);
@@ -1494,20 +867,16 @@ function renderOptions(opts, correct, type) {
     if (type === 'name') {
       const sig = getSignalForOption(opt);
       const sigClass = sig || 'neutro';
-      const sigText = currentLang === 'pt'
-        ? ({alta:'Alta', baixa:'Baixa', neutro:'Neutro'}[sigClass] || '')
-        : translateSignal(sigClass);
+      const sigText = {alta:'Alta', baixa:'Baixa', neutro:'Neutro'}[sigClass] || '';
       btn.innerHTML = `
         <span class="opt-signal-badge ${sigClass}">${sigText}</span>
-        <span class="opt-label">${displayPatternName(opt)}</span>
+        <span class="opt-label">${opt}</span>
       `;
     } else {
       const sigMap = {'📈 Alta':'alta','📉 Baixa':'baixa','➡️ Neutro':'neutro'};
       const sigClass = sigMap[opt] || 'neutro';
       const icons = {alta:'📈',baixa:'📉',neutro:'➡️'};
-      const labels = currentLang === 'pt'
-        ? {alta:'Alta',baixa:'Baixa',neutro:'Neutro'}
-        : {alta:translateSignal('alta'),baixa:translateSignal('baixa'),neutro:translateSignal('neutro')};
+      const labels = {alta:'Alta',baixa:'Baixa',neutro:'Neutro'};
       btn.innerHTML = `
         <span style="font-size:1.5rem">${icons[sigClass]}</span>
         <span class="opt-label" style="font-size:.95rem">${labels[sigClass]}</span>
@@ -1537,16 +906,6 @@ function answer(chosen, correct, btn) {
     playSound('correct');
     if (state.streak >= 5) { showCombo('🔥 ' + state.streak + 'x'); if(state.streak % 5 === 0) { playSound('combo'); launchConfetti(); } }
     btn.classList.add('correct');
-
-    // Modo Sobrevivência: a cada 10 acertos seguidos, ganha um coração extra
-    if (state.mode === 'survival' && state.streak > 0 && state.streak % 10 === 0) {
-      state.maxLives = (state.maxLives || 3) + 1;
-      state.lives = Math.min(state.lives + 1, state.maxLives);
-      updateLives();
-      showCombo('❤️ +1 ' + t('extra_heart','Vida Extra!'));
-      playSound('combo');
-      launchConfetti();
-    }
   } else {
     state.errors++;
     state.streak = 0;
@@ -1584,14 +943,14 @@ function answer(chosen, correct, btn) {
   // Feedback
   const fb = document.getElementById('feedbackBox');
   fb.className = 'feedback-box show ' + (isCorrect ? 'correct' : 'wrong');
-  document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ ' + translatePatternName(p) : '❌ ' + t('was_label','Era:') + ' ' + translatePatternName(p);
-  document.getElementById('feedbackText').textContent = translatePatternDesc(p);
+  document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ ' + p.name : '❌ Era: ' + p.name;
+  document.getElementById('feedbackText').textContent = p.desc;
 
   const ti = document.getElementById('tradeInfo');
   ti.innerHTML = `
-    <div class="ti"><div class="label">${t('modal_signal','Sinal')}</div><div class="value">${signalLabelTranslated(p.signal)}</div></div>
-    <div class="ti"><div class="label">${t('modal_target','Alvo')}</div><div class="value">${p.target||'-'}</div></div>
-    <div class="ti"><div class="label">${t('modal_stop','Stop')}</div><div class="value">${p.stop||'-'}</div></div>
+    <div class="ti"><div class="label">Sinal</div><div class="value">${signalLabel(p.signal)}</div></div>
+    <div class="ti"><div class="label">Alvo</div><div class="value">${p.target||'-'}</div></div>
+    <div class="ti"><div class="label">Stop</div><div class="value">${p.stop||'-'}</div></div>
   `;
 
   document.getElementById('nextBtn').style.display = 'block';
@@ -1599,14 +958,8 @@ function answer(chosen, correct, btn) {
 }
 
 function updateLives() {
-  const display = document.getElementById('livesDisplay');
-  if (!display) return;
-  const max = state.maxLives || 3;
-  let html = '';
-  for (let i = 0; i < max; i++) {
-    html += `<span class="heart${i >= state.lives ? ' lost' : ''}">❤️</span>`;
-  }
-  display.innerHTML = html;
+  const hearts = document.querySelectorAll('.heart');
+  hearts.forEach((h, i) => h.classList.toggle('lost', i >= state.lives));
 }
 
 function showGameOver() {
@@ -1748,9 +1101,9 @@ function renderLibrary() {
     const signalClass = {alta:'signal-alta', baixa:'signal-baixa', neutro:'signal-neutro'}[p.signal];
     const stars = '★'.repeat(p.diff) + '☆'.repeat(4 - p.diff);
     card.innerHTML = `
-      <span class="pc-signal ${signalClass}">${signalLabelTranslated(p.signal)}</span>
+      <span class="pc-signal ${signalClass}">${signalLabel(p.signal)}</span>
       <canvas id="libcanvas-${p.id}" height="60"></canvas>
-      <h4>${translatePatternName(p)}</h4>
+      <h4>${p.name}</h4>
       <p>${stars}</p>
     `;
     grid.appendChild(card);
@@ -1812,16 +1165,16 @@ function showPatternDetail(p) {
   const modal = document.getElementById('patternModal');
   modal.classList.remove('hidden');
 
-  document.getElementById('modalTitle').textContent = translatePatternName(p);
+  document.getElementById('modalTitle').textContent = p.name;
   const signalClass = {alta:'signal-alta', baixa:'signal-baixa', neutro:'signal-neutro'}[p.signal];
   document.getElementById('modalSignalBadge').className = 'pc-signal ' + signalClass;
-  document.getElementById('modalSignalBadge').textContent = signalLabelTranslated(p.signal);
-  document.getElementById('modalSignal').textContent = signalLabelTranslated(p.signal);
+  document.getElementById('modalSignalBadge').textContent = signalLabel(p.signal);
+  document.getElementById('modalSignal').textContent = signalLabel(p.signal);
   document.getElementById('modalDiff').textContent = '★'.repeat(p.diff) + '☆'.repeat(4 - p.diff);
   document.getElementById('modalTarget').textContent = p.target || '-';
   document.getElementById('modalStop').textContent = p.stop || '-';
-  document.getElementById('modalDesc').textContent = translatePatternDesc(p);
-  document.getElementById('modalTip').textContent = '💡 ' + translatePatternTip(p);
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalTip').textContent = '💡 ' + p.tip;
 
   setTimeout(() => drawMiniCandles(p, document.getElementById('modalCanvas')), 10);
 }
@@ -2071,26 +1424,26 @@ function placeTrade(dir) {
 
   resDisplay.style.display = 'block';
 
-  const dirLabel = dir === 'buy' ? '▲ ' + t('sim_dir_buy','COMPRA') : dir === 'sell' ? '▼ ' + t('sim_dir_sell','VENDA') : '⏸ ' + t('sim_waited_title','AGUARDOU');
-  const nextDir = next.c > entry.c ? t('sim_market_up','subiu ▲') : t('sim_market_down','caiu ▼');
+  const dirLabel = dir === 'buy' ? '▲ COMPRA' : dir === 'sell' ? '▼ VENDA' : '⏸ AGUARDOU';
+  const nextDir = next.c > entry.c ? 'subiu ▲' : 'caiu ▼';
 
   if (dir === 'wait') {
     resDisplay.className = 'sim-result-display aguardou';
     resIcon.textContent = '⏸';
-    resText.textContent = t('sim_waited_title','AGUARDOU');
-    resSub.textContent = `${capitalize(t('the_market','mercado'))} ${nextDir} — ${t('sim_next_in','próximo cenário em 2s')}`;
+    resText.textContent = 'AGUARDOU';
+    resSub.textContent = `O mercado ${nextDir} — próximo cenário em 2s`;
   } else if (result > 0) {
     resDisplay.className = 'sim-result-display acerto';
     resIcon.textContent = '✅';
-    resText.textContent = t('sim_correct','ACERTOU!');
-    resSub.textContent = `${dirLabel} — ${t('the_market','mercado')} ${nextDir}`;
+    resText.textContent = 'ACERTOU!';
+    resSub.textContent = `${dirLabel} — mercado ${nextDir}`;
     playSound('correct');
     if (simData._streak >= 3) { showCombo('🔥 ' + simData._streak + 'x'); if (simData._streak % 3 === 0) playSound('combo'); }
   } else {
     resDisplay.className = 'sim-result-display erro';
     resIcon.textContent = '❌';
-    resText.textContent = t('sim_wrong','ERROU!');
-    resSub.textContent = `${dirLabel} — ${t('but_market','mas o mercado')} ${nextDir}`;
+    resText.textContent = 'ERROU!';
+    resSub.textContent = `${dirLabel} — mas o mercado ${nextDir}`;
     playSound('wrong');
   }
 
@@ -2137,31 +1490,15 @@ function detectPattern() {
   const shootingStar = (c.c <= c.o) && ((c.h - c.o) >= 2 * Math.abs(c.c - c.o));
   const doji = Math.abs(c.c - c.o) < (c.h - c.l) * 0.1;
 
-  if (bullEngulf) { alert.classList.add('show'); alertName.textContent = displayPatternName('Engolfo de Alta') + ' 📈'; }
-  else if (bearEngulf) { alert.classList.add('show'); alertName.textContent = displayPatternName('Engolfo de Baixa') + ' 📉'; }
-  else if (hammer) { alert.classList.add('show'); alertName.textContent = displayPatternName('Martelo') + ' 📈'; }
-  else if (shootingStar) { alert.classList.add('show'); alertName.textContent = displayPatternName('Estrela Cadente') + ' 📉'; }
-  else if (doji) { alert.classList.add('show'); alertName.textContent = displayPatternName('Doji') + ' ➡️'; }
+  if (bullEngulf) { alert.classList.add('show'); alertName.textContent = 'Engolfo de Alta 📈'; }
+  else if (bearEngulf) { alert.classList.add('show'); alertName.textContent = 'Engolfo de Baixa 📉'; }
+  else if (hammer) { alert.classList.add('show'); alertName.textContent = 'Martelo 📈'; }
+  else if (shootingStar) { alert.classList.add('show'); alertName.textContent = 'Estrela Cadente 📉'; }
+  else if (doji) { alert.classList.add('show'); alertName.textContent = 'Doji ➡️'; }
   else { alert.classList.remove('show'); }
 }
 
 // ==================== ACHIEVEMENTS ====================
-const ACHIEVEMENTS_I18N = {
-  first: {name:{en:'First Candle',es:'Primera Vela',fr:'Première Bougie',zh:'第一根蜡烛',hi:'पहली कैंडल',ar:'الشمعة الأولى',bn:'প্রথম মোমবাতি',ru:'Первая свеча',ja:'最初のローソク足',de:'Erste Kerze',ko:'첫 캔들',vi:'Nến Đầu Tiên',tr:'İlk Mum',it:'Prima Candela',th:'แท่งเทียนแรก',pl:'Pierwsza Świeca',nl:'Eerste Kaars',uk:'Перша свічка',id:'Lilin Pertama',ur:'پہلی کینڈل'}, desc:{en:'Answer your first question',es:'Responde tu primera pregunta',fr:'Répondez à votre première question',zh:'回答你的第一个问题',hi:'अपना पहला प्रश्न उत्तर दें',ar:'أجب على سؤالك الأول',bn:'আপনার প্রথম প্রশ্নের উত্তর দিন',ru:'Ответьте на свой первый вопрос',ja:'最初の質問に答える',de:'Beantworte deine erste Frage',ko:'첫 질문에 답하기',vi:'Trả lời câu hỏi đầu tiên',tr:'İlk sorunu cevapla',it:'Rispondi alla tua prima domanda',th:'ตอบคำถามแรกของคุณ',pl:'Odpowiedz na pierwsze pytanie',nl:'Beantwoord je eerste vraag',uk:'Дайте відповідь на перше питання',id:'Jawab pertanyaan pertama Anda',ur:'اپنے پہلے سوال کا جواب دیں'}},
-  ten: {name:{en:'Apprentice',es:'Aprendiz',fr:'Apprenti',zh:'学徒',hi:'शिष्य',ar:'المتدرب',bn:'শিক্ষানবিস',ru:'Ученик',ja:'見習い',de:'Lehrling',ko:'견습생',vi:'Người Học Việc',tr:'Çırak',it:'Apprendista',th:'ผู้ฝึกหัด',pl:'Uczeń',nl:'Leerling',uk:'Учень',id:'Pemula',ur:'شاگرد'}, desc:{en:'Answer 10 questions',es:'Responde 10 preguntas',fr:'Répondez à 10 questions',zh:'回答10个问题',hi:'10 प्रश्नों के उत्तर दें',ar:'أجب على 10 أسئلة',bn:'১০টি প্রশ্নের উত্তর দিন',ru:'Ответьте на 10 вопросов',ja:'10問に答える',de:'Beantworte 10 Fragen',ko:'10개 질문에 답하기',vi:'Trả lời 10 câu hỏi',tr:'10 soru cevapla',it:'Rispondi a 10 domande',th:'ตอบคำถาม 10 ข้อ',pl:'Odpowiedz na 10 pytań',nl:'Beantwoord 10 vragen',uk:'Дайте відповідь на 10 питань',id:'Jawab 10 pertanyaan',ur:'10 سوالات کا جواب دیں'}},
-  fifty: {name:{en:'Scholar',es:'Estudioso',fr:'Érudit',zh:'学者',hi:'विद्वान',ar:'الباحث',bn:'পণ্ডিত',ru:'Учёный',ja:'学者',de:'Gelehrter',ko:'학자',vi:'Học Giả',tr:'Bilgin',it:'Studioso',th:'นักวิชาการ',pl:'Uczony',nl:'Geleerde',uk:'Вчений',id:'Cendekiawan',ur:'عالم'}, desc:{en:'Answer 50 questions',es:'Responde 50 preguntas',fr:'Répondez à 50 questions',zh:'回答50个问题',hi:'50 प्रश्नों के उत्तर दें',ar:'أجب على 50 سؤالاً',bn:'৫০টি প্রশ্নের উত্তর দিন',ru:'Ответьте на 50 вопросов',ja:'50問に答える',de:'Beantworte 50 Fragen',ko:'50개 질문에 답하기',vi:'Trả lời 50 câu hỏi',tr:'50 soru cevapla',it:'Rispondi a 50 domande',th:'ตอบคำถาม 50 ข้อ',pl:'Odpowiedz na 50 pytań',nl:'Beantwoord 50 vragen',uk:'Дайте відповідь на 50 питань',id:'Jawab 50 pertanyaan',ur:'50 سوالات کا جواب دیں'}},
-  hundred: {name:{en:'Centurion',es:'Centurión',fr:'Centurion',zh:'百夫长',hi:'शताधिपति',ar:'القائد المئوي',bn:'শতাধিপতি',ru:'Центурион',ja:'百人隊長',de:'Zenturio',ko:'백부장',vi:'Bách Phu Trưởng',tr:'Yüzbaşı',it:'Centurione',th:'ร้อยเอก',pl:'Centurion',nl:'Centurio',uk:'Центуріон',id:'Centurion',ur:'سینچورین'}, desc:{en:'Answer 100 questions',es:'Responde 100 preguntas',fr:'Répondez à 100 questions',zh:'回答100个问题',hi:'100 प्रश्नों के उत्तर दें',ar:'أجب على 100 سؤال',bn:'১০০টি প্রশ্নের উত্তর দিন',ru:'Ответьте на 100 вопросов',ja:'100問に答える',de:'Beantworte 100 Fragen',ko:'100개 질문에 답하기',vi:'Trả lời 100 câu hỏi',tr:'100 soru cevapla',it:'Rispondi a 100 domande',th:'ตอบคำถาม 100 ข้อ',pl:'Odpowiedz na 100 pytań',nl:'Beantwoord 100 vragen',uk:'Дайте відповідь на 100 питань',id:'Jawab 100 pertanyaan',ur:'100 سوالات کا جواب دیں'}},
-  streak5: {name:{en:'Combo x5',es:'Combo x5',fr:'Combo x5',zh:'连击x5',hi:'कॉम्बो x5',ar:'تتابع x5',bn:'কম্বো x৫',ru:'Комбо x5',ja:'コンボx5',de:'Combo x5',ko:'콤보 x5',vi:'Combo x5',tr:'Kombo x5',it:'Combo x5',th:'คอมโบ x5',pl:'Combo x5',nl:'Combo x5',uk:'Комбо x5',id:'Combo x5',ur:'کومبو x5'}, desc:{en:'5 correct answers in a row',es:'5 aciertos seguidos',fr:'5 bonnes réponses d\'affilée',zh:'连续答对5题',hi:'लगातार 5 सही उत्तर',ar:'5 إجابات صحيحة متتالية',bn:'টানা ৫টি সঠিক উত্তর',ru:'5 правильных ответов подряд',ja:'5問連続正解',de:'5 richtige Antworten in Folge',ko:'5문제 연속 정답',vi:'5 câu đúng liên tiếp',tr:'Üst üste 5 doğru cevap',it:'5 risposte corrette di fila',th:'ตอบถูก 5 ข้อติดต่อกัน',pl:'5 poprawnych odpowiedzi z rzędu',nl:'5 juiste antwoorden op rij',uk:'5 правильних відповідей поспіль',id:'5 jawaban benar berturut-turut',ur:'مسلسل 5 درست جوابات'}},
-  streak10: {name:{en:'On Fire',es:'En Llamas',fr:'En Feu',zh:'火力全开',hi:'आग पर',ar:'مشتعل',bn:'আগুনে',ru:'В огне',ja:'絶好調',de:'In Flammen',ko:'불타는 중',vi:'Đang Bùng Cháy',tr:'Ateşte',it:'In Fiamme',th:'กำลังร้อนแรง',pl:'W Ogniu',nl:'In Vuur',uk:'У вогні',id:'Membara',ur:'آگ میں'}, desc:{en:'10 correct answers in a row',es:'10 aciertos seguidos',fr:'10 bonnes réponses d\'affilée',zh:'连续答对10题',hi:'लगातार 10 सही उत्तर',ar:'10 إجابات صحيحة متتالية',bn:'টানা ১০টি সঠিক উত্তর',ru:'10 правильных ответов подряд',ja:'10問連続正解',de:'10 richtige Antworten in Folge',ko:'10문제 연속 정답',vi:'10 câu đúng liên tiếp',tr:'Üst üste 10 doğru cevap',it:'10 risposte corrette di fila',th:'ตอบถูก 10 ข้อติดต่อกัน',pl:'10 poprawnych odpowiedzi z rzędu',nl:'10 juiste antwoorden op rij',uk:'10 правильних відповідей поспіль',id:'10 jawaban benar berturut-turut',ur:'مسلسل 10 درست جوابات'}},
-  acc80: {name:{en:'Sharp Aim',es:'Mira Afilada',fr:'Tir Précis',zh:'精准射手',hi:'पैनी नज़र',ar:'تصويب دقيق',bn:'নিখুঁত লক্ষ্য',ru:'Меткий глаз',ja:'鋭い狙い',de:'Scharfes Auge',ko:'정확한 조준',vi:'Ngắm Chuẩn',tr:'Keskin Nişan',it:'Mira Precisa',th:'เล็งแม่น',pl:'Celny Strzał',nl:'Scherp Mikken',uk:'Влучний прицiл',id:'Bidikan Tajam',ur:'تیز نشانہ'}, desc:{en:'80% accuracy (min 20 questions)',es:'80% de precisión (mín 20 preguntas)',fr:'80% de précision (min 20 questions)',zh:'80%准确率（至少20题）',hi:'80% सटीकता (न्यूनतम 20 प्रश्न)',ar:'80% دقة (20 سؤالاً على الأقل)',bn:'৮০% নির্ভুলতা (ন্যূনতম ২০টি প্রশ্ন)',ru:'80% точности (мин. 20 вопросов)',ja:'80%の精度（最低20問）',de:'80% Genauigkeit (min. 20 Fragen)',ko:'80% 정확도 (최소 20문제)',vi:'80% chính xác (tối thiểu 20 câu)',tr:'%80 doğruluk (min 20 soru)',it:'80% di precisione (min 20 domande)',th:'ความแม่นยำ 80% (อย่างน้อย 20 ข้อ)',pl:'80% dokładności (min 20 pytań)',nl:'80% nauwkeurigheid (min 20 vragen)',uk:'80% точності (мін. 20 питань)',id:'Akurasi 80% (min 20 pertanyaan)',ur:'80% درستگی (کم از کم 20 سوالات)'}},
-  acc90: {name:{en:'Sniper',es:'Francotirador',fr:'Tireur d\'Élite',zh:'狙击手',hi:'स्नाइपर',ar:'القناص',bn:'স্নাইপার',ru:'Снайпер',ja:'スナイパー',de:'Scharfschütze',ko:'스나이퍼',vi:'Xạ Thủ',tr:'Keskin Nişancı',it:'Cecchino',th:'สไนเปอร์',pl:'Snajper',nl:'Scherpschutter',uk:'Снайпер',id:'Penembak Jitu',ur:'نشانہ باز'}, desc:{en:'90% accuracy (min 50 questions)',es:'90% de precisión (mín 50 preguntas)',fr:'90% de précision (min 50 questions)',zh:'90%准确率（至少50题）',hi:'90% सटीकता (न्यूनतम 50 प्रश्न)',ar:'90% دقة (50 سؤالاً على الأقل)',bn:'৯০% নির্ভুলতা (ন্যূনতম ৫০টি প্রশ্ন)',ru:'90% точности (мин. 50 вопросов)',ja:'90%の精度（最低50問）',de:'90% Genauigkeit (min. 50 Fragen)',ko:'90% 정확도 (최소 50문제)',vi:'90% chính xác (tối thiểu 50 câu)',tr:'%90 doğruluk (min 50 soru)',it:'90% di precisione (min 50 domande)',th:'ความแม่นยำ 90% (อย่างน้อย 50 ข้อ)',pl:'90% dokładności (min 50 pytań)',nl:'90% nauwkeurigheid (min 50 vragen)',uk:'90% точності (мін. 50 питань)',id:'Akurasi 90% (min 50 pertanyaan)',ur:'90% درستگی (کم از کم 50 سوالات)'}},
-  pat20: {name:{en:'Collector',es:'Coleccionista',fr:'Collectionneur',zh:'收藏家',hi:'संग्रहकर्ता',ar:'الجامع',bn:'সংগ্রাহক',ru:'Коллекционер',ja:'コレクター',de:'Sammler',ko:'수집가',vi:'Nhà Sưu Tầm',tr:'Koleksiyoncu',it:'Collezionista',th:'นักสะสม',pl:'Kolekcjoner',nl:'Verzamelaar',uk:'Колекціонер',id:'Kolektor',ur:'جمع کار'}, desc:{en:'Study 20 different patterns',es:'Estudia 20 patrones diferentes',fr:'Étudiez 20 motifs différents',zh:'学习20种不同形态',hi:'20 अलग पैटर्न का अध्ययन करें',ar:'ادرس 20 نمطاً مختلفاً',bn:'২০টি ভিন্ন প্যাটার্ন অধ্যয়ন করুন',ru:'Изучите 20 разных моделей',ja:'20種類の異なるパターンを学ぶ',de:'Lerne 20 verschiedene Muster',ko:'20개의 다른 패턴 학습',vi:'Học 20 mẫu hình khác nhau',tr:'20 farklı formasyon öğren',it:'Studia 20 pattern diversi',th:'ศึกษารูปแบบที่แตกต่างกัน 20 แบบ',pl:'Poznaj 20 różnych formacji',nl:'Bestudeer 20 verschillende patronen',uk:'Вивчіть 20 різних моделей',id:'Pelajari 20 pola berbeda',ur:'20 مختلف پیٹرنز کا مطالعہ کریں'}},
-  pat50: {name:{en:'Master',es:'Maestro',fr:'Maître',zh:'大师',hi:'मास्टर',ar:'السيد',bn:'মাস্টার',ru:'Мастер',ja:'マスター',de:'Meister',ko:'마스터',vi:'Bậc Thầy',tr:'Usta',it:'Maestro',th:'ปรมาจารย์',pl:'Mistrz',nl:'Meester',uk:'Майстер',id:'Master',ur:'ماسٹر'}, desc:{en:'Study 50 different patterns',es:'Estudia 50 patrones diferentes',fr:'Étudiez 50 motifs différents',zh:'学习50种不同形态',hi:'50 अलग पैटर्न का अध्ययन करें',ar:'ادرس 50 نمطاً مختلفاً',bn:'৫০টি ভিন্ন প্যাটার্ন অধ্যয়ন করুন',ru:'Изучите 50 разных моделей',ja:'50種類の異なるパターンを学ぶ',de:'Lerne 50 verschiedene Muster',ko:'50개의 다른 패턴 학습',vi:'Học 50 mẫu hình khác nhau',tr:'50 farklı formasyon öğren',it:'Studia 50 pattern diversi',th:'ศึกษารูปแบบที่แตกต่างกัน 50 แบบ',pl:'Poznaj 50 różnych formacji',nl:'Bestudeer 50 verschillende patronen',uk:'Вивчіть 50 різних моделей',id:'Pelajari 50 pola berbeda',ur:'50 مختلف پیٹرنز کا مطالعہ کریں'}},
-  pat_all: {name:{en:'Legendary',es:'Legendario',fr:'Légendaire',zh:'传奇',hi:'पौराणिक',ar:'الأسطوري',bn:'কিংবদন্তি',ru:'Легендарный',ja:'伝説的',de:'Legendär',ko:'전설',vi:'Huyền Thoại',tr:'Efsanevi',it:'Leggendario',th:'ตำนาน',pl:'Legendarny',nl:'Legendarisch',uk:'Легендарний',id:'Legendaris',ur:'افسانوی'}, desc:{en:'Study all patterns',es:'Estudia todos los patrones',fr:'Étudiez tous les motifs',zh:'学习所有形态',hi:'सभी पैटर्न का अध्ययन करें',ar:'ادرس جميع الأنماط',bn:'সব প্যাটার্ন অধ্যয়ন করুন',ru:'Изучите все модели',ja:'すべてのパターンを学ぶ',de:'Lerne alle Muster',ko:'모든 패턴 학습',vi:'Học tất cả mẫu hình',tr:'Tüm formasyonları öğren',it:'Studia tutti i pattern',th:'ศึกษารูปแบบทั้งหมด',pl:'Poznaj wszystkie formacje',nl:'Bestudeer alle patronen',uk:'Вивчіть усі моделі',id:'Pelajari semua pola',ur:'تمام پیٹرنز کا مطالعہ کریں'}},
-  streak3: {name:{en:'Dedicated',es:'Dedicado',fr:'Dévoué',zh:'专注',hi:'समर्पित',ar:'المتفاني',bn:'নিবেদিত',ru:'Преданный',ja:'献身的',de:'Engagiert',ko:'헌신적인',vi:'Tận Tâm',tr:'Adanmış',it:'Dedicato',th:'ทุ่มเท',pl:'Zaangażowany',nl:'Toegewijd',uk:'Відданий',id:'Berdedikasi',ur:'پرعزم'}, desc:{en:'3 days of practice in a row',es:'3 días seguidos de práctica',fr:'3 jours d\'entraînement d\'affilée',zh:'连续练习3天',hi:'लगातार 3 दिन अभ्यास',ar:'3 أيام تدريب متتالية',bn:'টানা ৩ দিন অনুশীলন',ru:'3 дня тренировок подряд',ja:'3日連続練習',de:'3 Tage in Folge geübt',ko:'3일 연속 연습',vi:'3 ngày luyện tập liên tiếp',tr:'Üst üste 3 gün pratik',it:'3 giorni di pratica di fila',th:'ฝึกฝน 3 วันติดต่อกัน',pl:'3 dni ćwiczeń z rzędu',nl:'3 dagen op rij geoefend',uk:'3 дні тренувань поспіль',id:'3 hari latihan berturut-turut',ur:'مسلسل 3 دن کی مشق'}},
-  streak7: {name:{en:'Perfect Week',es:'Semana Perfecta',fr:'Semaine Parfaite',zh:'完美一周',hi:'बेहतरीन सप्ताह',ar:'أسبوع مثالي',bn:'নিখুঁত সপ্তাহ',ru:'Идеальная неделя',ja:'完璧な一週間',de:'Perfekte Woche',ko:'완벽한 주',vi:'Tuần Hoàn Hảo',tr:'Mükemmel Hafta',it:'Settimana Perfetta',th:'สัปดาห์ที่สมบูรณ์แบบ',pl:'Idealny Tydzień',nl:'Perfecte Week',uk:'Ідеальний тиждень',id:'Minggu Sempurna',ur:'بہترین ہفتہ'}, desc:{en:'7 days in a row',es:'7 días seguidos',fr:'7 jours d\'affilée',zh:'连续7天',hi:'लगातार 7 दिन',ar:'7 أيام متتالية',bn:'টানা ৭ দিন',ru:'7 дней подряд',ja:'7日連続',de:'7 Tage in Folge',ko:'7일 연속',vi:'7 ngày liên tiếp',tr:'Üst üste 7 gün',it:'7 giorni di fila',th:'7 วันติดต่อกัน',pl:'7 dni z rzędu',nl:'7 dagen op rij',uk:'7 днів поспіль',id:'7 hari berturut-turut',ur:'مسلسل 7 دن'}},
-};
-
 const ACHIEVEMENTS = [
   {id:'first',name:'Primeira Vela',desc:'Responda sua primeira questão',icon:'🕯️',check: s => s.totalAnswered >= 1},
   {id:'ten',name:'Aprendiz',desc:'Responda 10 questões',icon:'📚',check: s => s.totalAnswered >= 10},
@@ -2178,24 +1515,13 @@ const ACHIEVEMENTS = [
   {id:'streak7',name:'Semana Perfeita',desc:'7 dias seguidos',icon:'🗓️',check: s => s.streakDays >= 7},
 ];
 
-function translateAchievement(a) {
-  if (currentLang === 'pt') return { name: a.name, desc: a.desc };
-  const tr = ACHIEVEMENTS_I18N[a.id];
-  if (!tr) return { name: a.name, desc: a.desc };
-  return {
-    name: tr.name[currentLang] || a.name,
-    desc: tr.desc[currentLang] || a.desc,
-  };
-}
-
 function checkAchievements() {
   ACHIEVEMENTS.forEach(a => {
     if (!state.achievements.includes(a.id) && a.check(state)) {
       state.achievements.push(a.id);
       storage.achievements = state.achievements;
       save();
-      const tr = translateAchievement(a);
-      showCombo('🏆 ' + tr.name);
+      showCombo('🏆 ' + a.name);
       playSound('combo');
       launchConfetti();
     }
@@ -2207,14 +1533,13 @@ function renderAchievements() {
   grid.innerHTML = '';
   ACHIEVEMENTS.forEach(a => {
     const earned = state.achievements.includes(a.id);
-    const tr = translateAchievement(a);
     const card = document.createElement('div');
     card.className = 'ach-card' + (earned ? ' earned' : '');
     card.innerHTML = `
       <div class="ach-icon" style="${earned ? '' : 'filter:grayscale(1);opacity:.4'}">${a.icon}</div>
       <div>
-        <h4 style="${earned ? 'color:var(--gold)' : ''}">${tr.name}</h4>
-        <p>${tr.desc}</p>
+        <h4 style="${earned ? 'color:var(--gold)' : ''}">${a.name}</h4>
+        <p>${a.desc}</p>
       </div>
     `;
     grid.appendChild(card);
@@ -2239,128 +1564,9 @@ function launchConfetti() {
 }
 
 // ==================== INIT ====================
-applyTranslations();
 updateHome();
 initHeroCanvas();
 initParticles();
-initOnboarding();
-
-// ==================== ONBOARDING ====================
-let onbCurrentSlide = 0;
-const ONB_TOTAL_SLIDES = 4;
-
-function initOnboarding() {
-  const seen = localStorage.getItem('mdv4_onboarded');
-  const overlay = document.getElementById('onboardingOverlay');
-  if (seen) {
-    overlay.classList.add('hidden');
-    return;
-  }
-  // Skip button only appears after language is chosen
-  document.getElementById('onbSkip').style.display = 'none';
-
-  // Particles for onboarding background
-  const container = document.getElementById('onbParticles');
-  const colors = ['#ffd700','#d4a017','#ffe066','#00c853'];
-  for (let i = 0; i < 14; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.cssText = `
-      position:absolute; border-radius:50%;
-      left: ${Math.random()*100}%;
-      width: ${2+Math.random()*4}px;
-      height: ${2+Math.random()*4}px;
-      background: ${colors[Math.floor(Math.random()*colors.length)]};
-      opacity: ${0.15+Math.random()*0.35};
-      animation: particle-float ${6+Math.random()*12}s linear infinite;
-      animation-delay: ${Math.random()*10}s;
-    `;
-    container.appendChild(p);
-  }
-  drawOnbCandle();
-}
-
-function selectOnbLang(lang) {
-  setLang(lang);
-  // Hide language screen, reveal slides
-  document.getElementById('onbLangScreen').classList.add('hidden');
-  document.getElementById('onbSlides').classList.remove('hidden');
-  document.getElementById('onbDots').classList.remove('hidden');
-  document.getElementById('onbNavWrap').classList.remove('hidden');
-  document.getElementById('onbSkip').style.display = 'block';
-}
-
-function drawOnbCandle() {
-  const canvas = document.getElementById('onbCandle1');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  const W = 140, H = 100;
-  const candles = [
-    {o:55,h:65,l:30,c:35,x:14},
-    {o:35,h:42,l:22,c:38,x:34},
-    {o:40,h:60,l:36,c:58,x:54},
-    {o:58,h:70,l:52,c:54,x:74},
-    {o:54,h:68,l:32,c:64,x:94},
-    {o:64,h:78,l:60,c:74,x:114},
-  ];
-  let frame = 0;
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    candles.forEach((c, i) => {
-      const delay = i * 8;
-      const progress = Math.max(0, Math.min(1, (frame - delay) / 20));
-      const isBull = c.c >= c.o;
-      const color = isBull ? '#00c896' : '#ff4560';
-      const yOf = v => 6 + (1 - v/100) * (H - 12);
-      const yO = yOf(c.o), yC = yOf(c.c), yH = yOf(c.h), yL = yOf(c.l);
-      const bodyTop = Math.min(yO,yC);
-      const bodyH = Math.max(Math.abs(yO-yC),2) * progress;
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(c.x+7, yH); ctx.lineTo(c.x+7, yL); ctx.stroke();
-      ctx.fillStyle = color;
-      ctx.fillRect(c.x, bodyTop, 14, bodyH);
-      ctx.shadowBlur = 0;
-    });
-    frame++;
-    if (frame < 200) requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-function onbNextSlide() {
-  if (onbCurrentSlide >= ONB_TOTAL_SLIDES - 1) {
-    finishOnboarding();
-    return;
-  }
-  const slides = document.querySelectorAll('.onb-slide');
-  const dots = document.querySelectorAll('.onb-dot');
-  slides[onbCurrentSlide].classList.remove('active');
-  slides[onbCurrentSlide].classList.add('prev');
-  dots[onbCurrentSlide].classList.remove('active');
-  onbCurrentSlide++;
-  slides[onbCurrentSlide].classList.add('active');
-  slides[onbCurrentSlide].classList.remove('prev');
-  dots[onbCurrentSlide].classList.add('active');
-
-  const nextBtn = document.getElementById('onbNext');
-  if (onbCurrentSlide === ONB_TOTAL_SLIDES - 1) {
-    nextBtn.style.display = 'none';
-  }
-}
-
-function finishOnboarding() {
-  localStorage.setItem('mdv4_onboarded', '1');
-  const overlay = document.getElementById('onboardingOverlay');
-  overlay.style.transition = 'opacity .4s ease';
-  overlay.style.opacity = '0';
-  setTimeout(() => {
-    overlay.classList.add('hidden');
-    overlay.style.opacity = '1';
-  }, 400);
-}
 
 // ==================== HERO CANVAS ====================
 function initHeroCanvas() {
